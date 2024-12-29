@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel, { UseEmblaCarouselType } from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Circle } from "lucide-react";
 import {
   ComponentPropsWithRef,
   createContext,
@@ -32,7 +32,10 @@ type CarouselContextProps = {
   api: ReturnType<typeof useEmblaCarousel>[1];
   onPrevButtonClick: () => void;
   onNextButtonClick: () => void;
+  onDotButtonClick: (index: number) => void;
+  selectedIndex: number;
   prevBtnDisabled: boolean;
+  scrollSnaps: number[];
   nextBtnDisabled: boolean;
 } & CarouselProps;
 
@@ -69,12 +72,25 @@ const Carousel = forwardRef<
       plugins
     );
 
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
     const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
     const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
     const onPrevButtonClick = useCallback(() => {
       api?.scrollPrev();
     }, [api]);
+
+    const onDotButtonClick = useCallback(
+      (index: number) => {
+        api?.scrollTo(index);
+      },
+      [api]
+    );
+
+    const onInit = useCallback((api: EmblaCarouselType) => {
+      setScrollSnaps(api.scrollSnapList());
+    }, []);
 
     const onNextButtonClick = useCallback(() => {
       api?.scrollNext();
@@ -83,13 +99,15 @@ const Carousel = forwardRef<
     const onSelect = useCallback((api: EmblaCarouselType) => {
       setPrevBtnDisabled(!api.canScrollPrev());
       setNextBtnDisabled(!api.canScrollNext());
+      setSelectedIndex(api?.selectedScrollSnap());
     }, []);
 
     useEffect(() => {
       if (!api) return;
 
+      onInit(api);
       onSelect(api);
-      api.on("reInit", onSelect).on("select", onSelect);
+      api.on("reInit", onSelect).on("select", onSelect).on("reInit", onInit);
     }, [api, onSelect]);
 
     return (
@@ -102,17 +120,14 @@ const Carousel = forwardRef<
             orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
           onPrevButtonClick,
           onNextButtonClick,
+          onDotButtonClick,
+          selectedIndex,
+          scrollSnaps,
           prevBtnDisabled,
           nextBtnDisabled,
         }}
       >
-        <section className="embla">
-          <div className={cn("embla__viewport", className)} ref={carouselRef}>
-            {children}
-          </div>
-          <PrevButton className="text-black"><p>asdfasd</p></PrevButton>
-          <NextButton className="text-black">asasdfasdfdf</NextButton>
-        </section>
+        <section className={cn("overflow-hidden", className)}>{children}</section>
       </CarouselContext.Provider>
     );
   }
@@ -123,8 +138,12 @@ const CarouselContent = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
+  const { carouselRef } = useCarousel();
+
   return (
-    <div className={cn("embla__container w-full", className)} {...props}></div>
+    <div className={cn("", className)} ref={carouselRef}>
+      <div className={cn("flex w-full h-full")} {...props}></div>
+    </div>
   );
 });
 CarouselContent.displayName = "CarouselContent";
@@ -137,19 +156,12 @@ const CarouselItem = forwardRef<
     <div
       ref={ref}
       aria-roledescription="slide"
-      className={cn("embla__slide", className)}
+      className={cn("min-w-0 shrink-0 grow-0 basis-full", className)}
       {...props}
     />
   );
 });
 CarouselItem.displayName = "CarouselItem";
-
-type UsePrevNextButtonsType = {
-  prevBtnDisabled: boolean;
-  nextBtnDisabled: boolean;
-  onPrevButtonClick: () => void;
-  onNextButtonClick: () => void;
-};
 
 type PropType = ComponentPropsWithRef<"button">;
 
@@ -162,7 +174,7 @@ export const PrevButton: React.FC<PropType> = (props) => {
     <button
       className="embla__button embla__button--prev"
       type="button"
-      disabled={  prevBtnDisabled}
+      disabled={prevBtnDisabled}
       onClick={onPrevButtonClick}
       {...restProps}
     >
@@ -191,4 +203,27 @@ export const NextButton: React.FC<PropType> = (props) => {
   );
 };
 
-export { type CarouselApi, Carousel, CarouselContent, CarouselItem };
+const DotButton: React.FC<PropType> = ({className, children, ...restProps }) => {
+  const { onDotButtonClick, selectedIndex, scrollSnaps } = useCarousel();
+
+  return (
+    <div className={cn("embla__dots", className)}>
+      {scrollSnaps.map((_, index) => (
+        <button
+          type="button"
+          {...restProps}
+          className={cn(
+            "embla__dot",
+            selectedIndex === index ? " embla__dot--selected" : ""
+          )}
+          key={index}
+          onClick={() => onDotButtonClick(index)}
+        >
+          <Circle color={selectedIndex === index ? "white" : "black"} size={15} className="mx-1" strokeWidth={3} />
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export { type CarouselApi, Carousel, CarouselContent, CarouselItem, DotButton };

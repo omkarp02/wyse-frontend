@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -56,11 +62,15 @@
   }
 
   .heading {
-    @apply uppercase bg-black px-6 py-3 font-work-sans font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-center my-5;
+    @apply scroll-m-20 text-2xl font-semibold tracking-wide mt-6;
   }
 
   .sub-heading {
-    @apply font-medium text-[20px] text-white max-w-2xl text-center break-words;
+    @apply scroll-m-20 mt-2 text-sm  
+  }
+
+  .main-container {
+    @apply px-1
   }
 
   .section_container {
@@ -220,13 +230,3 @@
   padding: 10px !important;
 }
 
-.embla {
-  overflow: hidden;
-}
-.embla__container {
-  display: flex;
-}
-.embla__slide {
-  flex: 0 0 100%;
-  min-width: 0;
-}

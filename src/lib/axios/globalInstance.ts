@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000", // Replace with your API base URL
+  baseURL: "http://localhost:8080/api/v1", // Replace with your API base URL
   timeout: 1000,
   headers: { "Content-Type": "application/json" },
 });
@@ -19,8 +19,9 @@ axiosInstance.interceptors.request.use(
 
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
-  function (response) {
-    return response;
+  (res)=> {
+    console.log(res)
+    return res?.data
   },
   function (error) {
     return Promise.reject(error);

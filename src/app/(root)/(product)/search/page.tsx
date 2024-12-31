@@ -1,5 +1,9 @@
+"use client";
+
 import React from "react";
 import ProductCard from "../_component/ProductCard";
+import { useQuery } from "@tanstack/react-query";
+import { getData } from "@/services/test";
 
 const productList = [
   {
@@ -149,21 +153,36 @@ const productList = [
 ];
 
 const SearchPage = () => {
+  const {
+    data: productList,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["product"], //Array according to Documentation
+    queryFn: async () => await getData(),
+    staleTime: 10000
+  });
+
+  if (isLoading) return <h1> LoADING </h1>;
+  if (isError) return <div>Sorry There was an Error</div>;
+
   return (
     <div className="main-container">
       <p className="heading">Cargo for men</p>
       <p className="sub-heading">76 items</p>
       <div className="flex flex-wrap justify-between mt-5">
-        {productList.map((ele, index) => (
-          <ProductCard
-            className=""
-            discount={ele.discount}
-            imgLink={ele.link}
-            name={ele.name}
-            price={ele.price}
-            key={index}
-          />
-        ))}
+        {productList &&
+          Array.isArray(productList.data) &&
+          productList.data.map((ele, index) => (
+            <ProductCard
+              className=""
+              discount={ele.discount}
+              imgLink={ele.link}
+              name={ele.name}
+              price={ele.price}
+              key={index}
+            />
+          ))}
       </div>
     </div>
   );

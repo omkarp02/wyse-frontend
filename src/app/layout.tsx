@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import "./globals.css";
+import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -20,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={` ${roboto.variable} antialiased`}>{children}</body>
+      <ReactQueryProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+        <body className={` ${roboto.variable} antialiased`}>{children}</body>
+      </ReactQueryProvider>
     </html>
   );
 }

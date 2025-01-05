@@ -45,7 +45,6 @@ type CarouselProps = {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
-  setApi?: (api: CarouselApi) => void;
 };
 
 const Carousel = forwardRef<
@@ -56,13 +55,10 @@ const Carousel = forwardRef<
     {
       orientation = "horizontal",
       opts,
-      setApi,
       plugins,
       className,
       children,
-      ...props
     },
-    ref
   ) => {
     const [carouselRef, api] = useEmblaCarousel(
       {
@@ -108,7 +104,7 @@ const Carousel = forwardRef<
       onInit(api);
       onSelect(api);
       api.on("reInit", onSelect).on("select", onSelect).on("reInit", onInit);
-    }, [api, onSelect]);
+    }, [api, onSelect, onInit]);
 
     return (
       <CarouselContext.Provider
@@ -137,7 +133,7 @@ Carousel.displayName = "Carousel";
 const CarouselContent = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+>(({ className, ...props }) => {
   const { carouselRef } = useCarousel();
 
   return (
@@ -203,7 +199,7 @@ export const NextButton: React.FC<PropType> = (props) => {
   );
 };
 
-const DotButton: React.FC<PropType> = ({className, children, ...restProps }) => {
+const DotButton: React.FC<PropType> = ({className, ...restProps }) => {
   const { onDotButtonClick, selectedIndex, scrollSnaps } = useCarousel();
 
   return (

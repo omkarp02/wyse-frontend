@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import "./globals.css";
 import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const roboto = Roboto({
   variable: "--font-roboto",
   weight: ["400", "500", "700", "900"],
+  subsets: ['latin']
 });
 
 export const metadata: Metadata = {
@@ -21,10 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <ReactQueryProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-        <body className={` ${roboto.variable} antialiased`}>{children}</body>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <body className={`${roboto.className} antialiased`}>
+          {children}
+          <Toaster />
+        </body>
       </ReactQueryProvider>
     </html>
   );

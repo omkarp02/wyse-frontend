@@ -13,12 +13,21 @@
 @layer base {
   :root {
     --radius: 0.5rem;
+    --navbar-height: 60px
   }
 }
 
 @layer utilities {
   .flex-between {
     @apply flex justify-between items-center;
+  }
+
+  .min-h-vh {
+    min-height: calc(100vh - var(--navbar-height))
+  }
+
+  .navbar-h{
+    height: var(--navbar-height)
   }
 
   .text-30-extrabold {
@@ -58,7 +67,7 @@
   }
 
   .tag {
-    @apply bg-secondary px-6 py-3 font-work-sans font-bold rounded-sm uppercase relative tag-tri;
+    @apply bg-secondary px-6 py-3 font-roboto font-bold rounded-sm uppercase relative tag-tri;
   }
 
   .heading {
@@ -125,7 +134,7 @@
   }
 
   .login {
-    @apply border-[5px] py-4 border-black bg-white text-black relative shadow-100 font-work-sans font-medium hover:shadow-none transition-all duration-500 !important;
+    @apply border-[5px] py-4 border-black bg-white text-black relative shadow-100 font-roboto font-medium hover:shadow-none transition-all duration-500 !important;
   }
 
   /* searchform */

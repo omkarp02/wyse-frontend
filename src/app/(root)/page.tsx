@@ -1,22 +1,17 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   DotButton,
-  NextButton,
-  PrevButton,
 } from "@/components/ui/carousel";
 
 import Autoplay from "embla-carousel-autoplay";
-import useEmblaCarousel from "embla-carousel-react";
-import { ArrowRight, DollarSign, Truck, Undo2 } from "lucide-react";
+import {  DollarSign, Truck, Undo2 } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
-const carouselHeight = "h-[40vh]";
 const images = [
   {
     link: "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
@@ -101,11 +96,6 @@ const categoriesImg = [
 ];
 
 export default function Home() {
-  const autoplayPlugin = useRef(Autoplay({ delay: 3000 }));
-  // plugins={[autoplayPlugin.current]}
-  // <img src={`https://picsum.photos/id/${index}/200/300`} />
-  const options = { loop: true };
-
   return (
     <>
       <Carousel className="relative">
@@ -173,7 +163,7 @@ export default function Home() {
         <p className="heading">Shop For Men</p>
         <div className="flex flex-wrap justify-center">
           {categoriesImg.map((ele, index) => (
-            <div className="w-[45%] h-[45%] mx-2 my-4 relative">
+            <div key={index} className="w-[45%] h-[45%] mx-2 my-4 relative">
               <Image
                 alt="asdf"
                 src={ele.link}

@@ -4,23 +4,18 @@ import {
   Sheet,
   SheetTrigger,
   SheetContent,
-  SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetClose,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
-  Cross,
-  GitBranch,
-  GitBranchPlus,
+  Gitlab,
   Menu,
   Search,
   ShoppingCart,
   X,
 } from "lucide-react";
-import { SearchInput } from "./ui/input";
+import { SearchInput } from "./ui/search-input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -32,8 +27,8 @@ export default function Component() {
   }
 
   return (
-    <header className=" w-full relative ">
-      <div className="flex py-4 justify-between px-4 items-center border-b border-b-black">
+    <header className=" w-full relative">
+      <div className="flex-between navbar-h px-2 border-b border-b-black">
         <Sheet>
           <SheetTrigger>
             <Menu />
@@ -44,14 +39,12 @@ export default function Component() {
               <SheetClose>
                 <X />
               </SheetClose>
-              <GitBranchPlus />
+              <Gitlab />
               <ShoppingCart />
             </div>
           </SheetContent>
         </Sheet>
-          <ShoppingCart />
-          <Link href={'/search'} >Search</Link>
-          <Link href={"/"}>Home</Link>
+        <Link href={"/"}><Gitlab /></Link>
         <div className="flex gap-3">
           {showSearch ? (
             <X onClick={toggleSearchInput} />

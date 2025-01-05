@@ -13,9 +13,11 @@ const config: Config = {
         xs: "475px",
       },
       colors: {
+        input: "#242F66",
         primary: {
           "100": "#F7F8FD",
           DEFAULT: "#242F66",
+          foreground: "#FFFFFF",
         },
         secondary: "#F5F5F6",
         black: {
@@ -23,6 +25,14 @@ const config: Config = {
           "200": "#141413",
           "300": "#7D8087",
           DEFAULT: "#000000",
+        },
+        muted: {
+          DEFAULT: "#0f1629",
+          foreground: "#64748b",
+        },
+        destructive: {
+          DEFAULT: "#ff0000",
+          foreground: "#f7f9fb",
         },
         white: {
           "100": "#F7F7F7",
@@ -33,7 +43,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        "work-sans": ["var(--font-work-sans)"],
+        "roboto": ["var(--font-roboto)"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -44,7 +54,7 @@ const config: Config = {
         100: "2px 2px 0px 0px rgb(0, 0, 0)",
         200: "2px 2px 0px 2px rgb(0, 0, 0)",
         300: "2px 2px 0px 2px rgb(238, 43, 105)",
-      }
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],

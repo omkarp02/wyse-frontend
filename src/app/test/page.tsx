@@ -1,21 +1,20 @@
+"use client";
 
-"use client"
-
-import React from 'react'
-import { useQuery } from '@tanstack/react-query';
-import { getData } from '@/services/test';
+import React from "react";
+import Image from "next/image";
 
 const TestPage = () => {
+  return (
+    <div>
+      <Image
+        className="w-[250px] md:w-[400px] h-auto"
+        src={"https://i.imgur.com/zKZGfxC.jpeg"}
+        alt="asdf"
+        width={400}
+        height={266}
+      />
+    </div>
+  );
+};
 
-
-  const { data, isLoading, isError } = useQuery({
-    queryFn: getData,
-    queryKey: ["movies"], //Array according to Documentation
-  });
-
-  if (isLoading) return <h1>Loading</h1>;
-  if (isError) return <div>Sorry There was an Error</div>;
-  return <div>{JSON.stringify(data)}</div>;
-}
-
-export default TestPage
+export default TestPage;

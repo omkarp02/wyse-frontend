@@ -20,11 +20,10 @@ axiosInstance.interceptors.request.use(
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
   (res)=> {
-    console.log(res)
     return res?.data
   },
   function (error) {
-    return Promise.reject(error);
+    return Promise.reject(error?.response?.data);
   }
 );
 

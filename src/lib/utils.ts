@@ -11,3 +11,4 @@ export function calculateDiscountedPrice(originalPrice: number, discountPercenta
   const finalPrice = originalPrice - discountAmount;
   return finalPrice;
 }
+

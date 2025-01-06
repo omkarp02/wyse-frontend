@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/carousel";
 
 import Autoplay from "embla-carousel-autoplay";
-import {  DollarSign, Truck, Undo2 } from "lucide-react";
+import { DollarSign, Truck, Undo2 } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -164,12 +164,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center">
           {categoriesImg.map((ele, index) => (
             <div key={index} className="w-[45%] h-[45%] mx-2 my-4 relative">
-              <Image
-                alt="asdf"
-                src={ele.link}
-                width={300}
-                height={300}
-              />
+              <Image alt="asdf" src={ele.link} width={300} height={300} />
               <p className="text-center">{ele.name}</p>
             </div>
           ))}
@@ -177,4 +172,74 @@ export default function Home() {
       </section>
     </>
   );
+}
+
+export async function getStaticProps() {
+  
+
+  const cmsData = {
+    carousel: [
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
+        redirect: "",
+      },
+    ],
+    sectionTwo: {
+      title: "Most Popular",
+      subTitle: "Check Out Now ->",
+      carousel: [
+        {
+          imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
+          redirect: ""
+        },
+        {
+          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
+          redirect: ""
+        },
+        {
+          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
+          redirect: ""
+        },
+        {
+          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
+          redirect: ""
+        },
+      ]
+
+    },
+    featureImgLink: "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350",
+
+  };
+
+  return {
+    props: {
+      cmsData,
+    },
+  };
 }

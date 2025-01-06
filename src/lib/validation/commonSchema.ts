@@ -14,3 +14,11 @@ export const emailSchema = z
   .string()
   .email("Invalid email address") // Validate email format
   .min(5, "Email must be at least 5 characters long");
+
+export const mobileSchema = z
+  .string()
+  .regex(/^\d{10}$/, { message: "Mobile number must be 10 digits" });
+
+export const genderSchema = z.enum(["male", "female", "other"], {
+  message: "Gender must be male, female, or other",
+});

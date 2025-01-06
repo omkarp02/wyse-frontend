@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import {
+  CircleUser,
+  CircleUserRound,
   Gitlab,
   Menu,
   Search,
@@ -44,8 +46,9 @@ export default function Component() {
             </div>
           </SheetContent>
         </Sheet>
-        <Link href={"/"}><Gitlab /></Link>
+      
         <div className="flex gap-3">
+          <CircleUserRound   />
           {showSearch ? (
             <X onClick={toggleSearchInput} />
           ) : (

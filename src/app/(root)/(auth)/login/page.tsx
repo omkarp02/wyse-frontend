@@ -3,7 +3,7 @@ import { LoginForm } from "./_login-form";
 
 const LoginPage = () => {
   return (
-    <div className="flex-between min-h-vh w-full  p-6 md:p-10">
+    <div className="flex-between min-h-vh main-container">
       <div className="w-full max-w-sm">
         <LoginForm />
       </div>

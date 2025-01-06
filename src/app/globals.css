@@ -22,6 +22,10 @@
     @apply flex justify-between items-center;
   }
 
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
   .min-h-vh {
     min-height: calc(100vh - var(--navbar-height))
   }
@@ -71,7 +75,7 @@
   }
 
   .heading {
-    @apply scroll-m-20 text-2xl font-semibold tracking-wide mt-6;
+    @apply scroll-m-20 text-2xl font-semibold tracking-wide mt-6 text-center;
   }
 
   .sub-heading {
@@ -98,6 +102,10 @@
     @apply text-black-100 text-sm font-normal;
   }
 
+  .absolute-center {
+    @apply absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2
+  }
+
   /* profile */
   .profile_container {
     @apply w-full pb-10 pt-20 px-6 max-w-7xl mx-auto lg:flex-row flex-col flex gap-10;
@@ -117,7 +125,7 @@
 
   /* idea details */
   .divider {
-    @apply border-dotted bg-zinc-400 max-w-4xl my-10 mx-auto;
+    @apply border-dotted bg-black max-w-4xl;
   }
 
   .view_skeleton {

@@ -13,6 +13,7 @@ const config: Config = {
         xs: "475px",
       },
       colors: {
+        background: "#FFFFFF",
         input: "#242F66",
         primary: {
           "100": "#F7F8FD",

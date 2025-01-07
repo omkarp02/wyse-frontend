@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,3 +13,10 @@ export function calculateDiscountedPrice(originalPrice: number, discountPercenta
   return finalPrice;
 }
 
+
+export const createSearchParamsUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
+  const paramsString = params.toString()
+  const queryString = `${paramsString.length ? "?" : ""}${paramsString}`
+  return `${pathname}${queryString}`
+
+}

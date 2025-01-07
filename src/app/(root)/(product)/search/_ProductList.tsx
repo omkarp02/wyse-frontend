@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
 import { getProductList } from "@/services/product/list-product";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import ProductCard from "../_component/ProductCard";
+import { useSearchParams } from "next/navigation";
 
 const ProductList = () => {
+  const searchParams = useSearchParams();
+
+  const name = searchParams.get("search");
+
   const {
     data: productList,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["product"], //Array according to Documentation
-    queryFn: async () => await getProductList(1, 10),
+    queryKey: ["product", name], //Array according to Documentation
+    queryFn: async () =>
+      await getProductList({ page: 1, limit: 10, name }),
   });
 
   if (isLoading) return <h1> LoADING </h1>;
@@ -23,7 +29,7 @@ const ProductList = () => {
         Array.isArray(productList.data) &&
         productList.data.map((ele, index) => (
           <ProductCard
-            className=""
+            className="px-1 h-[46vh] w-[49.5%]"
             discount={ele.discount}
             imgLink={ele.imgLink}
             name={ele.name}

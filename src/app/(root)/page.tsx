@@ -1,108 +1,161 @@
-"use client";
-
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   DotButton,
 } from "@/components/ui/carousel";
+import {
+  BESTSELLER_PRODUCT,
+  CATEGORY_LIST,
+  LATEST_PRODUCT,
+} from "@/lib/constants";
+import { getCategoriesApi } from "@/services/master/categories";
+import { getProductList } from "@/services/product/list-product";
+import { ICategory, IProductList } from "@/types/api";
 
-import Autoplay from "embla-carousel-autoplay";
 import { DollarSign, Truck, Undo2 } from "lucide-react";
+import { unstable_cache } from "next/cache";
 import Image from "next/image";
-import { useRef } from "react";
+import { cache } from "react";
+import ProductCard from "./(product)/_component/ProductCard";
+import { Button } from "@/components/ui/button";
 
-const images = [
-  {
-    link: "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
-  },
-  {
-    link: "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
-  },
-];
+const revalidate = 1;
+// const revalidate = 24 * 3600
 
-const trendingimages = [
-  {
-    link: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
+const cmsData = {
+  carousel: [
+    {
+      imgLink:
+        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
+      redirect: "",
+    },
+    {
+      imgLink:
+        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
+      redirect: "",
+    },
+    {
+      imgLink:
+        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
+      redirect: "",
+    },
+    {
+      imgLink:
+        "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
+      redirect: "",
+    },
+    {
+      imgLink:
+        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
+      redirect: "",
+    },
+    {
+      imgLink:
+        "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
+      redirect: "",
+    },
+  ],
+  sectionTwo: {
+    title: "Most Popular",
+    subTitle: "Check Out Now ->",
+    carousel: [
+      {
+        imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
+        redirect: "",
+      },
+      {
+        imgLink:
+          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
+        redirect: "",
+      },
+    ],
   },
-  {
-    link: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
+  featureImgLink:
+    "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350",
+  categories: {
+    title: "Shop for Men",
   },
-  {
-    link: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
+  banner: "https://nobero.com/cdn/shop/files/Our_Story-2_1.webp?v=1723793985",
+  sectionThree: {
+    title: "See the latest",
+    subTitle: "Handpicked for you",
+    buttonText: "Shop All Products",
   },
-  {
-    link: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
+  featuredProduct: {
+    imgOne:
+      "https://nobero.com/cdn/shop/files/TRAVEL_HOODIE_213e7bdf-2a73-472b-b4ef-7281e4cfbc00.jpg?v=1735620251",
+    imgTwo:
+      "https://nobero.com/cdn/shop/files/MicrosoftTeams-image_5_2d6c21a9-8e7e-4c04-96d8-bfdfabf562b9.png?v=1735620251",
   },
-];
+  sectionFour: {
+    title: "Our Bestsellers",
+    subTitle: "Don't miss out Top Selling styles",
+    buttonText: "Shop All Products",
+  },
+};
 
-const categoriesImg = [
-  {
-    link: "https://nobero.com/cdn/shop/files/Hoodies_3.jpg",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/O._Tees_1_268fd8dd-926a-4d4b-a48b-e53b1bc823c2.png",
-    name: "t-shirt",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/O._Tees_1.png",
-    name: "oversized tshirt",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Hoodies_6_7344e12e-e51d-4d04-a51c-14119bcc3ba7.jpg",
-    name: "jacket",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Hoodies_1.png",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Joggers_1_d89bfdeb-6295-49a8-9160-7853ed6b1088.png",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/collections/9.jpg",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/collections/8.jpg",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/Shorts_6ca0b211-d2f3-4232-844e-4e5c4b4c2d5f.png",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/collections/Cargo_Pants_Icon_Home_Page_copy.jpg",
-    name: "hoodies",
-  },
-  {
-    link: "https://nobero.com/cdn/shop/files/travel_jogger_copy.png",
-    name: "hoodies",
-  },
-];
+let count = 0;
 
-export default function Home() {
+const getCategories = unstable_cache(
+  async () => {
+    count += 1;
+    return await getCategoriesApi();
+  },
+  [CATEGORY_LIST],
+  { revalidate }
+);
+
+const getLatestProduct = unstable_cache(
+  async () => {
+    count += 1;
+    const payload = {
+      page: 1,
+      limit: 4,
+      collection: "latest",
+    };
+    return await getProductList(payload);
+  },
+  [LATEST_PRODUCT],
+  { revalidate }
+);
+
+const getBestSellerProduct = unstable_cache(
+  async () => {
+    count += 1;
+    const payload = {
+      page: 1,
+      limit: 4,
+      collection: "bestseller",
+    };
+    return await getProductList(payload);
+  },
+  [BESTSELLER_PRODUCT],
+  { revalidate }
+);
+
+export default async function Home() {
+  const categoryList = await getCategories();
+  const bestsellerProductList = await getBestSellerProduct();
+  const latestProductList = await getLatestProduct();
+
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Carousel className="relative">
         <CarouselContent className="h-[35vh]">
-          {images.map((e, i) => (
+          {cmsData.carousel.map((e, i) => (
             <CarouselItem key={i} className="relative">
-              <Image alt="asdf" src={e.link} fill />
+              <Image alt="asdf" src={e.imgLink} fill />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -111,16 +164,16 @@ export default function Home() {
 
       {/* Most trending section */}
 
-      <section className="text-center mt-6 ">
-        <p className="heading">Most Trending</p>
-        <p className="text-sm mt-2">Check Out Now</p>
+      <section className="text-center">
+        <p className="heading">{cmsData.sectionTwo.title}</p>
+        <p className="text-sm mt-2">{cmsData.sectionTwo.subTitle}</p>
         <Carousel className="relative mt-4">
           <CarouselContent className="h-[40vh]">
-            {trendingimages.map((e, i) => (
+            {cmsData.sectionTwo.carousel.map((e, i) => (
               <CarouselItem key={i} className="relative basis-2/3 px-1">
                 <Image
                   alt="asdf"
-                  src={e.link}
+                  src={e.imgLink}
                   width={500}
                   height={500}
                   style={{ height: "100%", width: "100%" }}
@@ -133,113 +186,107 @@ export default function Home() {
 
       {/* features section */}
 
-      <section className="bg-primary-100 text-primary h-20 flex justify-between px-2 my-8">
-        <div className="flex items-center gap-2">
-          <DollarSign />
-          <div>
-            <p className="font-bold text-sm uppercase tracking-wide">cash on</p>
-            <p className="uppercase text-sm font-medium">delivery</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Truck />
-          <div>
-            <p className="font-bold text-sm uppercase tracking-wide">free</p>
-            <p className="uppercase text-sm font-medium">shipping</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Undo2 />
-          <div>
-            <p className="font-bold text-sm uppercase tracking-wide">easy</p>
-            <p className="uppercase text-sm font-medium">return</p>
-          </div>
-        </div>
-      </section>
+      <Image
+        src={cmsData.featureImgLink}
+        alt="feature img"
+        className="w-full my-6"
+        width={330}
+        height={400}
+      />
 
       {/* Categories */}
 
       <section>
-        <p className="heading">Shop For Men</p>
+        <p className="heading">{cmsData.categories.title}</p>
         <div className="flex flex-wrap justify-center">
-          {categoriesImg.map((ele, index) => (
-            <div key={index} className="w-[45%] h-[45%] mx-2 my-4 relative">
-              <Image alt="asdf" src={ele.link} width={300} height={300} />
-              <p className="text-center">{ele.name}</p>
-            </div>
-          ))}
+          {categoryList?.data &&
+            categoryList?.data?.map((ele: ICategory, index: number) => (
+              <div key={index} className="w-[45%] h-[45%] mx-2 my-4 relative">
+                <Image alt="asdf" src={ele.icon} width={300} height={300} />
+                <p className="text-center">{ele.name}</p>
+              </div>
+            ))}
         </div>
       </section>
-    </>
+
+      <Image
+        src={cmsData.banner}
+        alt="banner img"
+        className="w-full"
+        width={330}
+        height={542}
+      />
+
+      <section>
+        <p className="heading">{cmsData.sectionThree.title}</p>
+        <p className="sub-heading mb-6">{cmsData.sectionThree.subTitle}</p>
+        <Carousel className="relative">
+          <CarouselContent className="h-fit">
+            {latestProductList?.data &&
+              latestProductList?.data.map((e: IProductList, i: number) => (
+                <CarouselItem key={i} className="relative basis-1/2">
+                  <ProductCard
+                    className="px-1 h-[45vh]"
+                    discount={e.discount}
+                    imgLink={e.imgLink}
+                    name={e.name}
+                    price={e.price}
+                    key={i}
+                  />
+                </CarouselItem>
+              ))}
+          </CarouselContent>
+          <DotButton className="flex justify-center my-2" />
+        </Carousel>
+        <div className="px-2 text-center">
+          <Button variant={"outline"} className="w-full">
+            Shop All Product
+          </Button>
+        </div>
+      </section>
+
+      <Image
+        src={cmsData.featuredProduct.imgOne}
+        alt="feature img"
+        className="w-full "
+        width={330}
+        height={400}
+      />
+      <Image
+        src={cmsData.featuredProduct.imgTwo}
+        alt="feature img"
+        className="w-full  p-4"
+        width={330}
+        height={400}
+      />
+
+      <section>
+        <p className="heading">{cmsData.sectionFour.title}</p>
+        <p className="sub-heading">{cmsData.sectionFour.subTitle}</p>
+        <Carousel className="relative">
+          <CarouselContent className="h-fit">
+            {bestsellerProductList?.data &&
+              bestsellerProductList?.data.map((e: IProductList, i: number) => (
+                <CarouselItem key={i} className="relative basis-1/2">
+                  <ProductCard
+                    className="px-1 h-[45vh]"
+                    discount={e.discount}
+                    imgLink={e.imgLink}
+                    name={e.name}
+                    price={e.price}
+                    key={i}
+                  />
+                </CarouselItem>
+              ))}
+          </CarouselContent>
+          <DotButton className="flex justify-center my-2" />
+        </Carousel>
+        <div className="px-2 text-center">
+          <Button variant={"outline"} className="w-full">
+            Shop All Product
+          </Button>
+        </div>
+      </section>
+    </div>
   );
-}
-
-export async function getStaticProps() {
-  
-
-  const cmsData = {
-    carousel: [
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
-        redirect: "",
-      },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
-        redirect: "",
-      },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
-        redirect: "",
-      },
-      {
-        imgLink:
-          "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
-        redirect: "",
-      },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
-        redirect: "",
-      },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
-        redirect: "",
-      },
-    ],
-    sectionTwo: {
-      title: "Most Popular",
-      subTitle: "Check Out Now ->",
-      carousel: [
-        {
-          imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
-          redirect: ""
-        },
-        {
-          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
-          redirect: ""
-        },
-        {
-          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
-          redirect: ""
-        },
-        {
-          imgLink: "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
-          redirect: ""
-        },
-      ]
-
-    },
-    featureImgLink: "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350",
-
-  };
-
-  return {
-    props: {
-      cmsData,
-    },
-  };
 }

@@ -79,7 +79,7 @@
   }
 
   .sub-heading {
-    @apply scroll-m-20 mt-2 text-sm  
+    @apply scroll-m-20 mt-2 text-sm  text-center
   }
 
   .main-container {

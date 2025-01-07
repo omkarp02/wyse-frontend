@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils";
 import { EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel, { UseEmblaCarouselType } from "embla-carousel-react";
@@ -209,13 +211,11 @@ const DotButton: React.FC<PropType> = ({className, ...restProps }) => {
           type="button"
           {...restProps}
           className={cn(
-            "embla__dot",
-            selectedIndex === index ? " embla__dot--selected" : ""
           )}
           key={index}
           onClick={() => onDotButtonClick(index)}
         >
-          <Circle color={selectedIndex === index ? "white" : "black"} size={15} className="mx-1" strokeWidth={3} />
+          <Circle color={selectedIndex === index ? "blue" : "black"} size={10} className="mx-1" strokeWidth={3} />
         </button>
       ))}
     </div>

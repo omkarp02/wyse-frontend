@@ -19,13 +19,48 @@ import {
 } from "lucide-react";
 import { SearchInput } from "./ui/search-input";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, createSearchParamsUrl } from "@/lib/utils";
+import z from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InternalServerError } from "@/lib/errors/errors";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
-export default function Component() {
+const searchSchema = z.object({
+  search: z.string(),
+});
+
+type IFormFields = z.infer<typeof searchSchema>;
+
+export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
+  const router = useRouter()
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  // const router = useRouter()
+
+  const { register, handleSubmit, reset } = useForm<IFormFields>({
+    resolver: zodResolver(searchSchema),
+  });
+
+  const onSubmit: SubmitHandler<IFormFields> = async (data) => {
+    try {
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.set("search", data.search);
+      const searchUrl = createSearchParamsUrl(pathName, newParams);
+      
+
+    } catch (error) {
+      InternalServerError();
+    }
+  };
 
   function toggleSearchInput() {
     setShowSearch((prev) => !prev);
+  }
+
+  function handleOnClear() {
+    reset();
   }
 
   return (
@@ -46,9 +81,9 @@ export default function Component() {
             </div>
           </SheetContent>
         </Sheet>
-      
+
         <div className="flex gap-3">
-          <CircleUserRound   />
+          <CircleUserRound />
           {showSearch ? (
             <X onClick={toggleSearchInput} />
           ) : (
@@ -57,12 +92,17 @@ export default function Component() {
           <ShoppingCart />
         </div>
       </div>
-      <div
+      <form
+        onSubmit={handleSubmit(onSubmit)}
         className={cn(" w-full bg-white p-2", showSearch ? "block" : "hidden")}
         style={{ zIndex: 1 }}
       >
-        <SearchInput placeholder="Search..." />
-      </div>
+        <SearchInput
+          onClear={handleOnClear}
+          placeholder="Search..."
+          {...register("search")}
+        />
+      </form>
     </header>
   );
 }

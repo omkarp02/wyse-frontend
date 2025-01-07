@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Divider from "@/components/ui/divider";
 import { InternalServerError } from "@/lib/errors/errors";
 import { emailSchema, mobileSchema } from "@/lib/validation/commonSchema";
+import { loginApi } from "@/services/auth/user-account";
 import { IApiError } from "@/types/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -51,7 +52,7 @@ const RegisterPage = () => {
   const onSubmit: SubmitHandler<IFormFields> = async (data) => {
     try {
       console.log(data.birthdate)
-      // const res = await loginApi(data);
+      const res = await loginApi(data);
     } catch (error) {
       const typeError = error as IApiError;
 

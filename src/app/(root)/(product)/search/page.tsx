@@ -9,17 +9,21 @@ import getQueryClient from "@/lib/queryClient";
 
 const SearchPage = async ({
   searchParams,
-}: {searchParams:  Promise<{ [key: string]: string | string[] | undefined }>}) => {
+}: {searchParams:  Promise<{ [key: string]: string | undefined }>}) => {
 
   const param = await searchParams
-  const page =  param['page'] ? +param['page'] : 1
-
+  const page =  param['page'] || "1"
+  const collection = param['collection'] || null
+  const name = param['search'] || null
 
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["product"], //Array according to Documentation
-    queryFn: async () => await getProductList(page, 10),
+    queryKey: ["product", name], //Array according to Documentation
+    queryFn: async () => {
+      console.log(">>>>>>>>>>>>>>>>>>>>> server side funtion called here")
+      return await getProductList({page: +page, limit: 10, collection, name})
+    },
   });
   const dehydratedState = dehydrate(queryClient);
 
@@ -28,7 +32,7 @@ const SearchPage = async ({
       <p className="heading">Cargo for men</p>
       <p className="sub-heading">76 items</p>
       <HydrationBoundary state={dehydratedState}>
-        <ProductList />
+        <ProductList  />
       </HydrationBoundary>
     </div>
   );

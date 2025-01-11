@@ -17,8 +17,8 @@ import { DollarSign, Truck, Undo2 } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import { cache } from "react";
-import ProductCard from "./(product)/_component/ProductCard";
 import { Button } from "@/components/ui/button";
+import ProductCard from "./_component/ProductCard";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600

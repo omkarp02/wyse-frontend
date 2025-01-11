@@ -25,6 +25,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InternalServerError } from "@/lib/errors/errors";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/Auth";
 
 const searchSchema = z.object({
   search: z.string(),
@@ -32,12 +33,15 @@ const searchSchema = z.object({
 
 type IFormFields = z.infer<typeof searchSchema>;
 
+const routesForCart = ["/search"]
+const routesForUser = ["/"]
+
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  // const router = useRouter()
+  const token = useAuthStore((state) => state.jwt);
 
   const { register, handleSubmit, reset } = useForm<IFormFields>({
     resolver: zodResolver(searchSchema),
@@ -48,8 +52,6 @@ export default function Navbar() {
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set("search", data.search);
       const searchUrl = createSearchParamsUrl(pathName, newParams);
-      
-
     } catch (error) {
       InternalServerError();
     }
@@ -62,6 +64,7 @@ export default function Navbar() {
   function handleOnClear() {
     reset();
   }
+
 
   return (
     <header className=" w-full relative">
@@ -83,13 +86,13 @@ export default function Navbar() {
         </Sheet>
 
         <div className="flex gap-3">
-          <CircleUserRound />
+          {routesForUser.includes(pathName) && <CircleUserRound />}
           {showSearch ? (
             <X onClick={toggleSearchInput} />
           ) : (
             <Search onClick={toggleSearchInput} />
           )}
-          <ShoppingCart />
+          {routesForCart.includes(pathName) && <ShoppingCart />}
         </div>
       </div>
       <form

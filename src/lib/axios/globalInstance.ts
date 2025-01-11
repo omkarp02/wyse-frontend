@@ -1,13 +1,14 @@
 import axios from "axios";
+import { BACKEND_URL } from "../constants";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api/v1", // Replace with your API base URL
+const globalInstance = axios.create({
+  baseURL: BACKEND_URL, // Replace with your API base URL
   timeout: 1000,
   headers: { "Content-Type": "application/json" },
 });
 
 // Add a request interceptor
-axiosInstance.interceptors.request.use(
+globalInstance.interceptors.request.use(
   function (config) {
     return config;
   },
@@ -18,7 +19,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // Add a response interceptor
-axiosInstance.interceptors.response.use(
+globalInstance.interceptors.response.use(
   (res)=> {
     return res?.data
   },
@@ -27,4 +28,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default globalInstance;

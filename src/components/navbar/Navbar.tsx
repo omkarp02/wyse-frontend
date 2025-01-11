@@ -17,7 +17,7 @@ import {
   ShoppingCart,
   X,
 } from "lucide-react";
-import { SearchInput } from "./ui/search-input";
+import { SearchInput } from "../ui/search-input";
 import { useState } from "react";
 import { cn, createSearchParamsUrl } from "@/lib/utils";
 import z from "zod";
@@ -25,7 +25,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InternalServerError } from "@/lib/errors/errors";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/Auth";
+import { useBoundStore } from "@/store/store";
 
 const searchSchema = z.object({
   search: z.string(),
@@ -41,7 +41,9 @@ export default function Navbar() {
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const token = useAuthStore((state) => state.jwt);
+  const token = useBoundStore((state) => state.token);
+
+  console.log(token,'<<<<<<<<<<<<<<<< here isthe tokne')
 
   const { register, handleSubmit, reset } = useForm<IFormFields>({
     resolver: zodResolver(searchSchema),
@@ -65,10 +67,18 @@ export default function Navbar() {
     reset();
   }
 
+  function handleUserProfileClick() {
+    if(token) {
+      router.push("/profile")
+    }else {
+      router.push("/login")
+    }
+  }
+
 
   return (
-    <header className=" w-full relative">
-      <div className="flex-between navbar-h px-2 border-b border-b-black">
+    <header className="w-full relative">
+      <div className="flex-between h-navbar px-2 border-b border-b-black">
         <Sheet>
           <SheetTrigger>
             <Menu />
@@ -86,7 +96,7 @@ export default function Navbar() {
         </Sheet>
 
         <div className="flex gap-3">
-          {routesForUser.includes(pathName) && <CircleUserRound />}
+          {routesForUser.includes(pathName) && <CircleUserRound onClick={handleUserProfileClick} />}
           {showSearch ? (
             <X onClick={toggleSearchInput} />
           ) : (

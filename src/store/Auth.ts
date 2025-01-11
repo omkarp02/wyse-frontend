@@ -1,9 +1,9 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 type IAuthState = {
-  jwt: string | null;
+  token: string | null;
   hydrated: boolean;
 };
 
@@ -12,25 +12,15 @@ type IAuthAction = {
   setToken(token: string): void;
 };
 
-export const useAuthStore = create<IAuthState & IAuthAction>()(
-  persist(
-    immer((set) => ({
-      jwt: null,
-      hydrated: false,
-      setHydrated() {
-        set({ hydrated: true });
-      },
-      setToken(token) {
-        set({ jwt: token });
-      },
-    })),
-    {
-      name: "auth",
-      onRehydrateStorage() {
-        return (state, error) => {
-          if (!error) state?.setHydrated();
-        };
-      },
-    }
-  )
-);
+export type IAuthStore = IAuthAction & IAuthState;
+
+export const authStore: StateCreator<IAuthStore> = (set) => ({
+  token: null,
+  hydrated: false,
+  setHydrated() {
+    set({ hydrated: true });
+  },
+  setToken(token) {
+    set({ token: token });
+  },
+});

@@ -1,3 +1,5 @@
+
+
 import {
   Carousel,
   CarouselContent,
@@ -19,6 +21,7 @@ import Image from "next/image";
 import { cache } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./_component/ProductCard";
+import { useBoundStore } from "@/store/store";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600

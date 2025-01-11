@@ -1,9 +1,8 @@
-import axiosInstance from "@/lib/axios/globalInstance";
-import { ICategory } from "@/types/api";
+import globalInstance from "@/lib/axios/globalInstance";
 
 
 
 export const getCategoriesApi = async () => {
-  const data = await axiosInstance.get(`/category`);
+  const data = await globalInstance.get(`/category`);
   return data;
 };

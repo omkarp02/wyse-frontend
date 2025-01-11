@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,7 +13,7 @@
 @layer base {
   :root {
     --radius: 0.5rem;
-    --navbar-height: 60px
+    --navbar-height: 60px;
   }
 }
 
@@ -26,12 +26,8 @@
     @apply flex justify-center items-center;
   }
 
-  .min-h-vh {
-    min-height: calc(100vh - var(--navbar-height))
-  }
-
-  .navbar-h{
-    height: var(--navbar-height)
+  .link {
+    @apply underline underline-offset-4 text-primary font-semibold
   }
 
   .text-30-extrabold {
@@ -79,11 +75,12 @@
   }
 
   .sub-heading {
-    @apply scroll-m-20 mt-2 text-sm  text-center
+    @apply scroll-m-20 mt-2 text-sm  text-center;
   }
 
   .main-container {
-    @apply px-1
+    @apply px-1;
+    min-height: calc(100vh - var(--navbar-height));
   }
 
   .section_container {
@@ -103,8 +100,14 @@
   }
 
   .absolute-center {
-    @apply absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2
+    @apply absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2;
   }
+
+  .absolute-center-right {
+    @apply absolute right-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2;
+  }
+
+  
 
   /* profile */
   .profile_container {
@@ -227,11 +230,11 @@
 
   .pattern {
     background-image: linear-gradient(
-            to right,
-            transparent 49.5%,
-            rgba(251, 232, 67, 0.2) 49.5%,
-            rgba(251, 232, 67, 0.6) 50.5%,
-            transparent 50.5%
+      to right,
+      transparent 49.5%,
+      rgba(251, 232, 67, 0.2) 49.5%,
+      rgba(251, 232, 67, 0.6) 50.5%,
+      transparent 50.5%
     );
     background-size: 5% 100%;
     background-position: center;
@@ -246,4 +249,3 @@
 .w-md-editor-toolbar {
   padding: 10px !important;
 }
-

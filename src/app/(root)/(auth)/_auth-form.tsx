@@ -127,12 +127,12 @@ export function AuthForm({
         <Link href={`${BACKEND_URL}/auth/google`}>
           <Button disabled={isSubmitting} variant="outline" className="w-full">
             <GoogleIcon />
-            Sign in with Google
+            {isLogin ? "Sign in with Google" : "Sign Up with Google"}
           </Button>
         </Link>
         <Button disabled={isSubmitting} variant="outline" className="w-full">
           <FacebookIcon />
-          Sign in with Facebook
+          {isLogin ? "Sign in with Facebook" : "Sign Up with Facebook"}
         </Button>
       </div>
 

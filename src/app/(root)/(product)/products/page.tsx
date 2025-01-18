@@ -1,39 +1,46 @@
-"use client"
-
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { GET_PRODUCT } from "@/lib/constants";
+import getQueryClient from "@/lib/queryClient";
+import { getProductDetails } from "@/services/product/product-detail";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
+import ProductDetail from "./_ProductDetail";
 
-const imageLink = [
-  "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0011.webp?v=1734158131",
-  "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0006.webp?v=1734158131",
-  "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0007.webp?v=1734158131&width=360",
-  "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0010.webp?v=1734158131&width=360",
-];
+const ProductPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) => {
+  const param = await searchParams;
+  const id = param["id"] || null;
 
-const ProductPage = () => {
-  return (
-    <div>
-      <section>
-        <Carousel className="relative mt-4">
-          <CarouselContent >
-            {imageLink.map((e, i) => (
-              <CarouselItem key={i} className="relative basis-11/12 px-1">
-                <Image
-                  alt="asdf"
-                  src={e}
-                  width={500}
-                  height={500}
-                  style={{ height: "auto", width: "100%" }}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </section>
-      
-    </div>
-  );
+  const queryClient = getQueryClient();
+
+  if (id === null) return <></>
+
+  await queryClient.prefetchQuery({
+    queryKey: [GET_PRODUCT, id],
+    queryFn: async () => {
+      console.log("server side api called")
+      return await getProductDetails(id);
+    },
+    retry: false,
+  });
+  const dehydratedState = dehydrate(queryClient);
+
+  console.log("here is something happeningd here")
+
+  return  <div className="main-container">
+  <HydrationBoundary state={dehydratedState}>
+    <ProductDetail  />
+  </HydrationBoundary>
+  <div className="h-10"></div>
+</div>
 };
 
 export default ProductPage;

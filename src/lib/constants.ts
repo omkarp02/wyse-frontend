@@ -1,17 +1,17 @@
-export const LIMIT = 10
+export const LIMIT = 10;
 
 //React query key
 
-export const CATEGORY_LIST = 'category-list'
-export const LATEST_PRODUCT = 'latest_product'
-export const BESTSELLER_PRODUCT = 'bestseller_product'
-
+export const CATEGORY_LIST = "category-list";
+export const LATEST_PRODUCT = "latest_product";
+export const BESTSELLER_PRODUCT = "bestseller_product";
+export const LIST_PRODUCT = "list-product";
+export const GET_PRODUCT = "get-product";
 
 //Pagination
 
-export const PRODUCT_LIMIT = 10
-
+export const PRODUCT_LIMIT = 10;
 
 //Axios
 
-export const BACKEND_URL = "http://localhost:8080/api/v1"
+export const BACKEND_URL = "http://localhost:8080/api/v1";

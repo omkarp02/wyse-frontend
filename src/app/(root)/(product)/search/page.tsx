@@ -6,6 +6,7 @@ import {
 import { getProductList } from "@/services/product/list-product";
 import ProductList from "./_ProductList";
 import getQueryClient from "@/lib/queryClient";
+import { LIST_PRODUCT } from "@/lib/constants";
 
 const SearchPage = async ({
   searchParams,
@@ -14,14 +15,13 @@ const SearchPage = async ({
   const param = await searchParams
   const page =  param['page'] || "1"
   const collection = param['collection'] || null
-  const name = param['search'] || null
+  const name = param['name'] || null
 
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["product", name], //Array according to Documentation
+    queryKey: [LIST_PRODUCT, name],
     queryFn: async () => {
-      console.log(">>>>>>>>>>>>>>>>>>>>> server side funtion called here")
       return await getProductList({page: +page, limit: 10, collection, name})
     },
   });
@@ -34,6 +34,7 @@ const SearchPage = async ({
       <HydrationBoundary state={dehydratedState}>
         <ProductList  />
       </HydrationBoundary>
+      <div className="h-10"></div>
     </div>
   );
 };

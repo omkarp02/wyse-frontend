@@ -36,3 +36,11 @@ export const getToken = () => {
     return persistedToken;
   }
 };
+
+export const getActualPrice = (price: number, discount: number) => {
+  return Math.round(price / (1 - discount/100))
+}
+
+export const getDiscountOnPrice = (price: number, discount: number) => {
+  return Math.round(getActualPrice(price, discount) * (discount / 100))
+}

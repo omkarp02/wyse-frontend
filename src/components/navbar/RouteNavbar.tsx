@@ -14,7 +14,7 @@ export default function RouteNavbar() {
   return (
     <header className="w-full relative">
       <div className="flex items-center gap-4 h-navbar px-2 border-b ">
-          <ArrowLeft onClick={handleBack} />
+          <ArrowLeft className="cursor-pointer" onClick={handleBack} />
           <span className="text-semibold text-lg capitalize">{pathName.split("/")[1]}</span>
       </div>
     </header>

@@ -27,6 +27,9 @@ import { AUTH_PAGE_TYPE } from "@/lib/enums";
 import { useRouter } from "next/navigation";
 import { BACKEND_URL } from "@/lib/constants";
 import { useBoundStore } from "@/store/store";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import ScreenLoader from "@/components/loader/ScreenLoader";
 
 const loginSchema = z.object({
   email: emailSchema,
@@ -41,7 +44,7 @@ const registerSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmpassword"],
+    path: ["confirmPassword"],
   });
 
 type IFormFields = z.infer<typeof loginSchema> | z.infer<typeof registerSchema>;
@@ -60,8 +63,9 @@ export function AuthForm({
   ...props
 }: IAuthForm) {
   const router = useRouter();
-  const setToken = useBoundStore(state => state.setToken)
+  const setToken = useBoundStore((state) => state.setToken);
   const { toast } = useToast();
+  const [showScreenLoader, setScreenLoader] = useState(false);
 
   const isLogin = type === AUTH_PAGE_TYPE.LOGIN;
 
@@ -79,9 +83,11 @@ export function AuthForm({
 
   const onSubmit: SubmitHandler<IFormFields> = async (data) => {
     try {
+      setScreenLoader(true);
       if (isLogin) {
         const res = await loginApi(data);
         setToken(res.data.accessToken);
+        router.push("/");
       } else {
         const res = await registerApi({
           email: data.email,
@@ -113,10 +119,16 @@ export function AuthForm({
       } else {
         InternalServerError();
       }
+    } finally {
+      setScreenLoader(false);
     }
   };
 
-  return (
+  console.log(fullErrors);
+
+  return showScreenLoader ? (
+    <ScreenLoader />
+  ) : (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <p className="heading" style={{ marginTop: "0" }}>
         {title}
@@ -149,35 +161,36 @@ export function AuthForm({
               errMsg={errors.email?.message}
             />
           </div>
+
+          <div>
+            {" "}
+            <Input
+              id="password"
+              placeholder="Password"
+              type="password"
+              {...register("password")}
+              errMsg={errors.password?.message}
+            />
+            {isLogin && (
+              <a
+                href="#"
+                className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
+              >
+                Forgot your password?
+              </a>
+            )}
+          </div>
           {!isLogin && (
             <div>
-              {" "}
               <Input
-                id="password"
-                placeholder="Password"
+                id="confirmPassword"
+                placeholder="Confirm Password"
                 type="password"
-                {...register("password")}
-                errMsg={errors.password?.message}
+                {...register("confirmPassword")}
+                errMsg={fullErrors.confirmPassword?.message}
               />
-              {isLogin && (
-                <a
-                  href="#"
-                  className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              )}
             </div>
           )}
-          <div>
-            <Input
-              id="confirmPassword"
-              placeholder="Confirm Password"
-              type="password"
-              {...register("confirmPassword")}
-              errMsg={fullErrors.confirmPassword?.message}
-            />
-          </div>
           <Button disabled={isSubmitting} type="submit" className="w-full">
             {isLogin ? "Sign In" : "Sign Up"}
           </Button>

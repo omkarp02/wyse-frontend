@@ -18,7 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { SearchInput } from "../ui/search-input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn, createSearchParamsUrl } from "@/lib/utils";
 import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -33,8 +33,8 @@ const searchSchema = z.object({
 
 type IFormFields = z.infer<typeof searchSchema>;
 
-const routesForCart = ["/search"]
-const routesForUser = ["/"]
+const routesForCart = ["/search"];
+const routesForUser = ["/"];
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
@@ -43,24 +43,35 @@ export default function Navbar() {
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
 
-  console.log(token,'<<<<<<<<<<<<<<<< here isthe tokne')
-
-  const { register, handleSubmit, reset } = useForm<IFormFields>({
-    resolver: zodResolver(searchSchema),
-  });
+  const { register, handleSubmit, setFocus, reset } = useForm<IFormFields>();
 
   const onSubmit: SubmitHandler<IFormFields> = async (data) => {
     try {
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set("search", data.search);
-      const searchUrl = createSearchParamsUrl(pathName, newParams);
+      if (data.search) {
+        newParams.set("name", data.search);
+      } else {
+        newParams.delete("name");
+      }
+      let searchUrl;
+
+      if (pathName === "/search") {
+        searchUrl = createSearchParamsUrl(pathName, newParams);
+        window.history.replaceState({}, "", searchUrl);
+      } else {
+        searchUrl = createSearchParamsUrl("/search", newParams);
+        router.push(searchUrl);
+      }
+      setShowSearch(false);
     } catch (error) {
       InternalServerError();
     }
   };
 
   function toggleSearchInput() {
-    setShowSearch((prev) => !prev);
+    setShowSearch((prev) => {
+      return !prev;
+    });
   }
 
   function handleOnClear() {
@@ -68,39 +79,49 @@ export default function Navbar() {
   }
 
   function handleUserProfileClick() {
-    if(token) {
-      router.push("/profile")
-    }else {
-      router.push("/login")
+    if (token) {
+      router.push("/profile");
+    } else {
+      router.push("/login");
     }
   }
 
+  useEffect(()=> {
+    if(showSearch){
+      setFocus("search")
+    }
+  },[showSearch])
 
   return (
     <header className="w-full relative">
       <div className="flex-between h-navbar px-2 border-b border-b-black">
         <Sheet>
           <SheetTrigger>
-            <Menu />
+            <Menu className="cursor-pointer" />
           </SheetTrigger>
           <SheetContent side={"left"} className="bg-white w-full">
             <SheetTitle></SheetTitle>
             <div className="flex justify-between">
               <SheetClose>
-                <X />
+                <X className="cursor-pointer" />
               </SheetClose>
               <Gitlab />
-              <ShoppingCart />
+              <ShoppingCart className="cursor-pointer" />
             </div>
           </SheetContent>
         </Sheet>
 
         <div className="flex gap-3">
-          {routesForUser.includes(pathName) && <CircleUserRound onClick={handleUserProfileClick} />}
+          {routesForUser.includes(pathName) && (
+            <CircleUserRound
+              className="cursor-pointer"
+              onClick={handleUserProfileClick}
+            />
+          )}
           {showSearch ? (
-            <X onClick={toggleSearchInput} />
+            <X onClick={toggleSearchInput} className="cursor-pointer" />
           ) : (
-            <Search onClick={toggleSearchInput} />
+            <Search onClick={toggleSearchInput} className="cursor-pointer" />
           )}
           {routesForCart.includes(pathName) && <ShoppingCart />}
         </div>

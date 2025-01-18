@@ -5,18 +5,19 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import ProductCard from "../_component/ProductCard";
 import { useSearchParams } from "next/navigation";
+import { LIST_PRODUCT } from "@/lib/constants";
 
 const ProductList = () => {
   const searchParams = useSearchParams();
 
-  const name = searchParams.get("search");
+  const name = searchParams.get("name");
 
   const {
     data: productList,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["product", name], //Array according to Documentation
+    queryKey: [LIST_PRODUCT, name], 
     queryFn: async () =>
       await getProductList({ page: 1, limit: 10, name }),
   });
@@ -33,6 +34,7 @@ const ProductList = () => {
             discount={ele.discount}
             imgLink={ele.imgLink}
             name={ele.name}
+            productLink={`/products?id=${ele.productDetailId}`}
             price={ele.price}
             key={index}
           />

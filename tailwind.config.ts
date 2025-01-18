@@ -13,7 +13,10 @@ const config: Config = {
         xs: "475px",
       },
       colors: {
-        background: "#FFFFFF",
+        background: {
+          "300": "#7D8087",
+          DEFAULT: "#FFFFFF",
+        },
         input: "#242F66",
         primary: {
           "100": "#F7F8FD",
@@ -44,7 +47,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        "roboto": ["var(--font-roboto)"],
+        roboto: ["var(--font-roboto)"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -57,8 +60,8 @@ const config: Config = {
         300: "2px 2px 0px 2px rgb(238, 43, 105)",
       },
       spacing: {
-        'navbar': "var(--navbar-height)",  // 60px navbar height
-      }
+        navbar: "var(--navbar-height)", // 60px navbar height
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],

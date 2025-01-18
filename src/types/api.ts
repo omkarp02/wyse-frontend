@@ -14,3 +14,15 @@ export type IProductList = {
   price: number;
   imgLink: string;
 };
+
+export type IVariation = {
+  size: string;
+  price: number;
+  discount: number;
+};
+
+export type IBatchProductDetail = {
+  imgLink: string;
+  productDetailId: string;
+  productListId: string;
+};

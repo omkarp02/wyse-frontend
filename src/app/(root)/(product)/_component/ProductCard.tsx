@@ -1,5 +1,6 @@
 import { calculateDiscountedPrice, cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type TProductCard = {
@@ -8,6 +9,7 @@ type TProductCard = {
   price: number;
   discount: number;
   className: string;
+  productLink: string
 };
 
 const ProductCard = ({
@@ -15,10 +17,11 @@ const ProductCard = ({
   name,
   price,
   discount,
+  productLink,
   className,
 }: TProductCard) => {
   return (
-    <div className={cn("relative my-4", className)}>
+    <Link href={productLink} className={cn("relative my-4", className)}>
       <div className="h-5/6 w-full">
         <Image
           alt="asdf"
@@ -40,7 +43,7 @@ const ProductCard = ({
           <p className="text-success">50% off</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

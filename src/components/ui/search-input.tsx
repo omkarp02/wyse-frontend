@@ -28,10 +28,7 @@ const SearchInput = ({
         {...props}
       />
 
-      <X
-        role="button"
-        onClick={onClear}
-      />
+      <X role="button" onClick={onClear} />
     </div>
   );
 };

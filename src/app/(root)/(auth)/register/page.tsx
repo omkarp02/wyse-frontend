@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthForm } from "../_auth-form";
-import { AUTH_PAGE_TYPE } from "@/lib/enums";
+import { AUTH_PAGE_TYPE } from "@/utils/enums";
 
 const RegisterPage = () => {
   return (

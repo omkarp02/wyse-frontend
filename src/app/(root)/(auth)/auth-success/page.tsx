@@ -1,18 +1,18 @@
 "use client";
 
-import { ROUTES } from "@/lib/enums";
+import { ROUTES } from "@/utils/enums";
 import { useBoundStore } from "@/store/store";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const AuthSuccess = () => {
   const searchParams = useSearchParams();
-  const jwt = searchParams.get("token") || null;
+  const token = searchParams.get("token") || null;
   const router = useRouter()
 
-  const setToken = useBoundStore((state) => state.setToken);
+  const setLoggedIn = useBoundStore((state) => state.setLoggedIn);
 
-  if (jwt) {
-    setToken(jwt);
+  if (token) {
+    setLoggedIn({token: token});
     router.replace(ROUTES.HOME)
   }else{
     router.back()

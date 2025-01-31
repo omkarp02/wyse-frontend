@@ -9,7 +9,8 @@ const ReactQueryProvider = ({ children }: { children: ReactNode }) => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 10000
+            staleTime: 10000, 
+            retry: 0
           },
         },
       })

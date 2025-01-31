@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import ProductCard from "../_component/ProductCard";
 import { useSearchParams } from "next/navigation";
-import { LIST_PRODUCT } from "@/lib/constants";
+import { LIST_PRODUCT } from "@/constants/reactquery";
 
 const ProductList = () => {
   const searchParams = useSearchParams();
@@ -22,7 +22,7 @@ const ProductList = () => {
       await getProductList({ page: 1, limit: 10, name }),
   });
 
-  if (isLoading) return <h1> LoADING </h1>;
+  if (isLoading) return <h1> loading... </h1>;
   if (isError) return <div>Sorry There was an Error</div>;
   return (
     <div className="flex flex-wrap justify-between mt-5">
@@ -34,7 +34,7 @@ const ProductList = () => {
             discount={ele.discount}
             imgLink={ele.imgLink}
             name={ele.name}
-            productLink={`/products?id=${ele.productDetailId}`}
+            productLink={`/products?id=${ele.productDetailId}&batch=${ele.batchId}`}
             price={ele.price}
             key={index}
           />

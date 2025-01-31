@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/helper";
 import { Search, X } from "lucide-react";
 
 type ISearchInput = React.ComponentProps<"input"> & {

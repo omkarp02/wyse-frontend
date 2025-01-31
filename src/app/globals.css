@@ -14,6 +14,7 @@
   :root {
     --radius: 0.5rem;
     --navbar-height: 60px;
+    --primary: #242F66;
   }
 }
 
@@ -27,7 +28,7 @@
   }
 
   .link {
-    @apply underline underline-offset-4 text-primary font-semibold
+    @apply underline underline-offset-4 text-primary font-semibold;
   }
 
   .text-30-extrabold {
@@ -81,6 +82,7 @@
   .main-container {
     @apply px-1;
     min-height: calc(100vh - var(--navbar-height));
+    height: fit-content;
   }
 
   .section_container {
@@ -106,8 +108,6 @@
   .absolute-center-right {
     @apply absolute right-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2;
   }
-
-  
 
   /* profile */
   .profile_container {

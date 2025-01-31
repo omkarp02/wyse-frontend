@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/helper";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,27 +18,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { emailSchema } from "@/lib/validation/commonSchema";
 import { loginApi, registerApi } from "@/services/auth/user-account";
 import { useToast } from "@/hooks/use-toast";
-import { ERROR_STATUS, InternalServerError } from "@/lib/errors/errors";
+import { ERROR_STATUS, InternalServerError } from "@/utils/errors/errors";
 import { IApiError } from "@/types/errors";
 import FacebookIcon from "@/components/icons/brand/FacebookIcon";
 import Divider from "@/components/ui/divider";
 import Link from "next/link";
-import { AUTH_PAGE_TYPE } from "@/lib/enums";
+import { AUTH_PAGE_TYPE } from "@/utils/enums";
 import { useRouter } from "next/navigation";
-import { BACKEND_URL } from "@/lib/constants";
 import { useBoundStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import ScreenLoader from "@/components/loader/ScreenLoader";
+import { BACKEND_URL } from "@/constants/common";
 
 const loginSchema = z.object({
-  email: emailSchema,
+  userId: emailSchema,
   password: z.string(),
 });
 
 const registerSchema = z
   .object({
-    email: emailSchema,
+    userId: emailSchema,
     password: z.string(),
     confirmPassword: z.string(),
   })
@@ -63,7 +63,7 @@ export function AuthForm({
   ...props
 }: IAuthForm) {
   const router = useRouter();
-  const setToken = useBoundStore((state) => state.setToken);
+  const setLoggedIn = useBoundStore((state) => state.setLoggedIn);
   const { toast } = useToast();
   const [showScreenLoader, setScreenLoader] = useState(false);
 
@@ -86,11 +86,11 @@ export function AuthForm({
       setScreenLoader(true);
       if (isLogin) {
         const res = await loginApi(data);
-        setToken(res.data.accessToken);
+        setLoggedIn({ token: res.data.accessToken });
         router.push("/");
       } else {
         const res = await registerApi({
-          email: data.email,
+          userId: data.userId,
           password: data.password,
         });
 
@@ -126,82 +126,88 @@ export function AuthForm({
 
   console.log(fullErrors);
 
-  return showScreenLoader ? (
-    <ScreenLoader />
-  ) : (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <p className="heading" style={{ marginTop: "0" }}>
-        {title}
-      </p>
-      <p className="sub-heading text-center">{subTitle}</p>
+  return (
+    <>
+      <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <p className="heading" style={{ marginTop: "0" }}>
+          {title}
+        </p>
+        <p className="sub-heading text-center">{subTitle}</p>
 
-      <div className="grid gap-2">
-        <Link href={`${BACKEND_URL}/auth/google`}>
+        <div className="grid gap-2">
+          <Link href={`${BACKEND_URL}/user/sso/google`}>
+            <Button
+              disabled={isSubmitting}
+              variant="outline"
+              className="w-full"
+            >
+              <GoogleIcon />
+              {isLogin ? "Sign in with Google" : "Sign Up with Google"}
+            </Button>
+          </Link>
           <Button disabled={isSubmitting} variant="outline" className="w-full">
-            <GoogleIcon />
-            {isLogin ? "Sign in with Google" : "Sign Up with Google"}
+            <FacebookIcon />
+            {isLogin ? "Sign in with Facebook" : "Sign Up with Facebook"}
           </Button>
-        </Link>
-        <Button disabled={isSubmitting} variant="outline" className="w-full">
-          <FacebookIcon />
-          {isLogin ? "Sign in with Facebook" : "Sign Up with Facebook"}
-        </Button>
-      </div>
+        </div>
 
-      <Divider text="OR" />
+        <Divider text="OR" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-3">
-          <div>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Email"
-              {...register("email")}
-              errMsg={errors.email?.message}
-            />
-          </div>
-
-          <div>
-            {" "}
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              {...register("password")}
-              errMsg={errors.password?.message}
-            />
-            {isLogin && (
-              <a
-                href="#"
-                className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </a>
-            )}
-          </div>
-          {!isLogin && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-3">
             <div>
               <Input
-                id="confirmPassword"
-                placeholder="Confirm Password"
-                type="password"
-                {...register("confirmPassword")}
-                errMsg={fullErrors.confirmPassword?.message}
+                id="email"
+                type="email"
+                placeholder="Email"
+                {...register("userId")}
+                errMsg={errors.userId?.message}
               />
             </div>
-          )}
-          <Button disabled={isSubmitting} type="submit" className="w-full">
-            {isLogin ? "Sign In" : "Sign Up"}
-          </Button>
-        </div>
-        <div className="mt-4 text-center text-sm">
-          {isLogin ? "Don't have an account" : "Already have an account ?"}
-          <Link href={isLogin ? "/register" : "/login"} className="link mx-2">
-            {isLogin ? "Sign Up" : "Sign In"}
-          </Link>
-        </div>
-      </form>
-    </div>
+
+            <div>
+              {" "}
+              <Input
+                id="password"
+                placeholder="Password"
+                type="password"
+                {...register("password")}
+                errMsg={errors.password?.message}
+              />
+              {isLogin && (
+                <a
+                  href="#"
+                  className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </a>
+              )}
+            </div>
+            {!isLogin && (
+              <div>
+                <Input
+                  id="confirmPassword"
+                  placeholder="Confirm Password"
+                  type="password"
+                  {...register("confirmPassword")}
+                  errMsg={fullErrors.confirmPassword?.message}
+                />
+              </div>
+            )}
+            <Button disabled={isSubmitting} type="submit" className="w-full">
+              {isLogin ? "Sign In" : "Sign Up"}
+            </Button>
+          </div>
+          <div className="mt-4 text-center text-sm">
+            {isLogin ? "Don't have an account" : "Already have an account ?"}
+            <Link href={isLogin ? "/register" : "/login"} className="link mx-2">
+              {isLogin ? "Sign Up" : "Sign In"}
+            </Link>
+          </div>
+        </form>
+        <ScreenLoader open={showScreenLoader} />
+      </div>
+      ;
+    </>
   );
 }

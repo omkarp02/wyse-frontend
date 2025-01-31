@@ -1,13 +1,13 @@
 import globalInstance from "@/lib/axios/globalInstance";
 import axiosInstance from "@/lib/axios/protectedInstance";
 
-export const loginApi = async (cred: { email: string; password: string }) => {
+export const loginApi = async (cred: { userId: string; password: string }) => {
   const data = await globalInstance.post(`/auth/login`, cred);
   return data;
 };
 
 export const registerApi = async (cred: {
-  email: string;
+  userId: string;
   password: string;
 }) => {
   const data = await globalInstance.post(`/auth/register`, cred);

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/helper";
 import { Eye, EyeOff } from "lucide-react";
 
 type IInput = React.ComponentProps<"input"> & {

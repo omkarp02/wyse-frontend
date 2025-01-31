@@ -4,16 +4,16 @@ import * as React from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/helper";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-type IDatePicker = {
+type IDatePicker = CalendarProps & {
   errMsg?: string;
   label: string;
   value: Date | undefined
@@ -22,11 +22,10 @@ type IDatePicker = {
 };
 
 const DatePicker: React.FC<IDatePicker> = ({
-  className,
   value, 
   onChange,
   label,
-  errMsg,
+  ...props
 }) => {
 
 
@@ -46,9 +45,10 @@ const DatePicker: React.FC<IDatePicker> = ({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
+          {...props}
+          onSelect={onChange}
           mode="single"
           selected={value}
-          onSelect={onChange}
           initialFocus
         />
       </PopoverContent>

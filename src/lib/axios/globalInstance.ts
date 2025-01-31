@@ -1,5 +1,5 @@
+import { BACKEND_URL } from "@/constants/common";
 import axios from "axios";
-import { BACKEND_URL } from "../constants";
 
 const globalInstance = axios.create({
   baseURL: BACKEND_URL, // Replace with your API base URL

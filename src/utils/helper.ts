@@ -7,14 +7,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function calculateDiscountedPrice(
-  originalPrice: number,
-  discountPercentage: number
-): number {
-  const discountAmount = (originalPrice * discountPercentage) / 100;
-  const finalPrice = originalPrice - discountAmount;
-  return finalPrice;
-}
 
 export const createSearchParamsUrl = (
   pathname: string,

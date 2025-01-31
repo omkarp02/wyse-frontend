@@ -19,13 +19,14 @@ import {
 } from "lucide-react";
 import { SearchInput } from "../ui/search-input";
 import { useEffect, useRef, useState } from "react";
-import { cn, createSearchParamsUrl } from "@/lib/utils";
+import { cn, createSearchParamsUrl } from "@/utils/helper";
 import z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InternalServerError } from "@/lib/errors/errors";
+import { InternalServerError } from "@/utils/errors/errors";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useBoundStore } from "@/store/store";
+import CShoppingCart from "../icons/CShoppingCart";
 
 const searchSchema = z.object({
   search: z.string(),
@@ -33,7 +34,7 @@ const searchSchema = z.object({
 
 type IFormFields = z.infer<typeof searchSchema>;
 
-const routesForCart = ["/search"];
+const routesForCart = ["/search", "/products"];
 const routesForUser = ["/"];
 
 export default function Navbar() {
@@ -42,6 +43,8 @@ export default function Navbar() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
+
+  console.log({ pathName });
 
   const { register, handleSubmit, setFocus, reset } = useForm<IFormFields>();
 
@@ -86,11 +89,11 @@ export default function Navbar() {
     }
   }
 
-  useEffect(()=> {
-    if(showSearch){
-      setFocus("search")
+  useEffect(() => {
+    if (showSearch) {
+      setFocus("search");
     }
-  },[showSearch])
+  }, [showSearch]);
 
   return (
     <header className="w-full relative">
@@ -106,7 +109,7 @@ export default function Navbar() {
                 <X className="cursor-pointer" />
               </SheetClose>
               <Gitlab />
-              <ShoppingCart className="cursor-pointer" />
+              <CShoppingCart itemCount={0} />
             </div>
           </SheetContent>
         </Sheet>
@@ -123,7 +126,7 @@ export default function Navbar() {
           ) : (
             <Search onClick={toggleSearchInput} className="cursor-pointer" />
           )}
-          {routesForCart.includes(pathName) && <ShoppingCart />}
+          {routesForCart.includes(pathName) && <CShoppingCart itemCount={0} />}
         </div>
       </div>
       <form

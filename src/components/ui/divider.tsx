@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/helper";
 import React from "react";
 
 const Divider = ({ text, className }: { text?: string, className?: string }) => {

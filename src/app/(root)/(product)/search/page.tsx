@@ -6,7 +6,7 @@ import {
 import { getProductList } from "@/services/product/list-product";
 import ProductList from "./_ProductList";
 import getQueryClient from "@/lib/queryClient";
-import { LIST_PRODUCT } from "@/lib/constants";
+import { LIST_PRODUCT } from "@/constants/reactquery";
 
 const SearchPage = async ({
   searchParams,
@@ -29,8 +29,8 @@ const SearchPage = async ({
 
   return (
     <div className="main-container">
-      <p className="heading">Cargo for men</p>
-      <p className="sub-heading">76 items</p>
+     <p className="heading">{name ?? "All"}</p>
+      {/* <p className="sub-heading">76 items</p> */}
       <HydrationBoundary state={dehydratedState}>
         <ProductList  />
       </HydrationBoundary>

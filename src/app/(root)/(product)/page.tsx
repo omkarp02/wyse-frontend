@@ -6,11 +6,7 @@ import {
   CarouselItem,
   DotButton,
 } from "@/components/ui/carousel";
-import {
-  BESTSELLER_PRODUCT,
-  CATEGORY_LIST,
-  LATEST_PRODUCT,
-} from "@/lib/constants";
+
 import { getCategoriesApi } from "@/services/master/categories";
 import { getProductList } from "@/services/product/list-product";
 import { ICategory, IProductList } from "@/types/api";
@@ -22,6 +18,7 @@ import { cache } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./_component/ProductCard";
 import { useBoundStore } from "@/store/store";
+import { BESTSELLER_PRODUCT, CATEGORY_LIST, LATEST_PRODUCT } from "@/constants/reactquery";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -232,6 +229,7 @@ export default async function Home() {
                     className="px-1 h-[45vh]"
                     discount={e.discount}
                     imgLink={e.imgLink}
+                    productLink={e.imgLink}
                     name={e.name}
                     price={e.price}
                     key={i}
@@ -275,6 +273,7 @@ export default async function Home() {
                     className="px-1 h-[45vh]"
                     discount={e.discount}
                     imgLink={e.imgLink}
+                    productLink={e.imgLink}
                     name={e.name}
                     price={e.price}
                     key={i}

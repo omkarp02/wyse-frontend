@@ -1,4 +1,4 @@
-import { calculateDiscountedPrice, cn } from "@/lib/utils";
+import { cn, getActualPrice } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -37,10 +37,10 @@ const ProductCard = ({
         </p>
         <div className="flex gap-2 text-sm">
           <p className="">
-            ₹{price - calculateDiscountedPrice(price, discount)}
+            ₹{price}
           </p>
-          <p className="line-through ">₹{price}</p>
-          <p className="text-success">50% off</p>
+          <p className="line-through ">₹{getActualPrice(price, discount)}</p>
+          <p className="text-success">{discount}% off</p>
         </div>
       </div>
     </Link>

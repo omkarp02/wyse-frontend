@@ -34,7 +34,7 @@ const ProductList = () => {
             discount={ele.discount}
             imgLink={ele.imgLink}
             name={ele.name}
-            productLink={`/products?id=${ele.productDetailId}&batch=${ele.batchId}`}
+            productLink={`/products?id=${ele.slug}&batch=${ele.batchId}`}
             price={ele.price}
             key={index}
           />

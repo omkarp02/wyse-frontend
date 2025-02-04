@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-
 export const createSearchParamsUrl = (
   pathname: string,
   params: URLSearchParams | ReadonlyURLSearchParams
@@ -30,9 +29,17 @@ export const getToken = () => {
 };
 
 export const getActualPrice = (price: number, discount: number) => {
-  return Math.round(price / (1 - discount/100))
-}
+  return Math.round(price / (1 - discount / 100));
+};
 
 export const getDiscountOnPrice = (price: number, discount: number) => {
-  return Math.round(getActualPrice(price, discount) * (discount / 100))
-}
+  return Math.round(getActualPrice(price, discount) * (discount / 100));
+};
+
+export const generateProductUrl = (
+  slug: string,
+  batchCode: string,
+  productId: string
+): string => {
+  return `/products/${slug}?id=${productId}&batch=${batchCode}`;
+};

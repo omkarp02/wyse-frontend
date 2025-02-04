@@ -52,7 +52,6 @@ const ProductFilter = () => {
     setFilterType(value);
   }
 
-  console.log(filterType, "<<<<<<<<<<<<<<<<<<<<<<<<");
 
   return (
     <Drawer>

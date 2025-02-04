@@ -34,8 +34,8 @@ const searchSchema = z.object({
 
 type IFormFields = z.infer<typeof searchSchema>;
 
-const routesForCart = ["/search", "/products"];
-const routesForUser = ["/"];
+const routesForCart = ["search", "products"];
+const routesForUser = [""];
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
@@ -44,7 +44,8 @@ export default function Navbar() {
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
 
-  console.log({ pathName });
+
+  const formattedPathName = pathName.split("/")[1];
 
   const { register, handleSubmit, setFocus, reset } = useForm<IFormFields>();
 
@@ -58,8 +59,8 @@ export default function Navbar() {
       }
       let searchUrl;
 
-      if (pathName === "/search") {
-        searchUrl = createSearchParamsUrl(pathName, newParams);
+      if (formattedPathName === "search") {
+        searchUrl = createSearchParamsUrl(formattedPathName, newParams);
         window.history.replaceState({}, "", searchUrl);
       } else {
         searchUrl = createSearchParamsUrl("/search", newParams);
@@ -96,7 +97,7 @@ export default function Navbar() {
   }, [showSearch]);
 
   return (
-    <header className="w-full relative">
+    <header className="w-full fixed top-0 z-10 bg-background">
       <div className="flex-between h-navbar px-2 border-b border-b-black">
         <Sheet>
           <SheetTrigger>
@@ -114,8 +115,9 @@ export default function Navbar() {
           </SheetContent>
         </Sheet>
 
+        <Link href={"/"}>Logo</Link>
         <div className="flex gap-3">
-          {routesForUser.includes(pathName) && (
+          {routesForUser.includes(formattedPathName) && (
             <CircleUserRound
               className="cursor-pointer"
               onClick={handleUserProfileClick}
@@ -126,7 +128,7 @@ export default function Navbar() {
           ) : (
             <Search onClick={toggleSearchInput} className="cursor-pointer" />
           )}
-          {routesForCart.includes(pathName) && <CShoppingCart itemCount={0} />}
+          {routesForCart.includes(formattedPathName) && <CShoppingCart itemCount={0} />}
         </div>
       </div>
       <form

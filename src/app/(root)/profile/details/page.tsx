@@ -84,6 +84,7 @@ const EditProfile = () => {
     },
   });
 
+
   const onSubmit: SubmitHandler<IFormFields> = async (data) => {
     setScreenLoader(true);
     createMutation.mutate(data);

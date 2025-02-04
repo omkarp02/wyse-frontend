@@ -23,6 +23,6 @@ export type IVariation = {
 
 export type IBatchProductDetail = {
   imgLink: string;
-  productDetailId: string;
-  productListId: string;
+  productCode: string;
+  slug: string
 };

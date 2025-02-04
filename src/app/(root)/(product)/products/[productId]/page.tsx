@@ -25,17 +25,17 @@ const ProductPage = async ({
       return await getProductDetails(id);
     }
   });
+
   const dehydratedState = dehydrate(queryClient);
 
   console.log("here is something happeningd here");
 
   return (
-    <div>
+    <>
       <HydrationBoundary state={dehydratedState}>
         <ProductDetail />
       </HydrationBoundary>
-      <div className="h-10"></div>
-    </div>
+    </>
   );
 };
 

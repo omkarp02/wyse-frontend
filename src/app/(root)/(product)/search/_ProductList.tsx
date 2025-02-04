@@ -6,6 +6,7 @@ import React from "react";
 import ProductCard from "../_component/ProductCard";
 import { useSearchParams } from "next/navigation";
 import { LIST_PRODUCT } from "@/constants/reactquery";
+import { generateProductUrl } from "@/utils/helper";
 
 const ProductList = () => {
   const searchParams = useSearchParams();
@@ -34,7 +35,7 @@ const ProductList = () => {
             discount={ele.discount}
             imgLink={ele.imgLink}
             name={ele.name}
-            productLink={`/products?id=${ele.slug}&batch=${ele.batchId}`}
+            productLink={generateProductUrl(ele.slug, ele.batchId, ele.code)}
             price={ele.price}
             key={index}
           />

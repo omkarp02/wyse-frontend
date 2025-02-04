@@ -9,6 +9,7 @@ import {
 import {
   cn,
   createSearchParamsUrl,
+  generateProductUrl,
   getActualPrice,
   getDiscountOnPrice,
 } from "@/utils/helper";
@@ -19,7 +20,7 @@ import { Check, NotebookText, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import {
   useGetProductBatch,
   useGetProductDetails,
@@ -31,6 +32,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Interweave } from "interweave";
+import {
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  Drawer,
+} from "@/components/ui/drawer";
+import ProductSize from "@/features/productDetails/components/ProductSize";
+import AddtoCart from "@/features/productDetails/components/AddtoCart";
+import { ICartItem } from "@/services/product/cart";
 
 const imageLink = [
   "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0011.webp?v=1734158131",
@@ -77,6 +88,12 @@ const ProductDetail = () => {
   const price = variation?.price;
   const discount = variation?.discount;
 
+  let cartItem: ICartItem | null = null;
+
+  if (size) {
+    cartItem = { productCode: id, quantity: 1, size: size };
+  }
+
   return (
     <>
       <div className="relative">
@@ -122,10 +139,16 @@ const ProductDetail = () => {
               {productBatch?.batchProductDetails?.map(
                 (e: IBatchProductDetail, i: number) => (
                   <CarouselItem key={i} className="relative basis-1/4 px-1">
-                    <Link href={`/products?id=${e.productDetailId}`}>
+                    <Link
+                      href={generateProductUrl(
+                        e.slug,
+                        productBatch.code,
+                        e.productCode
+                      )}
+                    >
                       <Image
                         className={cn(
-                          e.productDetailId === id && "border border-black"
+                          e.productCode === id && "border border-black"
                         )}
                         alt="asdf"
                         src={e.imgLink}
@@ -133,7 +156,7 @@ const ProductDetail = () => {
                         height={115}
                         style={{ height: "auto", width: "100%" }}
                       />
-                      {e.productDetailId === id && (
+                      {e.productCode === id && (
                         <div className="bg-background absolute-center rounded-full p-1">
                           <Check size={16} />
                         </div>
@@ -146,27 +169,13 @@ const ProductDetail = () => {
           </Carousel>
         </section>
 
-        <section className="mt-4 px-2">
-          <p>Select Size</p>
-          <div className="flex flex-wrap  gap-5 mt-3">
-            {variations.map((ele, index) => {
-              if (ele.size === "base_size") return "";
-              return (
-                <div
-                  role="button"
-                  onClick={() => handleChange("size", ele.size)}
-                  className={cn(
-                    "px-4 py-1 border border-black",
-                    size === ele.size && "bg-primary text-primary-foreground"
-                  )}
-                >
-                  {ele.size}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-        
+        <ProductSize
+          className="mt-4"
+          handleChange={handleChange}
+          size={size}
+          variations={variations}
+        />
+
         {/* According with product description */}
         <section className="px-2 mt-5">
           <Accordion type="single" collapsible className="w-full">
@@ -206,11 +215,13 @@ const ProductDetail = () => {
         </section>
 
         {/* Add cart button */}
-        <section className="sticky top-[95%] mt-4 px-1">
-          <Button size={"lg"} className="w-full">
-            Add to Cart
-          </Button>
-        </section>
+        <AddtoCart
+          item={cartItem}
+          handleSizeChange={handleChange}
+          size={size}
+          variations={variations}
+        />
+
         <div className="h-16"></div>
       </div>
     </>

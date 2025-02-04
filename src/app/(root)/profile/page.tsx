@@ -9,12 +9,10 @@ import React from 'react'
 const ProfilePage = () => {
 
 
-  const setToken = useBoundStore(state => state.setToken)
+  const logout = useBoundStore(state => state.logout)
 
   async function handleLogout(){
-    setToken("")
-    const res = await logoutApi()
-    console.log(res)
+    logout()
   }
 
   return (

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import "./globals.css";
 import ReactQueryProvider from "@/components/provider/ReactQueryProvider";
 import { Toaster } from "@/components/ui/toaster";

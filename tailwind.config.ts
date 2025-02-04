@@ -6,6 +6,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
   	extend: {
@@ -31,7 +32,7 @@ const config: Config = {
   				DEFAULT: '#000000'
   			},
   			muted: {
-  				DEFAULT: '#0f1629',
+  				DEFAULT: '#465161',
   				foreground: '#64748b'
   			},
   			destructive: {
@@ -43,7 +44,8 @@ const config: Config = {
   				DEFAULT: '#FFFFFF'
   			},
   			success: {
-  				DEFAULT: '#00B573'
+  				DEFAULT: '#00B573',
+				foreground: "#FFFFFF"
   			}
   		},
   		fontFamily: {

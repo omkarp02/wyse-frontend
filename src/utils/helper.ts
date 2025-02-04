@@ -36,3 +36,6 @@ export const getActualPrice = (price: number, discount: number) => {
 export const getDiscountOnPrice = (price: number, discount: number) => {
   return Math.round(getActualPrice(price, discount) * (discount / 100))
 }
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+

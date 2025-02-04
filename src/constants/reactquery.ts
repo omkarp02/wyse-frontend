@@ -7,3 +7,5 @@ export const GET_PRODUCT_DETAILS = "get-product-details";
 export const GET_PRODUCT_BATCH = "get-product-batch";
 
 export const GET_USER_PROFILE = "get-user-profile"
+
+export const GET_ALL_REVIEW = "get-all-review"

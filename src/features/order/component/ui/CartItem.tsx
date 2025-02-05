@@ -10,12 +10,22 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { BASE_SIZE } from "@/constants/api";
+import {
+  GET_CART_DETAILS,
+  GET_CART_DETAILS_OFFLINE,
+} from "@/constants/reactquery";
 import { useUpdateCartItem } from "@/hooks/mutation/cart";
 import { useGetProductVariations } from "@/hooks/query/product";
+import { useBoundStore } from "@/store/store";
 import { ICartItem as ICartItemApi, IVariation } from "@/types/api";
 import { cn } from "@/utils/helper";
 import { Label } from "@radix-ui/react-label";
-import { Car, Check, ChevronDown, Undo2 } from "lucide-react";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { Car, Check, ChevronDown, Undo2, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
@@ -32,6 +42,9 @@ const QTY_ID = "qty";
 let fetched = false;
 
 type ICartItem = ICartItemApi & {
+  refetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<any, Error>>;
 };
 
 const CartItem = ({
@@ -45,6 +58,9 @@ const CartItem = ({
     [SIZE_ID]: false,
     [QTY_ID]: false,
   });
+  const token = useBoundStore((state) => state.token);
+  const updateCart = useBoundStore((state) => state.updateCart);
+  const queryClient = useQueryClient();
 
   const mutation = useUpdateCartItem();
 
@@ -86,18 +102,27 @@ const CartItem = ({
   }
 
   function handleSizeSubmit(val: string) {
-    mutation.mutate({ cartId, size: val });
+    if (!token) {
+      updateCart(productCode, undefined, val);
+    } else {
+      mutation.mutate({ cartId, size: val });
+    }
+
     handleOpenDrawer(SIZE_ID, false);
   }
 
   function handleQtySubmit(val: number) {
-    mutation.mutate({ cartId, quantity: val });
+    if (!token) {
+      updateCart(productCode, val);
+    } else {
+      mutation.mutate({ cartId, quantity: val });
+    }
     handleOpenDrawer(QTY_ID, false);
   }
 
   return (
     <>
-      <section className="flex h-[10rem]">
+      <section className="flex h-[10rem] relative">
         <div className="h-full">
           <Image
             className="h-full w-auto"
@@ -120,7 +145,7 @@ const CartItem = ({
               id={QTY_ID}
               handleOnClick={handleDropdownClick}
               name="qty"
-              value={quantity.toString()}
+              value={quantity?.toString()}
             />
           </div>
           <PriceDisplay
@@ -141,6 +166,7 @@ const CartItem = ({
             <span className="font-medium">8 Feb 2025</span>
           </div>
         </div>
+        <X size={20} className="absolute right-0" />
       </section>
       <CartDrawer
         items={sizeList}

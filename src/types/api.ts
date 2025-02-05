@@ -1,3 +1,4 @@
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
 export type ICategory = {
   catId: string;

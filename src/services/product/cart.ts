@@ -1,9 +1,15 @@
 import axiosInstance from "@/lib/axios/protectedInstance";
+import queryString from "query-string";
 
 export type IAddCartApiCartItem = {
   productCode: string;
   size: string;
   quantity: number;
+};
+
+export type IGetCartApiOffline = {
+  productCode: string[];
+  size: string[];
 };
 
 export type IAddCartApi = {
@@ -23,6 +29,12 @@ export const addToCartApi = async (payload: IAddCartApi) => {
 
 export const getCartApi = async () => {
   const data = await axiosInstance.get(`/cart`);
+  return data;
+};
+
+export const getCartApiOffline = async (payload: IGetCartApiOffline) => {
+  const stringified = queryString.stringify(payload);
+  const data = await axiosInstance.get(`/cart/offline?${stringified}`);
   return data;
 };
 

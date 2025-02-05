@@ -10,8 +10,9 @@ import { toast } from "@/hooks/use-toast";
 import { getMutationErrorMsg } from "@/utils/errors/errorHandler";
 import { GET_CART_DETAILS } from "@/constants/reactquery";
 import { ICartItem } from "@/types/api";
-import _ from "lodash"
+import _, { update } from "lodash";
 import { ERROR_STATUS } from "@/utils/errors/errors";
+import { useBoundStore } from "@/store/store";
 
 export const useAddToCart = () => {
   return useMutation({
@@ -23,9 +24,9 @@ export const useAddToCart = () => {
       });
     },
     onError: (error) => {
-      let { msg,  status} = getMutationErrorMsg(error, "Item");
+      let { msg, status } = getMutationErrorMsg(error, "Item");
       if (status === ERROR_STATUS.ALREADY_EXIST) {
-        msg = "Item already exist in the cart"
+        msg = "Item already exist in the cart";
       }
       toast({
         title: msg,
@@ -36,8 +37,10 @@ export const useAddToCart = () => {
 };
 
 export const useUpdateCartItem = () => {
+
   const queryClient = useQueryClient();
 
+ 
   return useMutation({
     mutationFn: (payload: IUpdateCartItemApi) => updateCartItemApi(payload),
     onSuccess: (data, id) => {
@@ -58,7 +61,7 @@ export const useUpdateCartItem = () => {
       //   return deep;
       // });
 
-      queryClient.refetchQueries({queryKey: [GET_CART_DETAILS]})
+      queryClient.refetchQueries({ queryKey: [GET_CART_DETAILS] });
     },
     onError: (error) => {
       const { msg } = getMutationErrorMsg(error, "Item");

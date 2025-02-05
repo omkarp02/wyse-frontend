@@ -8,7 +8,10 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { getMutationErrorMsg } from "@/utils/errors/errorHandler";
-import { GET_CART_DETAILS } from "@/constants/reactquery";
+import {
+  GET_CART_DETAILS,
+  GET_CART_DETAILS_OFFLINE,
+} from "@/constants/reactquery";
 import { ICartItem } from "@/types/api";
 import _, { update } from "lodash";
 import { ERROR_STATUS } from "@/utils/errors/errors";
@@ -37,10 +40,8 @@ export const useAddToCart = () => {
 };
 
 export const useUpdateCartItem = () => {
-
   const queryClient = useQueryClient();
 
- 
   return useMutation({
     mutationFn: (payload: IUpdateCartItemApi) => updateCartItemApi(payload),
     onSuccess: (data, id) => {
@@ -71,4 +72,23 @@ export const useUpdateCartItem = () => {
       });
     },
   });
+};
+
+export const useDeleteCartItem = (productCode: string) => {
+  const token = useBoundStore((state) => state.token);
+  const queryClient = useQueryClient();
+
+  if (!token) {
+    queryClient.setQueryData([GET_CART_DETAILS_OFFLINE], (curElem: any) => {
+      const index = curElem?.findIndex(
+        (e: ICartItem) => e.productCode === productCode
+      );
+      if (index != -1) {
+        curElem?.splice(index, 1);
+      }
+      return curElem
+    });
+  }
+
+ 
 };

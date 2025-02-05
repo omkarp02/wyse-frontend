@@ -1,4 +1,3 @@
-import internal from "stream";
 
 export type ICategory = {
   catId: string;
@@ -19,6 +18,7 @@ export type IVariation = {
   size: string;
   price: number;
   discount: number;
+  stock: number;
 };
 
 export type IBatchProductDetail = {
@@ -26,3 +26,18 @@ export type IBatchProductDetail = {
   productCode: string;
   slug: string
 };
+
+export type ICartItemProduct = {
+  id: string,
+  name: string,
+  previewImg: string
+  variations: IVariation
+}
+
+export type ICartItem = {
+  cartId: string,
+  productCode: string,
+  size: string,
+  quantity: number,
+  product: ICartItemProduct
+}

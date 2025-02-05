@@ -44,7 +44,6 @@ export default function Navbar() {
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
 
-
   const formattedPathName = pathName.split("/")[1];
 
   const { register, handleSubmit, setFocus, reset } = useForm<IFormFields>();
@@ -110,7 +109,9 @@ export default function Navbar() {
                 <X className="cursor-pointer" />
               </SheetClose>
               <Gitlab />
-              <CShoppingCart itemCount={0} />
+              <Link href={"/shopping-bag"}>
+                <CShoppingCart itemCount={0} />
+              </Link>
             </div>
           </SheetContent>
         </Sheet>
@@ -128,7 +129,11 @@ export default function Navbar() {
           ) : (
             <Search onClick={toggleSearchInput} className="cursor-pointer" />
           )}
-          {routesForCart.includes(formattedPathName) && <CShoppingCart itemCount={0} />}
+          {routesForCart.includes(formattedPathName) && (
+            <Link href={"/shopping-bag"}>
+              <CShoppingCart itemCount={0} />
+            </Link>
+          )}
         </div>
       </div>
       <form

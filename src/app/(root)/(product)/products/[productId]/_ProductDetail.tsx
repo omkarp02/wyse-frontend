@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/drawer";
 import ProductSize from "@/features/productDetails/components/ProductSize";
 import AddtoCart from "@/features/productDetails/components/AddtoCart";
-import { ICartItem } from "@/services/product/cart";
+import { IAddCartApiCartItem } from "@/services/product/cart";
 
 const imageLink = [
   "https://nobero.com/cdn/shop/files/WebImagesHeavyCargo-0011.webp?v=1734158131",
@@ -88,7 +88,7 @@ const ProductDetail = () => {
   const price = variation?.price;
   const discount = variation?.discount;
 
-  let cartItem: ICartItem | null = null;
+  let cartItem: IAddCartApiCartItem | null = null;
 
   if (size) {
     cartItem = { productCode: id, quantity: 1, size: size };

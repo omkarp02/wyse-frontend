@@ -6,12 +6,15 @@ import {
   DrawerTrigger,
   Drawer,
 } from "@/components/ui/drawer";
-import { cn } from "@/utils/helper";
+import { cn, generateRandomNumber } from "@/utils/helper";
 import React, { useEffect, useState } from "react";
 import ProductSize from "./ProductSize";
 import { IVariation } from "@/types/api";
 import { useAddToCart } from "@/hooks/mutation/cart";
-import { ICartItem } from "@/services/product/cart";
+import { IAddCartApiCartItem } from "@/services/product/cart";
+import { useBoundStore } from "@/store/store";
+import { useToast } from "@/hooks/use-toast";
+import { ERROR_STATUS } from "@/utils/errors/errors";
 
 const AddtoCart = ({
   size,
@@ -24,28 +27,51 @@ const AddtoCart = ({
   handleSizeChange(field: string, val: string): void;
   setScreenLoader?: (val: boolean) => void;
   variations: IVariation[];
-  item?: ICartItem | null;
+  item?: IAddCartApiCartItem | null;
 }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const token = useBoundStore((state) => state.token);
+  const addToCartFn = useBoundStore((state) => state.addToCart);
+  const { toast } = useToast();
 
   const mutation = useAddToCart();
 
   function handleOpenDrawer(open: boolean, size: string | null) {
     if (size === null) {
       setOpenDrawer(open);
+    } else if (!open) {
+      setOpenDrawer(false);
     }
   }
 
   function addToCart() {
     if (size && item) {
-      const payload = { item: [item] };
-      mutation.mutate(payload);
+      if (token) {
+        const payload = { item: [item] };
+        mutation.mutate(payload);
+      } else {
+        const cartItem = {
+          cartId: `C-${generateRandomNumber(5)}`,
+          productCode: item.productCode,
+          size: item.size,
+          quantity: item.quantity,
+        };
+        const res = addToCartFn(cartItem);
+        if(res === -1){
+          toast({
+            title: "Added to Bag",
+            variant: "default",
+          });
+        }else if(res === ERROR_STATUS.ALREADY_EXIST){
+          toast({
+            title: "Item already exist in the cart",
+            variant: "destructive",
+          });
+        }
+       
+      }
     }
   }
-
-  //   useEffect(() => {
-  //     setScreenLoader(mutation.isPending);
-  //   }, [mutation.isPending]);
 
   return (
     <Drawer

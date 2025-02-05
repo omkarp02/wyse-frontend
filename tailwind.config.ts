@@ -24,7 +24,7 @@ const config: Config = {
   				DEFAULT: 'var(--primary)',
   				foreground: '#FFFFFF'
   			},
-  			secondary: '#F5F5F6',
+  			secondary: '#eaeaea',
   			black: {
   				'100': '#333333',
   				'200': '#141413',

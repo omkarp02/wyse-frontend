@@ -1,50 +1,34 @@
-import { create, StateCreator } from "zustand";
+import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { aauthStore, authStore, IAuthStore } from "./Auth";
-import { hydrate } from "@tanstack/react-query";
-import { hhydarteStore, hydarteStore, IHydrateStore } from "./hydrate";
+import { authStore, IAuthStore } from "./Auth";
+import { hydarteStore, IHydrateStore } from "./hydrate";
+import { cartStore, ICartStore } from "./cart";
 
-type IBoundStore = IAuthStore;
+export type IBoundStore = IAuthStore & IHydrateStore & ICartStore;
+
+export type IMutators = [
+  ["zustand/devtools", never],
+  ["zustand/persist", unknown],
+  ["zustand/immer", never]
+];
 
 export const useBoundStore = create<IBoundStore>()(
   devtools(
     persist(
       immer((...a) => ({
         ...authStore(...a),
+        ...hydarteStore(...a),
+        ...cartStore(...a),
       })),
       {
         name: "store",
         onRehydrateStorage() {
           return (state, error) => {
-            // if (!error) state?.setHydrated();
+            if (!error) state?.setHydrated();
           };
         },
       }
     )
-  )
-);
-
-export interface CombinedState {
-  auth: IAuthStore;
-  hydrate: IHydrateStore;
-}
-
-export type StateSlice<T> = StateCreator<
-  CombinedState,
-  [["zustand/immer", never]],
-  [["zustand/persist", Partial<T>]],
-  T
->;
-
-export const useStore = create<CombinedState>()(
-  persist(
-    immer((...api) => ({
-      auth: aauthStore(...api),
-      hydrate: hhydarteStore(...api),
-    })),
-    {
-      name: "my-store-name",
-    }
   )
 );

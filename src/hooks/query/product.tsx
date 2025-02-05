@@ -1,10 +1,11 @@
 import {
   GET_PRODUCT_BATCH,
   GET_PRODUCT_DETAILS,
+  GET_PRODUCT_VARIATION,
   GET_USER_PROFILE,
 } from "@/constants/reactquery";
 import { getProductBatch } from "@/services/product/product-batch";
-import { getProductDetails } from "@/services/product/product-detail";
+import { getProductDetails, getProductVariationApi } from "@/services/product/product-detail";
 import { useQuery } from "@tanstack/react-query";
 
 type User = {
@@ -30,5 +31,16 @@ export const useGetProductBatch = (id: string) => {
     queryFn: async () => {
       return await getProductBatch(id);
     },
+  });
+};
+
+export const useGetProductVariations = (code: string, enabled: boolean) => {
+  return useQuery({
+    queryKey: [GET_PRODUCT_VARIATION, code],
+    queryFn: async () => {
+      const data = await getProductVariationApi(code)
+      return data?.data;
+    },
+    enabled: enabled
   });
 };

@@ -1,40 +1,47 @@
-import { logoutApi } from "@/services/auth/user-account";
-import { create, StateCreator } from "zustand";
-import { persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
+import { IBoundStore, IMutators } from "./store";
+import { ERROR_STATUS } from "@/utils/errors/errors";
 
-const AUTH_INITIAL_STATE = {
-  token: null,
+type ICartItem = {
+  cartId: string;
+  productCode: string;
+  size: string;
+  quantity: number;
 };
 
-type IAuthState = {
-  token: string | null;
-  hydrated: boolean;
+const CART_INITIAL_STATE = {
+  totalCartItem: null,
+  cartItems: [],
 };
 
-type IAuthAction = {
-  setHydrated(): void;
-  setLoggedIn({ token }: { token: string }): void;
-  reset(): void;
-  logout(): void;
+type ICartState = {
+  totalCartItem: null | number;
+  cartItems: ICartItem[];
 };
 
-export type IAuthStore = IAuthAction & IAuthState;
+type ICartAction = {
+  addToCart(item: ICartItem): ERROR_STATUS | -1;
+};
 
-export const cartStore: StateCreator<IAuthStore> = (set) => ({
-  token: null,
-  hydrated: false,
-  setHydrated() {
-    set({ hydrated: true });
-  },
-  setLoggedIn({ token }) {
-    set({ token: token });
-  },
-  reset() {
-    set(AUTH_INITIAL_STATE);
-  },
-  async logout() {
-    await logoutApi();
-    set(AUTH_INITIAL_STATE);
+export type ICartStore = ICartAction & ICartState;
+
+export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
+  set,
+  get
+) => ({
+  ...CART_INITIAL_STATE,
+  addToCart(item) {
+    const index = get().cartItems.findIndex(
+      (e: ICartItem) => e.productCode === item.productCode
+    );
+    if (index === -1) {
+      set((state) => {
+        state.cartItems.push(item);
+        return state;
+      });
+      return -1;
+    } else {
+      return ERROR_STATUS.ALREADY_EXIST;
+    }
   },
 });

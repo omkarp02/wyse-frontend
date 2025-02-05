@@ -1,3 +1,4 @@
+import PriceDisplay from "@/components/display/PriceDisplay";
 import { cn, getActualPrice } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,13 +36,7 @@ const ProductCard = ({
         <p className="overflow-hidden whitespace-nowrap text-ellipsis  ">
           {name}
         </p>
-        <div className="flex gap-2 text-sm">
-          <p className="">
-            ₹{price}
-          </p>
-          <p className="line-through ">₹{getActualPrice(price, discount)}</p>
-          <p className="text-success">{discount}% off</p>
-        </div>
+        <PriceDisplay price={price} discount={discount} className="text-sm" />
       </div>
     </Link>
   );

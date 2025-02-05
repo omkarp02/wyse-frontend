@@ -1,8 +1,6 @@
 import { logoutApi } from "@/services/auth/user-account";
-import { create, StateCreator } from "zustand";
-import { persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
-import { StateSlice } from "./store";
+import { StateCreator } from "zustand";
+import { IBoundStore, IMutators } from "./store";
 
 const AUTH_INITIAL_STATE = {
   token: null,
@@ -20,7 +18,12 @@ type IAuthAction = {
 
 export type IAuthStore = IAuthAction & IAuthState;
 
-export const authStore: StateCreator<IAuthStore> = (set) => ({
+export const authStore: StateCreator<
+  IBoundStore,
+  IMutators,
+  [],
+  IAuthStore
+> = (set) => ({
   token: null,
   setLoggedIn({ token }) {
     set({ token: token });
@@ -29,23 +32,23 @@ export const authStore: StateCreator<IAuthStore> = (set) => ({
     set(AUTH_INITIAL_STATE);
   },
   async logout() {
-    await logoutApi();
+    // await logoutApi();
     set(AUTH_INITIAL_STATE);
   },
 });
 
-export const aauthStore: StateSlice<IAuthStore> = (set) => ({
-  token: null,
-  setLoggedIn({ token }) {
-    set((state) => {
-      state.auth.token = token;
-    });
-  },
-  reset() {
-    set((state) => (state.auth.token = ""));
-  },
-  async logout() {
-    await logoutApi();
-    set((state) => (state.auth.token = ""));
-  },
-});
+// export const aauthStore: StateSlice<IAuthStore> = (set) => ({
+//   token: null,
+//   setLoggedIn({ token }) {
+//     set((state) => {
+//       state.auth.token = token;
+//     });
+//   },
+//   reset() {
+//     set((state) => (state.auth.token = ""));
+//   },
+//   async logout() {
+//     await logoutApi();
+//     set((state) => (state.auth.token = ""));
+//   },
+// });

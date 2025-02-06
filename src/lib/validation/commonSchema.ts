@@ -22,3 +22,9 @@ export const mobileSchema = z
 export const genderSchema = z.enum(["male", "female", "other"], {
   message: "Gender must be male, female, or other",
 });
+
+export const pinCodeSchema = z
+  .string()
+  .length(6, { message: "Pin Code must be exactly 6 digits" })
+  .regex(/^\d{6}$/, { message: "Pin Code must be a valid 6-digit number" })
+  .transform((val) => Number(val));

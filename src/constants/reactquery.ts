@@ -13,3 +13,4 @@ export const GET_ALL_REVIEW = "get-all-review"
 
 export const GET_CART_DETAILS = "get-cart-details"
 export const GET_CART_DETAILS_OFFLINE = "get-cart-offline"
+export const GET_TOTAL_CART_COUNT = "get-total-cart-count"

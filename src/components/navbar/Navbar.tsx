@@ -27,6 +27,7 @@ import { InternalServerError } from "@/utils/errors/errors";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useBoundStore } from "@/store/store";
 import CShoppingCart from "../icons/CShoppingCart";
+import { useGetTotalCartCount } from "@/hooks/query/cart";
 
 const searchSchema = z.object({
   search: z.string(),
@@ -43,6 +44,11 @@ export default function Navbar() {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
+  const totalCartItems = useBoundStore((state) => state.totalCartItem);
+
+  if (token) {
+    useGetTotalCartCount();
+  }
 
   const formattedPathName = pathName.split("/")[1];
 
@@ -110,7 +116,7 @@ export default function Navbar() {
               </SheetClose>
               <Gitlab />
               <Link href={"/shopping-bag"}>
-                <CShoppingCart itemCount={0} />
+                <CShoppingCart itemCount={totalCartItems} />
               </Link>
             </div>
           </SheetContent>
@@ -131,7 +137,7 @@ export default function Navbar() {
           )}
           {routesForCart.includes(formattedPathName) && (
             <Link href={"/shopping-bag"}>
-              <CShoppingCart itemCount={0} />
+              <CShoppingCart itemCount={totalCartItems} />
             </Link>
           )}
         </div>

@@ -24,7 +24,6 @@ import {
   updateUserProfileApi,
 } from "@/services/auth/user";
 import { loginApi } from "@/services/auth/user-account";
-import { GENDER, GENDER_LIST } from "@/types/dropdown";
 import { IApiError } from "@/types/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -36,6 +35,7 @@ import z from "zod";
 import { getMutationErrorMsg } from "@/utils/errors/errorHandler";
 import ScreenLoader from "@/components/loader/ScreenLoader";
 import { useGetUser } from "@/hooks/query/useGetProfile";
+import { GENDER, GENDER_LIST } from "@/constants/api";
 
 const registerSchema = z.object({
   firstname: z

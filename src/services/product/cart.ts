@@ -10,10 +10,11 @@ export type IAddCartApiCartItem = {
 export type IGetCartApiOffline = {
   productCode: string[];
   size: string[];
+  cartId: string[];
 };
 
 export type IAddCartApi = {
-  item: IAddCartApiCartItem[];
+  item: IAddCartApiCartItem;
 };
 
 export type IUpdateCartItemApi = {
@@ -27,8 +28,20 @@ export const addToCartApi = async (payload: IAddCartApi) => {
   return data;
 };
 
+export const getTotalCartItemApi = async () => {
+  const data = await axiosInstance.get(`/cart/item/total`);
+  return data;
+};
+
+
 export const getCartApi = async () => {
   const data = await axiosInstance.get(`/cart`);
+  return data;
+};
+
+
+export const deleteCartItemApi = async (cartId: string) => {
+  const data = await axiosInstance.delete(`/cart/item/${cartId}`);
   return data;
 };
 

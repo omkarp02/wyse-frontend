@@ -47,7 +47,7 @@ const AddtoCart = ({
   function addToCart() {
     if (size && item) {
       if (token) {
-        const payload = { item: [item] };
+        const payload = { item: item };
         mutation.mutate(payload);
       } else {
         const cartItem = {

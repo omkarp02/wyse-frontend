@@ -33,7 +33,7 @@ export const authStore: StateCreator<
   },
   async logout() {
     // await logoutApi();
-    set(AUTH_INITIAL_STATE);
+    set({token: "", cartItems: [], totalCartItem: null});
   },
 });
 

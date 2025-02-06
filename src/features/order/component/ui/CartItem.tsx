@@ -17,7 +17,11 @@ import {
 import { useUpdateCartItem } from "@/hooks/mutation/cart";
 import { useGetProductVariations } from "@/hooks/query/product";
 import { useBoundStore } from "@/store/store";
-import { ICartItem as ICartItemApi, IVariation } from "@/types/api";
+import {
+  ICartItem as ICartItemApi,
+  ICartItemProduct,
+  IVariation,
+} from "@/types/api";
 import { cn } from "@/utils/helper";
 import { Label } from "@radix-ui/react-label";
 import {
@@ -39,12 +43,12 @@ type Option = {
 const SIZE_ID = "size";
 const QTY_ID = "qty";
 
-let fetched = false;
+let fetched: { [key: string]: boolean } = {};
 
 type ICartItem = ICartItemApi & {
-  refetch: (
-    options?: RefetchOptions
-  ) => Promise<QueryObserverResult<any, Error>>;
+  deleteCartItem(cartId: string): void;
+  updateCartItem(cartId: string, size?: string, qty?: number, prevQty?: number): void;
+  product: ICartItemProduct;
 };
 
 const CartItem = ({
@@ -53,16 +57,13 @@ const CartItem = ({
   size,
   product,
   quantity,
+  deleteCartItem,
+  updateCartItem,
 }: ICartItem) => {
   const [openDrawer, setOpenDrawer] = useState({
     [SIZE_ID]: false,
     [QTY_ID]: false,
   });
-  const token = useBoundStore((state) => state.token);
-  const updateCart = useBoundStore((state) => state.updateCart);
-  const queryClient = useQueryClient();
-
-  const mutation = useUpdateCartItem();
 
   const { data: variationData, refetch } = useGetProductVariations(
     productCode,
@@ -90,9 +91,9 @@ const CartItem = ({
   }
 
   function handleDropdownClick(id: string) {
-    if (!fetched) {
+    if (!fetched[cartId]) {
       refetch();
-      fetched = true;
+      fetched[cartId] = true;
     }
     handleOpenDrawer(id, true);
   }
@@ -102,22 +103,17 @@ const CartItem = ({
   }
 
   function handleSizeSubmit(val: string) {
-    if (!token) {
-      updateCart(productCode, undefined, val);
-    } else {
-      mutation.mutate({ cartId, size: val });
-    }
-
+    updateCartItem(cartId, val);
     handleOpenDrawer(SIZE_ID, false);
   }
 
   function handleQtySubmit(val: number) {
-    if (!token) {
-      updateCart(productCode, val);
-    } else {
-      mutation.mutate({ cartId, quantity: val });
-    }
+    updateCartItem(cartId, undefined, val, quantity);
     handleOpenDrawer(QTY_ID, false);
+  }
+
+  function handleDelete() {
+    deleteCartItem(cartId);
   }
 
   return (
@@ -126,7 +122,7 @@ const CartItem = ({
         <div className="h-full">
           <Image
             className="h-full w-auto"
-            src={product.previewImg}
+            src={product?.previewImg ?? ""}
             width={200}
             height={300}
             alt="img"
@@ -166,7 +162,12 @@ const CartItem = ({
             <span className="font-medium">8 Feb 2025</span>
           </div>
         </div>
-        <X size={20} className="absolute right-0" />
+        <X
+          onClick={handleDelete}
+          role="button"
+          size={20}
+          className="absolute right-0"
+        />
       </section>
       <CartDrawer
         items={sizeList}

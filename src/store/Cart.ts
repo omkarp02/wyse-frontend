@@ -10,19 +10,24 @@ type ICartItem = {
 };
 
 const CART_INITIAL_STATE = {
-  totalCartItem: null,
+  totalCartItem: 0,
   cartItems: [],
 };
 
 type ICartState = {
-  totalCartItem: null | number;
+  totalCartItem: number;
   cartItems: ICartItem[];
 };
 
 type ICartAction = {
   addToCart(item: ICartItem): ERROR_STATUS | -1;
-  updateCart(productCode: string, quantity?: number, size?: string): void;
-  deleteCartItem(productCode: string): void;
+  updateCart(payload: {
+    cartId: string;
+    quantity?: number;
+    size?: string;
+  }): void;
+  deleteCartItem(cartId: string): void;
+  setTotalCartItem(n: number): void;
 };
 
 export type ICartStore = ICartAction & ICartState;
@@ -32,14 +37,19 @@ export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
   get
 ) => ({
   ...CART_INITIAL_STATE,
-  updateCart(productCode, quantity, size) {
+  updateCart({ cartId, quantity, size }) {
     set((state) => {
       const index = state.cartItems.findIndex(
-        (e: ICartItem) => e.productCode === productCode
+        (e: ICartItem) => e.cartId === cartId
       );
 
       if (index !== -1) {
         if (quantity) {
+          const curCartItem = state.cartItems[index];
+          let totalCartItem = state.totalCartItem;
+          totalCartItem -= curCartItem.quantity;
+          state.totalCartItem = totalCartItem + quantity;
+
           state.cartItems[index].quantity = quantity;
         }
         if (size) {
@@ -48,12 +58,15 @@ export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
       }
     });
   },
-  deleteCartItem(productCode) {
+  deleteCartItem(cartId) {
     set((state) => {
       const index = state.cartItems.findIndex(
-        (e: ICartItem) => e.productCode === productCode
+        (e: ICartItem) => e.cartId === cartId
       );
       if (index !== -1) {
+        const curCartItem = state.cartItems[index];
+        state.totalCartItem -= curCartItem.quantity;
+
         state.cartItems.splice(index, 1);
         return state;
       }
@@ -61,16 +74,22 @@ export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
   },
   addToCart(item) {
     const index = get().cartItems.findIndex(
-      (e: ICartItem) => e.productCode === item.productCode
+      (e: ICartItem) =>
+        e.productCode === item.productCode && e.size === item.size
     );
     if (index === -1) {
       set((state) => {
         state.cartItems.push(item);
+        state.totalCartItem += 1;
         return state;
       });
       return -1;
     } else {
       return ERROR_STATUS.ALREADY_EXIST;
     }
+  },
+  setTotalCartItem(n) {
+    if (n < 0) n = 0;
+    set({ totalCartItem: n });
   },
 });

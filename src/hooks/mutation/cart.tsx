@@ -1,6 +1,7 @@
 import { IUpdateUserProfileApi } from "@/services/auth/user";
 import {
   addToCartApi,
+  deleteCartItemApi,
   IAddCartApi,
   IUpdateCartItemApi,
   updateCartItemApi,
@@ -11,6 +12,7 @@ import { getMutationErrorMsg } from "@/utils/errors/errorHandler";
 import {
   GET_CART_DETAILS,
   GET_CART_DETAILS_OFFLINE,
+  GET_PRODUCT_VARIATION,
 } from "@/constants/reactquery";
 import { ICartItem } from "@/types/api";
 import _, { update } from "lodash";
@@ -18,9 +20,13 @@ import { ERROR_STATUS } from "@/utils/errors/errors";
 import { useBoundStore } from "@/store/store";
 
 export const useAddToCart = () => {
+  const setTotalCartItem = useBoundStore((state) => state.setTotalCartItem);
+  const curTotalCartItem = useBoundStore((state) => state.totalCartItem);
+
   return useMutation({
     mutationFn: (payload: IAddCartApi) => addToCartApi(payload),
     onSuccess: (data, id) => {
+      setTotalCartItem(curTotalCartItem + 1);
       toast({
         title: "Added to Bag",
         variant: "default",
@@ -39,16 +45,33 @@ export const useAddToCart = () => {
   });
 };
 
+type IUpdateCartItem = {
+  payload : IUpdateCartItemApi,
+  prevQty?: number
+}
+
 export const useUpdateCartItem = () => {
   const queryClient = useQueryClient();
+  const setTotalCartItem = useBoundStore((state) => state.setTotalCartItem);
+  const curTotalCartItem = useBoundStore((state) => state.totalCartItem);
+
 
   return useMutation({
-    mutationFn: (payload: IUpdateCartItemApi) => updateCartItemApi(payload),
+    mutationFn: (payload: IUpdateCartItem) => {
+      return updateCartItemApi(payload.payload);
+    },
     onSuccess: (data, id) => {
+      if(id.prevQty && id.payload?.quantity){
+        let totalItems = curTotalCartItem
+        totalItems = id.prevQty
+        setTotalCartItem(totalItems + id.payload.quantity)
+      }
       // queryClient.setQueryData([GET_CART_DETAILS], (curElem: any) => {
       //   const index = curElem.items.findIndex(
       //     (e: ICartItem) => e.cartId === id.cartId
       //   );
+      //   console.log(curElem.items[index], index, "<<<<<<<<")
+
       //   if (index != -1) {
       //     if (id.size) {
       //       curElem.items[index].size = id.size;
@@ -58,7 +81,7 @@ export const useUpdateCartItem = () => {
       //   }
 
       //   const deep = _.cloneDeep(curElem);
-      //   console.log({deep})
+      //   console.log({ deep });
       //   return deep;
       // });
 
@@ -74,21 +97,31 @@ export const useUpdateCartItem = () => {
   });
 };
 
-export const useDeleteCartItem = (productCode: string) => {
-  const token = useBoundStore((state) => state.token);
+export const useDeleteCartItem = () => {
+  const setTotalCartItem = useBoundStore((state) => state.setTotalCartItem);
+  const curTotalCartItem = useBoundStore((state) => state.totalCartItem);
   const queryClient = useQueryClient();
 
-  if (!token) {
-    queryClient.setQueryData([GET_CART_DETAILS_OFFLINE], (curElem: any) => {
-      const index = curElem?.findIndex(
-        (e: ICartItem) => e.productCode === productCode
-      );
-      if (index != -1) {
-        curElem?.splice(index, 1);
-      }
-      return curElem
-    });
-  }
-
- 
+  return useMutation({
+    mutationFn: (cartId: string) => deleteCartItemApi(cartId),
+    onSuccess: (data, id) => {
+      queryClient.setQueryData([GET_CART_DETAILS], (curElem: any) => {
+        const index = curElem.items.findIndex(
+          (e: ICartItem) => e.cartId === id
+        );
+        if (index != -1) {
+          setTotalCartItem(curTotalCartItem - curElem.items[index].quantity);
+          curElem.items.splice(index, 1);
+        }
+        return curElem;
+      });
+    },
+    onError: (error) => {
+      let { msg } = getMutationErrorMsg(error, "Item");
+      toast({
+        title: msg,
+        variant: "destructive",
+      });
+    },
+  });
 };

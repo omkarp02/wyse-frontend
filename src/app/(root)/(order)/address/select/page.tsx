@@ -17,6 +17,11 @@ const SelectAddressPage = () => {
         </Button>
       </Link>
       <p className="form-heading">Default address</p>
+     {
+        addressData?.map((e)=> {
+            
+        })
+     }
     </div>
   );
 };

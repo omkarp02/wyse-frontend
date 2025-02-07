@@ -14,6 +14,7 @@ const getStep: any = {
   "/shopping-bag": 1,
   "/address": 2,
   "/address/add": 2,
+  "/address/select": 2,
 };
 
 export default function Layout({

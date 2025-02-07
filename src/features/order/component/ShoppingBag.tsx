@@ -15,6 +15,7 @@ import { getDiscountOnPrice } from "@/utils/helper";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import EmptyCart from "./ui/EmptyCart";
+import Link from "next/link";
 
 const ShoppingBag = () => {
   let { data: cartData, refetch } = useGetCart();
@@ -72,9 +73,14 @@ const ShoppingBag = () => {
     <div className="relative">
       {cartData?.items && cartData?.items?.length > 0 ? (
         <>
-          <Button className="w-full uppercase  sticky top-[94vh]" size={"lg"}>
-            Place order
-          </Button>
+          <Link
+            href={"/address"}
+            className="sticky top-[94vh]"
+          >
+            <Button className="w-full uppercase  " size={"lg"}>
+              Place order
+            </Button>
+          </Link>
           <div className="-mt-8">
             {cartData?.items?.map((e: ICartItem, i: number) => {
               if (e.product) {

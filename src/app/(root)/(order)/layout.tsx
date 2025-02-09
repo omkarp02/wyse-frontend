@@ -10,24 +10,27 @@ const steps = [
   { label: "Payment", id: 3 },
 ];
 
-const getStep: any = {
-  "/shopping-bag": 1,
-  "/address": 2,
-  "/address/add": 2,
-  "/address/select": 2,
-};
-
 export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
-  console.log(pathname);
+
+  function getStep(pathname: string): number {
+    if (pathname === "/shopping-bag") {
+      return 1;
+    } else if (pathname.includes("address")) {
+      return 2;
+    }else if(pathname === "/payment"){
+      return 3
+    }
+    return 0
+  }
 
   return (
     <main>
       <RouteNavbar />
       <section className="px-6 my-6">
-        <CircleStepper steps={steps} curStep={getStep[pathname]} />
+        <CircleStepper steps={steps} curStep={getStep(pathname)} />
       </section>
       {children}
     </main>

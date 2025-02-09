@@ -9,7 +9,7 @@ const addressSchema = z.object({
   city: z.string().min(1, { message: "City is required" }),
   state: z.string().min(1, { message: "State is required" }),
   country: z.string().min(1, { message: "Country is required" }),
-  pinCode: pinCodeSchema,
+  pincode: pinCodeSchema,
   mobileNo: mobileSchema,
   alternateMobileNo: mobileSchema.optional(),
 });

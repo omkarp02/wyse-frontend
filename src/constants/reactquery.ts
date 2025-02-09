@@ -16,3 +16,5 @@ export const GET_CART_DETAILS_OFFLINE = "get-cart-offline"
 export const GET_TOTAL_CART_COUNT = "get-total-cart-count"
 
 export const GET_ADDRESS_LIST = "get-address-list"
+export const GET_ADDRESS = "get-address"
+export const GET_PRIMARY_ADDRESS = "get-primary-address"

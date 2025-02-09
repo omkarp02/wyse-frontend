@@ -3,10 +3,10 @@ import { IconProps, iconVariants } from "@/types/props";
 import Image from "next/image";
 import React from "react";
 
-const EmptyCartIcon = ({ className }: { className?: string }) => {
+const ComingSoon = ({ className }: { className?: string }) => {
   return (
     <Image
-      src={"/emptycart.png"}
+      src={"/comingsoon.jpg"}
       className={className}
       width={211}
       height={211}
@@ -15,4 +15,4 @@ const EmptyCartIcon = ({ className }: { className?: string }) => {
   );
 };
 
-export default EmptyCartIcon;
+export default ComingSoon;

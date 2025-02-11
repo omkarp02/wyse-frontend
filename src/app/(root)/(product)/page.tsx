@@ -1,5 +1,3 @@
-
-
 import {
   Carousel,
   CarouselContent,
@@ -18,7 +16,12 @@ import { cache } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./_component/ProductCard";
 import { useBoundStore } from "@/store/store";
-import { BESTSELLER_PRODUCT, CATEGORY_LIST, LATEST_PRODUCT } from "@/constants/reactquery";
+import {
+  BESTSELLER_PRODUCT,
+  CATEGORY_LIST,
+  LATEST_PRODUCT,
+} from "@/constants/reactquery";
+import Link from "next/link";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -62,22 +65,22 @@ const cmsData = {
     carousel: [
       {
         imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
-        redirect: "",
+        redirect: "/search?category=cargo-pants",
       },
       {
         imgLink:
           "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
-        redirect: "",
+        redirect: "/search?category=hoodies&collection=trending",
       },
       {
         imgLink:
           "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
-        redirect: "",
+        redirect: "/search?category=hoodies&collection=trending",
       },
       {
         imgLink:
           "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
-        redirect: "",
+        redirect: "/search?category=joggers&collection=trending",
       },
     ],
   },
@@ -124,7 +127,10 @@ const getLatestProduct = unstable_cache(
       limit: 4,
       collection: "latest",
     };
-    return await getProductList(payload);
+    const { data } = await getProductList(payload);
+    const productData = data?.data;
+    const productCount = data?.count;
+    return { data: productData, count: productCount };
   },
   [LATEST_PRODUCT],
   { revalidate }
@@ -136,9 +142,12 @@ const getBestSellerProduct = unstable_cache(
     const payload = {
       page: 1,
       limit: 4,
-      collection: "bestseller",
+      collection: "best-sellers",
     };
-    return await getProductList(payload);
+    const { data } = await getProductList(payload);
+    const productData = data?.data;
+    const productCount = data?.count;
+    return { data: productData, count: productCount };
   },
   [BESTSELLER_PRODUCT],
   { revalidate }
@@ -201,10 +210,14 @@ export default async function Home() {
         <div className="flex flex-wrap justify-center">
           {categoryList?.data &&
             categoryList?.data?.map((ele: ICategory, index: number) => (
-              <div key={index} className="w-[45%] h-[45%] mx-2 my-4 relative">
+              <Link
+                href={`/search?category=${ele.slug}`}
+                key={index}
+                className="w-[45%] h-[45%] mx-2 my-4 relative"
+              >
                 <Image alt="asdf" src={ele.icon} width={300} height={300} />
                 <p className="text-center">{ele.name}</p>
-              </div>
+              </Link>
             ))}
         </div>
       </section>
@@ -222,9 +235,9 @@ export default async function Home() {
         <p className="sub-heading mb-6">{cmsData.sectionThree.subTitle}</p>
         <Carousel className="relative">
           <CarouselContent className="h-fit">
-            {latestProductList?.data &&
-              latestProductList?.data.map((e: IProductList, i: number) => (
-                <CarouselItem key={i} className="relative basis-1/2">
+            {latestProductList.data &&
+              latestProductList.data.map((e: IProductList, i: number) => (
+                <CarouselItem key={i} className="relative basis-1/2 px-1">
                   <ProductCard
                     className="px-1 h-[45vh]"
                     discount={e.discount}
@@ -237,7 +250,7 @@ export default async function Home() {
                 </CarouselItem>
               ))}
           </CarouselContent>
-          <DotButton className="flex justify-center my-2" />
+          <DotButton className="flex justify-center mt-4 mb-2" />
         </Carousel>
         <div className="px-2 text-center">
           <Button variant={"outline"} className="w-full">
@@ -263,14 +276,14 @@ export default async function Home() {
 
       <section>
         <p className="heading">{cmsData.sectionFour.title}</p>
-        <p className="sub-heading">{cmsData.sectionFour.subTitle}</p>
+        <p className="sub-heading mb-6">{cmsData.sectionFour.subTitle}</p>
         <Carousel className="relative">
           <CarouselContent className="h-fit">
-            {bestsellerProductList?.data &&
-              bestsellerProductList?.data.map((e: IProductList, i: number) => (
-                <CarouselItem key={i} className="relative basis-1/2">
+            {bestsellerProductList.data &&
+              bestsellerProductList.data.map((e: IProductList, i: number) => (
+                <CarouselItem key={i} className="relative basis-1/2 px-1">
                   <ProductCard
-                    className="px-1 h-[45vh]"
+                    className=" h-[45vh]"
                     discount={e.discount}
                     imgLink={e.imgLink}
                     productLink={e.imgLink}
@@ -281,7 +294,7 @@ export default async function Home() {
                 </CarouselItem>
               ))}
           </CarouselContent>
-          <DotButton className="flex justify-center my-2" />
+          <DotButton className="flex justify-center mt-4 mb-2" />
         </Carousel>
         <div className="px-2 text-center">
           <Button variant={"outline"} className="w-full">

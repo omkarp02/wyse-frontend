@@ -11,7 +11,7 @@ const sortList = [
   { label: "Customer Rating" },
 ];
 
-const SortFilter = () => {
+const SortFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
   return (
     <div className="mx-auto w-full max-w-sm">
       <DrawerHeader>

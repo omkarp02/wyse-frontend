@@ -2,7 +2,7 @@ import React from "react";
 import { DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 
-const GenderFilter = () => {
+const GenderFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
   return (
     <div className="mx-auto w-full max-w-sm">
       <DrawerHeader>

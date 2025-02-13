@@ -13,6 +13,9 @@ export type IProductList = {
   discount: number;
   price: number;
   imgLink: string;
+  slug: string;
+  batchId: string;
+  code: string;
 };
 
 export type IVariation = {
@@ -25,20 +28,20 @@ export type IVariation = {
 export type IBatchProductDetail = {
   imgLink: string;
   productCode: string;
-  slug: string
+  slug: string;
 };
 
 export type ICartItemProduct = {
-  id: string,
-  name: string,
-  previewImg: string
-  variations: IVariation
-}
+  id: string;
+  name: string;
+  previewImg: string;
+  variations: IVariation;
+};
 
 export type ICartItem = {
-  cartId: string,
-  productCode: string,
-  size: string,
-  quantity: number,
-  product: ICartItemProduct
-}
+  cartId: string;
+  productCode: string;
+  size: string;
+  quantity: number;
+  product: ICartItemProduct;
+};

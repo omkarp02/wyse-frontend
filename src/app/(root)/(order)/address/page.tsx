@@ -11,6 +11,12 @@ const AddressPage = () => {
 
   return (
     <div className="px-1 mt-[50px] h-[80vh] flex flex-col">
+      <Link href="/address/add">
+        <Button className="uppercase w-full my-4" size={"lg"}>
+          Add new Address
+        </Button>
+      </Link>
+
       {addressData ? (
         <DisplayAddress
           address={addressData.address}

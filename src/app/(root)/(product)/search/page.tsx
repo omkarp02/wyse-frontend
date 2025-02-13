@@ -29,7 +29,6 @@ const SearchPage = async ({
         category,
         collection,
       });
-      console.log(data.data, "<<<<<<<<<<");
       return data?.data ?? [];
     },
     initialPageParam: 1,

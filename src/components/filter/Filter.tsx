@@ -39,22 +39,26 @@ const filterTypeList = [
   },
 ];
 
-const filterComp = {
-  [FILTER_TYPE.GENDER]: <GenderFilter />,
-  [FILTER_TYPE.SORT]: <SortFilter />,
-  [FILTER_TYPE.ALL]: <AllFilter />,
-};
-
-const ProductFilter = () => {
+const ProductFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
   const [filterType, setFilterType] = useState<FILTER_TYPE | null>(null);
+  const [open, setOpen] = useState(false);
 
   function handleFilterOnClick(value: FILTER_TYPE) {
     setFilterType(value);
   }
 
+  function onOpenChange(val: boolean) {
+    setOpen(val);
+  }
+
+  const filterComp = {
+    [FILTER_TYPE.GENDER]: <GenderFilter handleSubmit={handleSubmit} />,
+    [FILTER_TYPE.SORT]: <SortFilter handleSubmit={handleSubmit} />,
+    [FILTER_TYPE.ALL]: <AllFilter onOpenChange={onOpenChange} handleSubmit={handleSubmit} />,
+  };
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         <div className="flex items-center fixed bottom-0 bg-background w-full">
           {filterTypeList.map((ele, index) => {

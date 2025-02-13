@@ -22,6 +22,7 @@ import {
   LATEST_PRODUCT,
 } from "@/constants/reactquery";
 import Link from "next/link";
+import { generateProductUrl } from "@/utils/helper";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -31,32 +32,32 @@ const cmsData = {
     {
       imgLink:
         "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
-      redirect: "",
+      redirect: "/search?category=joggers&collection=best-sellers",
     },
     {
       imgLink:
         "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
-      redirect: "",
+      redirect: "/search?category=cargo-pants&collection=trending",
     },
     {
       imgLink:
         "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
-      redirect: "",
+      redirect: "/search?category=hoodies&collection=trending",
     },
     {
       imgLink:
         "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
-      redirect: "",
+      redirect: "/search?category=hoodies&collection=trending",
     },
     {
       imgLink:
         "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
-      redirect: "",
+      redirect: "/search?category=hoodies&collection=trending",
     },
     {
       imgLink:
         "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
-      redirect: "",
+      redirect: "/search?category=cargo-pants&collection=trending",
     },
   ],
   sectionTwo: {
@@ -65,7 +66,7 @@ const cmsData = {
     carousel: [
       {
         imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
-        redirect: "/search?category=cargo-pants",
+        redirect: "/search?category=cargo-pants&collection=trending",
       },
       {
         imgLink:
@@ -128,9 +129,7 @@ const getLatestProduct = unstable_cache(
       collection: "latest",
     };
     const { data } = await getProductList(payload);
-    const productData = data?.data;
-    const productCount = data?.count;
-    return { data: productData, count: productCount };
+    return data;
   },
   [LATEST_PRODUCT],
   { revalidate }
@@ -145,9 +144,7 @@ const getBestSellerProduct = unstable_cache(
       collection: "best-sellers",
     };
     const { data } = await getProductList(payload);
-    const productData = data?.data;
-    const productCount = data?.count;
-    return { data: productData, count: productCount };
+    return data;
   },
   [BESTSELLER_PRODUCT],
   { revalidate }
@@ -164,7 +161,9 @@ export default async function Home() {
         <CarouselContent className="h-[35vh]">
           {cmsData.carousel.map((e, i) => (
             <CarouselItem key={i} className="relative">
-              <Image alt="asdf" src={e.imgLink} fill />
+              <Link href={e.redirect}>
+                <Image alt="asdf" src={e.imgLink} fill />
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -180,13 +179,15 @@ export default async function Home() {
           <CarouselContent className="h-[40vh]">
             {cmsData.sectionTwo.carousel.map((e, i) => (
               <CarouselItem key={i} className="relative basis-2/3 px-1">
-                <Image
-                  alt="asdf"
-                  src={e.imgLink}
-                  width={500}
-                  height={500}
-                  style={{ height: "100%", width: "100%" }}
-                />
+                <Link href={e.redirect}>
+                  <Image
+                    alt="asdf"
+                    src={e.imgLink}
+                    width={500}
+                    height={500}
+                    style={{ height: "100%", width: "100%" }}
+                  />
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -235,14 +236,14 @@ export default async function Home() {
         <p className="sub-heading mb-6">{cmsData.sectionThree.subTitle}</p>
         <Carousel className="relative">
           <CarouselContent className="h-fit">
-            {latestProductList.data &&
-              latestProductList.data.map((e: IProductList, i: number) => (
+            {latestProductList &&
+              latestProductList.map((e: IProductList, i: number) => (
                 <CarouselItem key={i} className="relative basis-1/2 px-1">
                   <ProductCard
                     className="px-1 h-[45vh]"
                     discount={e.discount}
                     imgLink={e.imgLink}
-                    productLink={e.imgLink}
+                    productLink={generateProductUrl(e.slug, e.batchId, e.code)}
                     name={e.name}
                     price={e.price}
                     key={i}
@@ -279,14 +280,14 @@ export default async function Home() {
         <p className="sub-heading mb-6">{cmsData.sectionFour.subTitle}</p>
         <Carousel className="relative">
           <CarouselContent className="h-fit">
-            {bestsellerProductList.data &&
-              bestsellerProductList.data.map((e: IProductList, i: number) => (
+            {bestsellerProductList &&
+              bestsellerProductList.map((e: IProductList, i: number) => (
                 <CarouselItem key={i} className="relative basis-1/2 px-1">
                   <ProductCard
                     className=" h-[45vh]"
                     discount={e.discount}
                     imgLink={e.imgLink}
-                    productLink={e.imgLink}
+                    productLink={generateProductUrl(e.slug, e.batchId, e.code)}
                     name={e.name}
                     price={e.price}
                     key={i}

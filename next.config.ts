@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     //     search: "",
     //   }
     // ],
-    domains: ['picsum.photos', 'nobero.com', 'i.imgur.com'],
+    domains: ["picsum.photos", "nobero.com", "i.imgur.com"],
   },
 };
 

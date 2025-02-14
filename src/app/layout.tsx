@@ -27,7 +27,7 @@ export default function RootLayout({
         <ReactQueryDevtools initialIsOpen={false} />
         <body className={`${roboto.className} antialiased`}>
           {children}
-          <Toaster />
+          <Toaster  />
         </body>
       </ReactQueryProvider>
     </html>

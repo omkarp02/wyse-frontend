@@ -39,7 +39,7 @@ const filterTypeList = [
   },
 ];
 
-const ProductFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
+const ProductFilter = ({ handleSubmit }: { handleSubmit?: () => void }) => {
   const [filterType, setFilterType] = useState<FILTER_TYPE | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -52,9 +52,11 @@ const ProductFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
   }
 
   const filterComp = {
-    [FILTER_TYPE.GENDER]: <GenderFilter handleSubmit={handleSubmit} />,
-    [FILTER_TYPE.SORT]: <SortFilter handleSubmit={handleSubmit} />,
-    [FILTER_TYPE.ALL]: <AllFilter onOpenChange={onOpenChange} handleSubmit={handleSubmit} />,
+    [FILTER_TYPE.GENDER]: <GenderFilter onOpenChange={onOpenChange} handleSubmit={handleSubmit} />,
+    [FILTER_TYPE.SORT]: <SortFilter onOpenChange={onOpenChange} handleSubmit={handleSubmit} />,
+    [FILTER_TYPE.ALL]: (
+      <AllFilter onOpenChange={onOpenChange} handleSubmit={handleSubmit} />
+    ),
   };
 
   return (

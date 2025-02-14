@@ -28,6 +28,8 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
   ? searchParams.get(FILTER_TYPE.COLOR)!.split(",")
   : [];
   const collection = searchParams.get("collection");
+  const gender = searchParams.get("gender")
+  const sort_by = searchParams.get("sort_by")
   const [hasMore, setHasMore] = useState(true);
   const ref = useRef(null);
 
@@ -38,7 +40,7 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
     isError,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [LIST_PRODUCT, name, category, collection, sizes, colors],
+    queryKey: [LIST_PRODUCT, name, category, collection, sizes, colors, gender, sort_by],
     queryFn: async ({ pageParam }) => {
       const data = await getProductList({
         page: pageParam,
@@ -49,6 +51,8 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
         sizes,
         colors,
         collection,
+        gender, 
+        sort_by
       });
       console.log(data.data, "<<<<<<<<<<");
       return data?.data ?? [];
@@ -58,10 +62,6 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
       return pages.length + 1;
     },
   });
-
-  function handleFitlerSubmit(){
-    refetch()
-  }
 
   useEffect(() => {
     let oberver = null;
@@ -127,7 +127,7 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
           ""
         )}
       </div>
-      <ProductFilter handleSubmit={handleFitlerSubmit} />
+      <ProductFilter />
     </>
   );
 };

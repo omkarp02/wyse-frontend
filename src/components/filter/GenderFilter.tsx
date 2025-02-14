@@ -1,25 +1,53 @@
 import React from "react";
 import { DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
+import { usePathname, useSearchParams } from "next/navigation";
+import { createSearchParamsUrl } from "@/utils/helper";
 
-const GenderFilter = ({ handleSubmit }: { handleSubmit(): void }) => {
+const genderList = [
+  { label: "All", value: "all" },
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Unisex", value: "unisex" },
+];
+
+const GenderFilter = ({
+  handleSubmit,
+  onOpenChange,
+}: {
+  onOpenChange(val: boolean): void;
+  handleSubmit?: () => void;
+}) => {
+  const searchParams = useSearchParams();
+  const pathName = usePathname()
+  const gender = searchParams.get("gender");
+
+  function handleClick(val: string) {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (val === "all") {
+      newParams.delete("gender");
+    } else {
+      newParams.set("gender", val);
+    }
+    const searchUrl = createSearchParamsUrl(pathName, newParams);
+    window.history.replaceState({}, "", searchUrl);
+    onOpenChange(false);
+  }
+
   return (
     <div className="mx-auto w-full max-w-sm">
       <DrawerHeader>
         <DrawerTitle>Gender</DrawerTitle>
       </DrawerHeader>
-      <Button variant={"ghost"} className="w-full">
-        Male
-      </Button>
-      <Button variant={"ghost"} className="w-full">
-        Boys
-      </Button>
-      <Button variant={"ghost"} className="w-full">
-        Girls
-      </Button>
-      <Button variant={"ghost"} className="w-full">
-        Women
-      </Button>
+      {genderList.map((e) => (
+        <Button
+          variant={"ghost"}
+          onClick={() => handleClick(e.value)}
+          className="w-full"
+        >
+          {e.label}
+        </Button>
+      ))}
     </div>
   );
 };

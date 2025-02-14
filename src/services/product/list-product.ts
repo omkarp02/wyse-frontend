@@ -10,14 +10,14 @@ export const getProductList = async (payload: {
   colors?: string[] | null;
   name?: string | null;
   category?: string | null;
-  count?: boolean
+  count?: boolean;
+  gender?: string | null;
+  sort_by?: string | null;
 }) => {
+  const cleanedObj = _.omitBy(payload, _.isNil);
 
-
-const cleanedObj = _.omitBy(payload, _.isNil);
-  
   const stringified = queryString.stringify(cleanedObj);
-  console.log(stringified , "<<<<<<<<")
+  console.log(stringified, "<<<<<<<<");
   const data = await globalInstance.get(`/product/list?${stringified}`);
   return data;
 };

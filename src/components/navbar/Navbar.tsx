@@ -28,6 +28,8 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useBoundStore } from "@/store/store";
 import CShoppingCart from "../icons/CShoppingCart";
 import { useGetTotalCartCount } from "@/hooks/query/cart";
+import { toast } from "@/hooks/use-toast";
+import { Button } from "../ui/button";
 
 const searchSchema = z.object({
   search: z.string(),
@@ -35,8 +37,16 @@ const searchSchema = z.object({
 
 type IFormFields = z.infer<typeof searchSchema>;
 
-const routesForCart = ["search", "products"];
+const routesForCart = ["search", "products", ""];
 const routesForUser = [""];
+
+const navList = [
+  { label: "Men", path: "/search?gender=men" },
+  { label: "Oversized Tees", path: "/search?category=oversized-tees" },
+  { label: "Classic Tees", path: "/search?category=t-shirt" },
+  { label: "Fashion Joggers", path: "/search?category=joggers" },
+  { label: "Hoodies", path: "/search?category=hoodies" },
+];
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
@@ -45,6 +55,7 @@ export default function Navbar() {
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
   const totalCartItems = useBoundStore((state) => state.totalCartItem);
+  const logout = useBoundStore((state) => state.logout);
 
   if (token) {
     useGetTotalCartCount();
@@ -56,6 +67,13 @@ export default function Navbar() {
 
   const onSubmit: SubmitHandler<IFormFields> = async (data) => {
     try {
+      if (!data.search) {
+        toast({
+          variant: "destructive",
+          title: "Please enter something to search",
+        });
+        return;
+      }
       const newParams = new URLSearchParams(searchParams.toString());
       if (data.search) {
         newParams.set("name", data.search);
@@ -87,6 +105,11 @@ export default function Navbar() {
     reset();
   }
 
+  async function handleLogout() {
+    logout();
+    router.replace("/");
+  }
+
   function handleUserProfileClick() {
     if (token) {
       router.push("/profile");
@@ -94,6 +117,8 @@ export default function Navbar() {
       router.push("/login");
     }
   }
+
+  console.log(pathName);
 
   useEffect(() => {
     if (showSearch) {
@@ -110,26 +135,59 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent side={"left"} className="bg-white w-full">
             <SheetTitle></SheetTitle>
-            <div className="flex justify-between">
-              <SheetClose>
-                <X className="cursor-pointer" />
-              </SheetClose>
-              <Gitlab />
-              <Link href={"/shopping-bag"}>
-                <CShoppingCart itemCount={totalCartItems} />
-              </Link>
+            <div className="flex flex-col h-full">
+              <div className="flex justify-between">
+                <SheetClose>
+                  <X className="cursor-pointer" />
+                </SheetClose>
+                <Gitlab />
+                <Link href={"/shopping-bag"}>
+                  <CShoppingCart itemCount={totalCartItems} />
+                </Link>
+              </div>
+              <section className="flex flex-col mt-4">
+                {navList.map((e) => (
+                  <>
+                    <Link
+                      className="text-xl  py-3  border-muted-100"
+                      href={e.path}
+                    >
+                      {e.label}
+                    </Link>
+                    <hr />
+                  </>
+                ))}
+              </section>
+              <section className="mt-auto">
+                {token ? (
+                  <>
+                    <Button className="w-full" asChild>
+                      <Link href={"/profile/details"}>Profile</Link>
+                    </Button>
+                    <Button className="w-full" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button className="w-full" asChild>
+                      <Link href={"/login"}>Log In or Sign Up</Link>
+                    </Button>
+                  </>
+                )}
+              </section>
             </div>
           </SheetContent>
         </Sheet>
 
         <Link href={"/"}>Logo</Link>
         <div className="flex gap-3">
-          {routesForUser.includes(formattedPathName) && (
+          {/* {routesForUser.includes(formattedPathName) && (
             <CircleUserRound
               className="cursor-pointer"
               onClick={handleUserProfileClick}
             />
-          )}
+          )} */}
           {showSearch ? (
             <X onClick={toggleSearchInput} className="cursor-pointer" />
           ) : (
@@ -149,7 +207,7 @@ export default function Navbar() {
       >
         <SearchInput
           onClear={handleOnClear}
-          placeholder="Search..."
+          placeholder={`Try searching "Hoodies"`}
           {...register("search")}
         />
       </form>

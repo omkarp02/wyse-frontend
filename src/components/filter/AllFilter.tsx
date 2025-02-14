@@ -12,6 +12,11 @@ export const enum FILTER_TYPE {
   COLOR = "colors",
 }
 
+const INITIAL_FILTER_STATE = {
+  [FILTER_TYPE.SIZE]: [],
+  [FILTER_TYPE.COLOR]: [],
+}
+
 let prevUrl = "";
 
 const AllFilter = ({
@@ -19,7 +24,7 @@ const AllFilter = ({
   handleSubmit,
 }: {
   onOpenChange(val: boolean): void;
-  handleSubmit(): void;
+  handleSubmit?: () => void;
 }) => {
   const { data: fitlerData } = useGetFilter();
   const searchParams = useSearchParams();
@@ -31,10 +36,7 @@ const AllFilter = ({
     : [];
 
   const [selectedFilterType, setSelectedFilterType] = useState("");
-  const [filter, setFilter] = useState<{ [key: string]: string[] }>({
-    [FILTER_TYPE.SIZE]: [],
-    [FILTER_TYPE.COLOR]: [],
-  });
+  const [filter, setFilter] = useState<{ [key: string]: string[] }>(INITIAL_FILTER_STATE);
   const pathName = usePathname();
   const [filterList, setFilterList] = useState([]);
   const filterTypeList = fitlerData?.map((e: any) => e.name);
@@ -56,30 +58,9 @@ const AllFilter = ({
     });
   }
 
-  // const key = type.toLowerCase();
-  //   const newParams = new URLSearchParams(searchParams.toString());
-  //   const curVal = newParams.get(key);
-  //   let valueToAdd = val;
-  //   if (curVal) {
-  //     const listOfVal = curVal.split(",");
-  //     const index = listOfVal.indexOf(val);
-  //     if (index === -1) {
-  //       listOfVal.push(val);
-  //     } else {
-  //       listOfVal.splice(index, 1);
-  //     }
-  //     valueToAdd = listOfVal.join(",");
-  //   }
-  //   if (valueToAdd) {
-  //     newParams.set(key, valueToAdd);
-  //   } else {
-  //     newParams.delete(key);
-  //   }
-  //   const searchUrl = createSearchParamsUrl(pathName, newParams);
-  //   window.history.replaceState({}, "", searchUrl);
-
   function handleClearAll() {
-    window.history.replaceState({}, "", pathName);
+    setFilter(INITIAL_FILTER_STATE)
+    // window.history.replaceState({}, "", pathName);
   }
 
   function handleApply() {
@@ -101,7 +82,6 @@ const AllFilter = ({
     const searchUrl = createSearchParamsUrl(pathName, newParams);
     window.history.replaceState({}, "", searchUrl);
     onOpenChange(false);
-    handleSubmit();
   }
 
   useEffect(() => {

@@ -16,13 +16,18 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import EmptyCart from "./ui/EmptyCart";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import LoginDialog from "./ui/LoginDialog";
 
 const ShoppingBag = () => {
   let { data: cartData, refetch } = useGetCart();
   const cartItems = useBoundStore((state) => state.cartItems);
   const token = useBoundStore((state) => state.token);
+  const router = useRouter();
   const deleteCart = useBoundStore((state) => state.deleteCartItem);
   const updateCartState = useBoundStore((state) => state.updateCart);
+
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
 
   const deleteCartMutation = useDeleteCartItem();
   const updateCartMutation = useUpdateCartItem();
@@ -32,6 +37,14 @@ const ShoppingBag = () => {
       deleteCartMutation.mutate(cartId);
     } else {
       deleteCart(cartId);
+    }
+  }
+
+  function handlePlaceOrder() {
+    if (token) {
+      router.push("/address");
+    } else {
+      setOpenLoginDialog(true)
     }
   }
 
@@ -70,58 +83,65 @@ const ShoppingBag = () => {
   }
 
   return (
-    <div className="relative">
-      {cartData?.items && cartData?.items?.length > 0 ? (
-        <>
-          <Link
-            href={"/address"}
-            className="sticky top-[94vh]"
-          >
-            <Button className="w-full uppercase  " size={"lg"}>
-              Place order
+    <>
+      <div className="relative">
+        {cartData?.items && cartData?.items?.length > 0 ? (
+          <>
+            <Button
+              onClick={handlePlaceOrder}
+              className="w-full uppercase sticky top-[94vh]"
+              size={"lg"}
+            >
+              Place Order
             </Button>
-          </Link>
-          <div className="-mt-8">
-            {cartData?.items?.map((e: ICartItem, i: number) => {
-              if (e.product) {
-                return (
-                  <section className="my-2 mx-1" key={i}>
-                    <CartItem
-                      {...e}
-                      updateCartItem={updateCartItem}
-                      deleteCartItem={deleteCartItem}
-                      product={e.product}
-                    />
-                    {/* <button onClick={()=> asdf(e.productCode)}>asldkf</button> */}
-                  </section>
-                );
-              } else {
-                return "";
+            <div className="-mt-8">
+              {cartData?.items?.map((e: ICartItem, i: number) => {
+                if (e.product) {
+                  return (
+                    <section className="my-2 mx-1" key={i}>
+                      <CartItem
+                        {...e}
+                        updateCartItem={updateCartItem}
+                        deleteCartItem={deleteCartItem}
+                        product={e.product}
+                      />
+                      {/* <button onClick={()=> asdf(e.productCode)}>asldkf</button> */}
+                    </section>
+                  );
+                } else {
+                  return "";
+                }
+              })}
+            </div>
+            <PriceDetails
+              className="my-6 px-2"
+              discountOnMrp={totalDiscountOnMrp}
+              totalItem={totalItem}
+              totalPrice={totalPrice}
+            />
+            <Image
+              src={
+                "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350"
               }
-            })}
-          </div>
-          <PriceDetails
-            className="my-6 px-2"
-            discountOnMrp={totalDiscountOnMrp}
-            totalItem={totalItem}
-            totalPrice={totalPrice}
-          />
-          <Image
-            src={
-              "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350"
-            }
-            alt="feature img"
-            className="w-full my-6"
-            width={330}
-            height={400}
-          />
+              alt="feature img"
+              className="w-full my-6"
+              width={330}
+              height={400}
+            />
 
-          <div className="h-10"></div>
-        </>
-      ) : (
-        <EmptyCart />
-      )}
-    </div>
+            <div className="h-10"></div>
+          </>
+        ) : (
+          <EmptyCart />
+        )}
+      </div>
+      <LoginDialog
+        open={openLoginDialog}
+        onOpenChange={(val) => {
+          setOpenLoginDialog(val);
+        }}
+      />
+    </>
   );
 };
 

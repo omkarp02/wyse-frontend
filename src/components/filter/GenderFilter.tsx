@@ -3,13 +3,9 @@ import { DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createSearchParamsUrl } from "@/utils/helper";
+import { genderList } from "@/features/filter/data";
 
-const genderList = [
-  { label: "All", value: "all" },
-  { label: "Male", value: "male" },
-  { label: "Female", value: "female" },
-  { label: "Unisex", value: "unisex" },
-];
+
 
 const GenderFilter = ({
   handleSubmit,

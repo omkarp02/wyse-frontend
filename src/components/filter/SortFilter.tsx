@@ -3,15 +3,9 @@ import { DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createSearchParamsUrl } from "@/utils/helper";
+import { sortList } from "@/features/filter/data";
 
-const sortList = [
-  { label: "What's new", value: "new" },
-  { label: "Price - high to low", value: "high" },
-  { label: "Popularity", value: "low" },
-  { label: "Discount", value: "discount" },
-  { label: "Price - low to high", value: "low" },
-  { label: "Customer Rating", value: "rating" },
-];
+
 
 const SortFilter = ({
   handleSubmit,
@@ -22,7 +16,6 @@ const SortFilter = ({
 }) => {
   const searchParams = useSearchParams();
   const pathName = usePathname();
-  const gender = searchParams.get("gender");
 
   function handleClick(val: string) {
     const newParams = new URLSearchParams(searchParams.toString());

@@ -1,14 +1,19 @@
 import { GET_FILTER, GET_PRODUCT_VARIATION } from "@/constants/reactquery";
-import { getFilterApi } from "@/services/product/fitler";
+import {
+  getFilterApi,
+  GetFilterApiPayload,
+} from "@/services/product/list-product";
 import { useQuery } from "@tanstack/react-query";
+import { sortBy } from "lodash";
 
-export const useGetFilter = () => {
+export const useGetFilter = (payload: GetFilterApiPayload) => {
+  const { name, category, collection } = payload;
   return useQuery({
-    queryKey: [GET_FILTER],
+    queryKey: [GET_FILTER, name, category, collection],
     queryFn: async () => {
-      const data = await getFilterApi();
+      const data = await getFilterApi(payload);
 
-      const formattedData: {name: string, filter: any}[] = [
+      const formattedData: { name: string; filter: any }[] = [
         { name: "Sizes", filter: [] },
         { name: "Colors", filter: [] },
       ];

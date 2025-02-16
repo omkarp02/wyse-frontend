@@ -8,28 +8,38 @@ import {
 } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../_component/ProductCard";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { LIST_PRODUCT } from "@/constants/reactquery";
-import { generateProductUrl } from "@/utils/helper";
+import { createSearchParamsUrl, generateProductUrl } from "@/utils/helper";
 import Loader from "@/components/loader/Loader";
 import { LIMIT } from "@/constants/common";
-import ProductFilter from "@/components/filter/Filter";
 import { FILTER_TYPE } from "@/components/filter/AllFilter";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { SelectLabel } from "@radix-ui/react-select";
+import { sortList } from "@/features/filter/data";
 
 const ProductList = () => {
   const searchParams = useSearchParams();
+  const pathName = usePathname();
 
   const name = searchParams.get("name");
   const category = searchParams.get("category");
   const sizes = searchParams.get(FILTER_TYPE.SIZE)
-  ? searchParams.get(FILTER_TYPE.SIZE)!.split(",")
-  : [];
-const colors = searchParams.get(FILTER_TYPE.COLOR)
-  ? searchParams.get(FILTER_TYPE.COLOR)!.split(",")
-  : [];
+    ? searchParams.get(FILTER_TYPE.SIZE)!.split(",")
+    : [];
+  const colors = searchParams.get(FILTER_TYPE.COLOR)
+    ? searchParams.get(FILTER_TYPE.COLOR)!.split(",")
+    : [];
   const collection = searchParams.get("collection");
-  const gender = searchParams.get("gender")
-  const sort_by = searchParams.get("sort_by")
+  const gender = searchParams.get("gender");
+  const sort_by = searchParams.get("sort_by");
   const [hasMore, setHasMore] = useState(true);
   const ref = useRef(null);
 
@@ -40,7 +50,16 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
     isError,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [LIST_PRODUCT, name, category, collection, sizes, colors, gender, sort_by],
+    queryKey: [
+      LIST_PRODUCT,
+      name,
+      category,
+      collection,
+      sizes,
+      colors,
+      gender,
+      sort_by,
+    ],
     queryFn: async ({ pageParam }) => {
       const data = await getProductList({
         page: pageParam,
@@ -51,8 +70,8 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
         sizes,
         colors,
         collection,
-        gender, 
-        sort_by
+        gender,
+        sort_by,
       });
       console.log(data.data, "<<<<<<<<<<");
       return data?.data ?? [];
@@ -84,6 +103,13 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
     };
   }, [isLoading]);
 
+  function handleSortChange(val: string) {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("sort_by", val);
+    const searchUrl = createSearchParamsUrl(pathName, newParams);
+    window.history.replaceState({}, "", searchUrl);
+  }
+
   useEffect(() => {
     if (productData?.pages && productData.pages.length > 1) {
       if (productData.pages[productData.pages.length - 1].length === 0) {
@@ -97,14 +123,38 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
 
   return (
     <>
-      <div className="flex flex-wrap justify-between mt-5 relative">
+      <div className="flex justify-between items-center">
+        <p className="heading ">Search Result for: {name ?? "All"}</p>
+        <Select
+          value={sort_by ?? sortList[0].value}
+          onValueChange={handleSortChange}
+          defaultValue={sortList[0].value}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a Filter" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup className="bg-background">
+              <SelectLabel>Sort By: </SelectLabel>
+              {sortList.map((e, i) => {
+                return (
+                  <SelectItem className="cursor-pointer" value={e.value}>
+                    {e.label}
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-wrap justify-center mt-5 relative">
         {productData?.pages.map((productList, i) => (
           <>
             {productList &&
               Array.isArray(productList) &&
               productList.map((ele, index) => (
                 <ProductCard
-                  className="px-1 h-[46vh] w-[49.5%]"
+                  className="px-1 w-1/2 max-w-[250px] h-auto inline-block"
                   discount={ele.discount}
                   imgLink={ele.imgLink}
                   name={ele.name}
@@ -127,7 +177,6 @@ const colors = searchParams.get(FILTER_TYPE.COLOR)
           ""
         )}
       </div>
-      <ProductFilter />
     </>
   );
 };

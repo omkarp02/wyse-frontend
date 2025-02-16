@@ -40,7 +40,6 @@ const SearchPage = async ({
 
   return (
     <div className="main-container">
-      <p className="heading">{name ?? "All"}</p>
       <HydrationBoundary state={dehydratedState}>
         <ProductList />
       </HydrationBoundary>

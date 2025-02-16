@@ -15,7 +15,7 @@ export const enum FILTER_TYPE {
 const INITIAL_FILTER_STATE = {
   [FILTER_TYPE.SIZE]: [],
   [FILTER_TYPE.COLOR]: [],
-}
+};
 
 let prevUrl = "";
 
@@ -26,7 +26,6 @@ const AllFilter = ({
   onOpenChange(val: boolean): void;
   handleSubmit?: () => void;
 }) => {
-  const { data: fitlerData } = useGetFilter();
   const searchParams = useSearchParams();
   const sizes = searchParams.get(FILTER_TYPE.SIZE)
     ? searchParams.get(FILTER_TYPE.SIZE)!.split(",")
@@ -34,9 +33,21 @@ const AllFilter = ({
   const colors = searchParams.get(FILTER_TYPE.COLOR)
     ? searchParams.get(FILTER_TYPE.COLOR)!.split(",")
     : [];
+  const category = searchParams.get("category");
+  const collection = searchParams.get("collection");
+  const name = searchParams.get("name");
+
+  const { data: fitlerData } = useGetFilter({
+    category,
+    collection,
+    count: true,
+    name,
+  });
 
   const [selectedFilterType, setSelectedFilterType] = useState("");
-  const [filter, setFilter] = useState<{ [key: string]: string[] }>(INITIAL_FILTER_STATE);
+  const [filter, setFilter] = useState<{ [key: string]: string[] }>(
+    INITIAL_FILTER_STATE
+  );
   const pathName = usePathname();
   const [filterList, setFilterList] = useState([]);
   const filterTypeList = fitlerData?.map((e: any) => e.name);
@@ -54,12 +65,12 @@ const AllFilter = ({
       } else {
         prev[type].splice(index, 1);
       }
-      return _.cloneDeep(prev)
+      return _.cloneDeep(prev);
     });
   }
 
   function handleClearAll() {
-    setFilter(INITIAL_FILTER_STATE)
+    setFilter(INITIAL_FILTER_STATE);
     // window.history.replaceState({}, "", pathName);
   }
 

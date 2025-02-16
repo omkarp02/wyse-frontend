@@ -11,7 +11,7 @@ import { ICategory, IProductList } from "@/types/api";
 
 import { DollarSign, Truck, Undo2 } from "lucide-react";
 import { unstable_cache } from "next/cache";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { cache } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./_component/ProductCard";
@@ -23,6 +23,7 @@ import {
 } from "@/constants/reactquery";
 import Link from "next/link";
 import { generateProductUrl } from "@/utils/helper";
+import { showOnDesktopClass, showOnMobileClass } from "@/constants/common";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -30,34 +31,43 @@ const revalidate = 1;
 const cmsData = {
   carousel: [
     {
-      imgLink:
-        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07_1.webp?v=1731670749&width=360",
+      imgLink: {
+        mobile: "https://nobero.com/cdn/shop/files/192.jpg?v=1738312464",
+        desktop: "https://nobero.com/cdn/shop/files/173.jpg?v=1738312472",
+      },
+      redirect: "/search?category=hoodies&collection=trending",
+    },
+    {
+      imgLink: {
+        mobile:
+          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2025-01-31_at_3.39.25_PM.jpg?v=1738323722",
+        desktop:
+          "https://nobero.com/cdn/shop/files/Desktop_-_Homepage_Banners-20_1.jpg?v=1738323728 ",
+      },
+      redirect: "/search?category=cargo-pants&collection=trending",
+    },
+    {
+      imgLink: {
+        mobile: "https://nobero.com/cdn/shop/files/195.jpg?v=1738312464",
+        desktop: "https://nobero.com/cdn/shop/files/176.jpg?v=1738312471",
+      },
       redirect: "/search?category=joggers&collection=best-sellers",
     },
     {
-      imgLink:
-        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-07.webp?v=1731670750&width=360",
+      imgLink: {
+        mobile:
+          "https://nobero.com/cdn/shop/files/home-page-mob_1.jpg?v=1738133874",
+        desktop:
+          "https://nobero.com/cdn/shop/files/home-page-web_8.jpg?v=1738133874",
+      },
       redirect: "/search?category=cargo-pants&collection=trending",
     },
     {
-      imgLink:
-        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-06.webp?v=1731670750&width=360",
+      imgLink: {
+        mobile: "https://nobero.com/cdn/shop/files/196.jpg?v=1738312464",
+        desktop: "https://nobero.com/cdn/shop/files/177.jpg?v=1738312471",
+      },
       redirect: "/search?category=hoodies&collection=trending",
-    },
-    {
-      imgLink:
-        "	https://nobero.com/cdn/shop/files/HOME-PAGE-MOBILE1.jpg?v=1735376673&width=3600",
-      redirect: "/search?category=hoodies&collection=trending",
-    },
-    {
-      imgLink:
-        "https://nobero.com/cdn/shop/files/Sale_D2C_banners_-10.webp?v=1731670749&width=360",
-      redirect: "/search?category=hoodies&collection=trending",
-    },
-    {
-      imgLink:
-        "https://nobero.com/cdn/shop/files/Travel_Cargo_Home_Page_Banner_Mobile_copy.webp?v=1732190346&width=360",
-      redirect: "/search?category=cargo-pants&collection=trending",
     },
   ],
   sectionTwo: {
@@ -65,22 +75,23 @@ const cmsData = {
     subTitle: "Check Out Now ->",
     carousel: [
       {
-        imgLink: "https://nobero.com/cdn/shop/files/CARGO-PANTS_1.jpg",
+        imgLink:
+          "https://nobero.com/cdn/shop/files/97_1ff90344-6cfa-4b2e-91ea-7a76b5d8eaf4.jpg?v=1738323339",
         redirect: "/search?category=cargo-pants&collection=trending",
       },
       {
         imgLink:
-          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-10_at_12.03.02_PM.jpg",
+          "https://nobero.com/cdn/shop/files/98_b384e323-1704-4c82-94ce-3fe42681c3c5.jpg?v=1738323401",
         redirect: "/search?category=hoodies&collection=trending",
       },
       {
         imgLink:
-          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.14_PM.jpg",
+          "https://nobero.com/cdn/shop/files/Most_Popular-2.jpg?v=1738323477",
         redirect: "/search?category=hoodies&collection=trending",
       },
       {
         imgLink:
-          "https://nobero.com/cdn/shop/files/WhatsApp_Image_2024-12-09_at_6.30.15_PM.jpg",
+          "https://nobero.com/cdn/shop/files/99_0d5c5bd6-0982-4cdd-b5be-40d4db098bfb.jpg?v=1738323401",
         redirect: "/search?category=joggers&collection=trending",
       },
     ],
@@ -90,17 +101,29 @@ const cmsData = {
   categories: {
     title: "Shop for Men",
   },
-  banner: "https://nobero.com/cdn/shop/files/Our_Story-2_1.webp?v=1723793985",
+  banner: {
+    mobile: "https://nobero.com/cdn/shop/files/Our_Story-2_1.webp?v=1723793985",
+    desktop:
+      "https://nobero.com/cdn/shop/files/BRAND_STORY_2000_x_521_px_-2.webp?v=1723793962",
+  },
   sectionThree: {
     title: "See the latest",
     subTitle: "Handpicked for you",
     buttonText: "Shop All Products",
   },
   featuredProduct: {
-    imgOne:
-      "https://nobero.com/cdn/shop/files/TRAVEL_HOODIE_213e7bdf-2a73-472b-b4ef-7281e4cfbc00.jpg?v=1735620251",
-    imgTwo:
-      "https://nobero.com/cdn/shop/files/MicrosoftTeams-image_5_2d6c21a9-8e7e-4c04-96d8-bfdfabf562b9.png?v=1735620251",
+    imgOne: {
+      mobile:
+        "https://nobero.com/cdn/shop/files/Travel_Jogger_Home_Page_Image_Mob_1_copy_29e5b158-370f-4093-9e91-433872b82d5f.jpg?v=1738323121",
+      desktop:
+        "https://nobero.com/cdn/shop/files/Travel_Jogger_Home_Page_Image_1_copy_d8419a25-f731-44ef-a852-afec626ceb14.jpg?v=1738323121",
+    },
+    imgTwo: {
+      mobile:
+        "https://nobero.com/cdn/shop/files/Travel_Jogger_Home_Page_Image_Mob_2_copy_f2149a8e-dabb-4fee-8941-05cd5347eb73.png?v=1738323120",
+      desktop:
+        "https://nobero.com/cdn/shop/files/Travel_Jogger_Home_Page_Image_2_copy_2af40579-aef7-416d-82f0-414717f4578a.png?v=1738323120",
+    },
   },
   sectionFour: {
     title: "Our Bestsellers",
@@ -155,17 +178,61 @@ export default async function Home() {
   const bestsellerProductList = await getBestSellerProduct();
   const latestProductList = await getLatestProduct();
 
+
+  const common = { alt: "Art Direction Example" };
+
   return (
     <div className="flex flex-col gap-6">
       <Carousel className="relative">
-        <CarouselContent className="h-[35vh]">
-          {cmsData.carousel.map((e, i) => (
-            <CarouselItem key={i} className="relative">
-              <Link href={e.redirect}>
-                <Image alt="asdf" src={e.imgLink} fill />
-              </Link>
-            </CarouselItem>
-          ))}
+        <CarouselContent>
+          {cmsData.carousel.map((e, i) => {
+            // const {
+            //   props: { srcSet: desktop },
+            // } = getImageProps({
+            //   ...common,
+            //   width: 1110,
+            //   height: 427.344,
+            //   className: "w-full",
+            //   quality: 80,
+            //   src: e.imgLink.desktop.trim(),
+            // });
+            // const {
+            //   props: { srcSet: mobile, ...rest },
+            // } = getImageProps({
+            //   ...common,
+            //   width: 335,
+            //   height: 268,
+            //   className: "w-full",
+            //   quality: 70,
+            //   src: e.imgLink.mobile.trim(),
+            // });
+
+            return (
+              <CarouselItem key={i} className="relative">
+                <Link href={e.redirect}>
+                  {/* <picture>
+                    <source media="(max-width: 500px)" srcSet={mobile} />
+                    <source  media="(min-width: 600px)" srcSet={desktop} />
+                    <img {...rest}  />
+                  </picture> */}
+                  <Image
+                    width={1110}
+                    height={427.344}
+                    alt="asdf"
+                    className={`w-full h-auto ${showOnDesktopClass}`}
+                    src={e.imgLink.desktop.trim()}
+                  />
+                  <Image
+                    width={395}
+                    height={316}
+                    alt="asdf"
+                    className={`w-full h-auto ${showOnMobileClass}`}
+                    src={e.imgLink.mobile.trim()}
+                  />
+                </Link>
+              </CarouselItem>
+            );
+          })}
         </CarouselContent>
         <DotButton className="absolute transform translate-x-[-50%] left-1/2 bottom-0" />
       </Carousel>
@@ -176,16 +243,19 @@ export default async function Home() {
         <p className="heading">{cmsData.sectionTwo.title}</p>
         <p className="text-sm mt-2">{cmsData.sectionTwo.subTitle}</p>
         <Carousel className="relative mt-4">
-          <CarouselContent className="h-[40vh]">
+          <CarouselContent className="h-fit">
             {cmsData.sectionTwo.carousel.map((e, i) => (
-              <CarouselItem key={i} className="relative basis-2/3 px-1">
+              <CarouselItem
+                key={i}
+                className="relative basis-2/3 xs:basis-2/4 sm:basis-1/3 md:basis-1/4 px-1"
+              >
                 <Link href={e.redirect}>
                   <Image
                     alt="asdf"
                     src={e.imgLink}
-                    width={500}
-                    height={500}
-                    style={{ height: "100%", width: "100%" }}
+                    width={974}
+                    height={366}
+                    className="object-cover w-full h-auto"
                   />
                 </Link>
               </CarouselItem>
@@ -199,22 +269,22 @@ export default async function Home() {
       <Image
         src={cmsData.featureImgLink}
         alt="feature img"
-        className="w-full my-6"
-        width={330}
-        height={400}
+        className={`w-full my-6 ${showOnMobileClass}`}
+        width={335}
+        height={55.828}
       />
 
       {/* Categories */}
 
       <section>
         <p className="heading">{cmsData.categories.title}</p>
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center sm:justify-center ">
           {categoryList?.data &&
             categoryList?.data?.map((ele: ICategory, index: number) => (
               <Link
                 href={`/search?category=${ele.slug}`}
                 key={index}
-                className="w-[45%] h-[45%] mx-2 my-4 relative"
+                className="w-[45%] h-[45%] max-w-[230px] sm:w-auto sm:h-auto mx-2 my-4 relative"
               >
                 <Image alt="asdf" src={ele.icon} width={300} height={300} />
                 <p className="text-center">{ele.name}</p>
@@ -224,9 +294,16 @@ export default async function Home() {
       </section>
 
       <Image
-        src={cmsData.banner}
+        src={cmsData.banner.desktop}
         alt="banner img"
-        className="w-full"
+        className={`w-full ${showOnDesktopClass}`}
+        width={1393}
+        height={362.172}
+      />
+      <Image
+        src={cmsData.banner.mobile}
+        alt="banner img"
+        className={`w-full ${showOnMobileClass}`}
         width={330}
         height={542}
       />
@@ -238,7 +315,10 @@ export default async function Home() {
           <CarouselContent className="h-fit">
             {latestProductList &&
               latestProductList.map((e: IProductList, i: number) => (
-                <CarouselItem key={i} className="relative basis-1/2 px-1">
+                <CarouselItem
+                  key={i}
+                  className="relative basis-1/2 sm:basis-1/3 md:basis-1/4 px-1"
+                >
                   <ProductCard
                     className="px-1 h-[45vh]"
                     discount={e.discount}
@@ -261,18 +341,33 @@ export default async function Home() {
       </section>
 
       <Image
-        src={cmsData.featuredProduct.imgOne}
+        src={cmsData.featuredProduct.imgOne.desktop}
         alt="feature img"
-        className="w-full "
-        width={330}
-        height={400}
+        className={`w-full ${showOnDesktopClass}`}
+        width={957}
+        height={250}
       />
       <Image
-        src={cmsData.featuredProduct.imgTwo}
+        src={cmsData.featuredProduct.imgOne.mobile}
         alt="feature img"
-        className="w-full  p-4"
-        width={330}
-        height={400}
+        className={`w-full ${showOnMobileClass}`}
+        width={957}
+        height={218}
+      />
+
+      <Image
+        src={cmsData.featuredProduct.imgTwo.desktop}
+        alt="feature img"
+        className={`w-full ${showOnDesktopClass}`}
+        width={323}
+        height={258}
+      />
+      <Image
+        src={cmsData.featuredProduct.imgTwo.mobile}
+        alt="feature img"
+        className={`w-full ${showOnMobileClass}`}
+        width={323}
+        height={266}
       />
 
       <section>
@@ -282,7 +377,10 @@ export default async function Home() {
           <CarouselContent className="h-fit">
             {bestsellerProductList &&
               bestsellerProductList.map((e: IProductList, i: number) => (
-                <CarouselItem key={i} className="relative basis-1/2 px-1">
+                <CarouselItem
+                  key={i}
+                  className="relative basis-1/2 sm:basis-1/3 md:basis-1/4 px-1"
+                >
                   <ProductCard
                     className=" h-[45vh]"
                     discount={e.discount}
@@ -306,3 +404,38 @@ export default async function Home() {
     </div>
   );
 }
+
+// {cmsData.carousel.map((e, i) => {
+//   const {
+//     props: { srcSet: desktop },
+//   } = getImageProps({
+//     ...common,
+//     width: 1110,
+//     height: 427.344,
+//     className: "w-full",
+//     quality: 80,
+//     src: e.imgLink.desktop.trim(),
+//   });
+//   const {
+//     props: { srcSet: mobile, ...rest },
+//   } = getImageProps({
+//     ...common,
+//     width: 335,
+//     height: 268,
+//     className: "w-full",
+//     quality: 70,
+//     src: e.imgLink.mobile.trim(),
+//   });
+
+//   return (
+//     <CarouselItem key={i} className="relative">
+//       <Link href={e.redirect}>
+//         <picture>
+//           <source media="(max-width: 500px)" srcSet={mobile} />
+//           <source  media="(min-width: 600px)" srcSet={desktop} />
+//           <img {...rest}  />
+//         </picture>
+//       </Link>
+//     </CarouselItem>
+//   );
+// })}

@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import GenderFilter from "./GenderFilter";
 import SortFilter from "./SortFilter";
 import AllFilter from "./AllFilter";
+import { showOnMobileClass } from "@/constants/common";
 
 const enum FILTER_TYPE {
   GENDER,
@@ -39,7 +40,7 @@ const filterTypeList = [
   },
 ];
 
-const ProductFilter = ({ handleSubmit }: { handleSubmit?: () => void }) => {
+const MobileProductFilter = ({ handleSubmit }: { handleSubmit?: () => void }) => {
   const [filterType, setFilterType] = useState<FILTER_TYPE | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -61,7 +62,7 @@ const ProductFilter = ({ handleSubmit }: { handleSubmit?: () => void }) => {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerTrigger asChild>
+      <DrawerTrigger className={`${showOnMobileClass}`} asChild>
         <div className="flex items-center fixed bottom-0 bg-background w-full">
           {filterTypeList.map((ele, index) => {
             return (
@@ -96,4 +97,4 @@ const ProductFilter = ({ handleSubmit }: { handleSubmit?: () => void }) => {
   );
 };
 
-export default ProductFilter;
+export default MobileProductFilter;

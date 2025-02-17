@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import LoginDialog from "./ui/LoginDialog";
 
 const ShoppingBag = () => {
+
   const { data: cartData, refetch } = useGetCart();
   const cartItems = useBoundStore((state) => state.cartItems);
   const token = useBoundStore((state) => state.token);

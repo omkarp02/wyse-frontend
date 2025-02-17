@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { authStore, IAuthStore } from "./auth";
 import { hydarteStore, IHydrateStore } from "./hydrate";
+import { authStore, IAuthStore } from "./auth";
 import { cartStore, ICartStore } from "./cart";
 
 export type IBoundStore = IAuthStore & IHydrateStore & ICartStore;

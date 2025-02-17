@@ -57,9 +57,7 @@ export default function Navbar() {
   const totalCartItems = useBoundStore((state) => state.totalCartItem);
   const logout = useBoundStore((state) => state.logout);
 
-  if (token) {
-    useGetTotalCartCount();
-  }
+  useGetTotalCartCount();
 
   const formattedPathName = pathName.split("/")[1];
 

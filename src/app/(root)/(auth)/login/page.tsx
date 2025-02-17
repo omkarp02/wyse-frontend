@@ -11,7 +11,7 @@ const LoginPage = () => {
           title="Sign In your account"
           subTitle={
             <>
-              Let's get started.
+              Let&apos;s get started.
             </>
           }
         />

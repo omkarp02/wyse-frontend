@@ -10,7 +10,7 @@ const EmptyCart = () => {
 
       <p className="text-2xl font-semibold my-2">Hey, it feels so light!</p>
       <p className="text-sm text-muted">
-        There is nothing in your bag. Let's add some items
+        There is nothing in your bag. Let&apos;s add some items
       </p>
     </div>
   );

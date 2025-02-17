@@ -23,6 +23,7 @@ const ProductSize = ({
           if (ele.size === "base_size") return "";
           return (
             <div
+            key={index}
               role="button"
               onClick={() => handleChange("size", ele.size)}
               className={cn(

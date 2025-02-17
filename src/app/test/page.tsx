@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import InfiniteScroll from '@/components/ui/infinite-scroll';
 import { Loader2 } from 'lucide-react';
 
 interface DummyProductResponse {
@@ -66,9 +65,7 @@ const InfiniteScrollDemo = () => {
         {products.map((product) => (
           <Product key={product.id} product={product} />
         ))}
-        <InfiniteScroll hasMore={hasMore} isLoading={false} next={next} threshold={1}>
           {hasMore && <Loader2 className="my-4 h-8 w-8 animate-spin" />}
-        </InfiniteScroll>
       </div>
     </div>
   );

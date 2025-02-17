@@ -30,7 +30,7 @@ export const useAddUserAddress = () => {
       router.replace("/address/select");
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",
@@ -64,7 +64,7 @@ export const useEditUserAddress = () => {
       router.replace("/address/select");
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",
@@ -84,7 +84,7 @@ export const useUpdateAddressIsPrimary = () => {
       });
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",
@@ -117,7 +117,7 @@ export const useDeleteAddress = () => {
       });
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",
@@ -136,7 +136,7 @@ export const useDeleteAddressByUserIds = () => {
       queryClient.setQueryData(
         [GET_ADDRESS_LIST],
         (curElem: IResGetAddressApi[]) => {
-          for (let item of id.ids) {
+          for (const item of id.ids) {
             const index = curElem.findIndex((e) => e.id === item);
             if (index != -1) {
               curElem.splice(index, 1);
@@ -152,7 +152,7 @@ export const useDeleteAddressByUserIds = () => {
       });
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",

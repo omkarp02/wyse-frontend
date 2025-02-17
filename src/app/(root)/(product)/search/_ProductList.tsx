@@ -138,7 +138,7 @@ const ProductList = () => {
               <SelectLabel>Sort By: </SelectLabel>
               {sortList.map((e, i) => {
                 return (
-                  <SelectItem className="cursor-pointer" value={e.value}>
+                  <SelectItem key={`sortby-${i}`} className="cursor-pointer" value={e.value}>
                     {e.label}
                   </SelectItem>
                 );

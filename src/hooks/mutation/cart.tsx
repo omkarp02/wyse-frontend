@@ -33,9 +33,10 @@ export const useAddToCart = () => {
       });
     },
     onError: (error) => {
-      let { msg, status } = getMutationErrorMsg(error, "Item");
+      const { msg, status } = getMutationErrorMsg(error, "Item");
+      let cMsg = msg
       if (status === ERROR_STATUS.ALREADY_EXIST) {
-        msg = "Item already exist in the cart";
+        cMsg = "Item already exist in the cart";
       }
       toast({
         title: msg,
@@ -117,7 +118,7 @@ export const useDeleteCartItem = () => {
       });
     },
     onError: (error) => {
-      let { msg } = getMutationErrorMsg(error, "Item");
+      const { msg } = getMutationErrorMsg(error, "Item");
       toast({
         title: msg,
         variant: "destructive",

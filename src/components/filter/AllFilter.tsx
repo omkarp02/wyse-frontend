@@ -145,9 +145,10 @@ const AllFilter = ({
         </DrawerTitle>
         <div className="flex h-full ">
           <section className="w-1/3  text-start bg-secondary">
-            {filterTypeList?.map((e: string) => {
+            {filterTypeList?.map((e: string, id: number) => {
               return (
                 <button
+                  key={id}
                   className={cn(
                     "w-full py-3",
                     selectedFilterType === e ? "bg-white" : "bg-secondary"
@@ -163,6 +164,7 @@ const AllFilter = ({
             {filterList?.map((e: any) => {
               return (
                 <div
+                  key={e.value}
                   className={cn(
                     "flex gap-4 py-3 w-full  text-muted items-center"
                   )}

@@ -12,8 +12,6 @@ import React from "react";
 const EditAddressPage = () => {
   const { id } = useParams();
 
-  if (id === null || Array.isArray(id)) return <></>;
-
   const addressMutation = useAddUserAddress();
   const { data: addressData, isLoading } = useGetAddress(id as string);
 
@@ -21,10 +19,8 @@ const EditAddressPage = () => {
     addressMutation.mutate(data);
   }
 
-  // let pincode = ;
-  // if (addressData?.address?.pincode) {
-  //   pincode = addressData.address?.pincode
-  // }
+  if (id === null || Array.isArray(id)) return <></>;
+
 
   return (
     <AddressForm

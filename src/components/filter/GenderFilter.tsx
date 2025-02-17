@@ -37,6 +37,7 @@ const GenderFilter = ({
       </DrawerHeader>
       {genderList.map((e) => (
         <Button
+          key={e.value}
           variant={"ghost"}
           onClick={() => handleClick(e.value)}
           className="w-full"

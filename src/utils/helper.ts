@@ -48,8 +48,8 @@ export const generateProductUrl = (
 };
 
 export function generateRandomNumber(n: number) {
-  let min = Math.pow(10, n - 1); // minimum number with n digits
-  let max = Math.pow(10, n) - 1; // maximum number with n digits
+  const min = Math.pow(10, n - 1); // minimum number with n digits
+  const max = Math.pow(10, n) - 1; // maximum number with n digits
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 

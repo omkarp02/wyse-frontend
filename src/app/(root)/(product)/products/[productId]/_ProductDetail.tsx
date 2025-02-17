@@ -58,16 +58,16 @@ const ProductDetail = () => {
   const batchId = searchParams.get("batch");
   const size = searchParams.get("size");
 
-  if (id === null) return <></>;
-  if (batchId === null) return <></>;
-
-  const { data: productDetail, isLoading, isError } = useGetProductDetails(id);
+  const { data: productDetail, isLoading, isError } = useGetProductDetails(id ?? "");
 
   const {
     data: productBatchData,
     isLoading: isProductBatchLoading,
     isError: isProductBatchError,
-  } = useGetProductBatch(batchId);
+  } = useGetProductBatch(batchId ?? "");
+
+  if (id === null) return <></>;
+  if (batchId === null) return <></>;
 
   function handleChange(field: string, value: string) {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -83,7 +83,7 @@ const ProductDetail = () => {
   const productBatch = productBatchData?.data;
   const imgLinks = productInfo?.imgLink;
   const variations: IVariation[] = productInfo?.variations;
-  let variation = variations?.[0];
+  const variation = variations?.[0];
 
   const price = variation?.price;
   const discount = variation?.discount;

@@ -90,7 +90,7 @@ const SelectAddressPage = () => {
           {addressData?.map((e, i) => {
             if (!deletedAddressIdsList.includes(e.id)) {
               return (
-                <div className="my-2">
+                <div className="my-2" key={e.id}>
                   {i < 2 ? (
                     <p className="form-heading mb-4">
                       {e.isPrimary ? "Default address" : "Other Address"}

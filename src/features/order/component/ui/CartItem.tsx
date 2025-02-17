@@ -43,7 +43,7 @@ type Option = {
 const SIZE_ID = "size";
 const QTY_ID = "qty";
 
-let fetched: { [key: string]: boolean } = {};
+const fetched: { [key: string]: boolean } = {};
 
 type ICartItem = ICartItemApi & {
   deleteCartItem(cartId: string): void;
@@ -251,6 +251,7 @@ const CartDrawer = ({
               if (e.value === BASE_SIZE) return "";
               return (
                 <button
+                  key={e.value}
                   onClick={() => setCurVal(e.value)}
                   disabled={e.disabled}
                   className={cn(

@@ -45,7 +45,7 @@ const PriceDetails = ({
 
       <table className="w-full">
         {priceDetails.map((e, i) => (
-          <tr className={"w-2/3"}>
+          <tr key={`price-detail-${i}`} className={"w-2/3"}>
             <td className={"h-8 flex items-center"}>{e.label}</td>
             <td className="text-end">{e.value}</td>
           </tr>

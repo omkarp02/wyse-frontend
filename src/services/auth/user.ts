@@ -1,5 +1,5 @@
+import { GENDER } from "@/constants/api";
 import axiosInstance from "@/lib/axios/protectedInstance";
-import { GENDER } from "@/types/dropdown";
 
 export type IUpdateUserProfileApi = {
   firstname: string;

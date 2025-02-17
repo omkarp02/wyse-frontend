@@ -11,7 +11,7 @@ const RegisterPage = () => {
           title="Sign Up your account"
           subTitle={
             <>
-              Let's get started. Fill in the details below to <br /> create your
+              Let&apos;s get started. Fill in the details below to <br /> create your
               account.
             </>
           }

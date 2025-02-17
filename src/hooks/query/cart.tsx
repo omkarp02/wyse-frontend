@@ -44,7 +44,7 @@ export const useGetCart = () => {
           [key: string]: { quantity: number; cartId: string };
         } = {};
 
-        for (let item of cartItems) {
+        for (const item of cartItems) {
           payload.productCode.push(item.productCode);
           payload.size.push(item.size);
           payload.cartId.push(item.cartId);
@@ -57,7 +57,7 @@ export const useGetCart = () => {
         const data = await getCartApiOffline(payload);
         const finalResult = data?.data;
         if (finalResult) {
-          for (let item of finalResult) {
+          for (const item of finalResult) {
             item.quantity = productQuantity[item.cartId].quantity;
             item.cartId = productQuantity[item.cartId].cartId;
           }

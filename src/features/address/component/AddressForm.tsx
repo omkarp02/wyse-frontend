@@ -51,8 +51,6 @@ function AddressForm({
   });
   
 
-  defaultValue.address?.pincode
-
   useEffect(() => {
     if (defaultValue && isEditable) {
       form.reset({
@@ -190,7 +188,7 @@ function AddressForm({
                     className="flex"
                   >
                     {ADDRESS_TYPE_LIST.map((e) => (
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem key={e.value} className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value={e.value} />
                         </FormControl>

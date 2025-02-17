@@ -45,7 +45,7 @@ const DesktopProductFilter = ({ className }: { className: string }) => {
   function handleClearAll() {
     const names = [FILTER_TYPE.SIZE, FILTER_TYPE.COLOR, "gender", "sort_by"];
     const newParams = new URLSearchParams(searchParams.toString());
-    for (let item of names) {
+    for (const item of names) {
       newParams.delete(item);
     }
     const searchUrl = createSearchParamsUrl(pathName, newParams);
@@ -69,16 +69,20 @@ const DesktopProductFilter = ({ className }: { className: string }) => {
         {filterData &&
           filterData.map((e, i) => {
             return (
-              <AccordionItem value={`item-${i}`}>
+              <AccordionItem key={`item-${i}`} value={`item-${i}`}>
                 <AccordionTrigger className="px-2">{e.name}</AccordionTrigger>
                 <AccordionContent>
                   {e.filter.map(
-                    (filterItem: { name: string; stock: number }) => {
+                    (
+                      filterItem: { name: string; stock: number },
+                      i: number
+                    ) => {
                       const selectedValues =
                         getSelectedValueForFilterData[e.name.toLowerCase()];
 
                       return (
                         <FilterItem
+                          key={i}
                           name={e.name.toLowerCase()}
                           pathName={pathName}
                           searchParams={searchParams}
@@ -100,6 +104,7 @@ const DesktopProductFilter = ({ className }: { className: string }) => {
             {genderList.map((e) => {
               return (
                 <FilterItem
+                  key={e.value}
                   searchParams={searchParams}
                   pathName={pathName}
                   name="gender"

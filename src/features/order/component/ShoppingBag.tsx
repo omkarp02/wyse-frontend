@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import LoginDialog from "./ui/LoginDialog";
 
 const ShoppingBag = () => {
-  let { data: cartData, refetch } = useGetCart();
+  const { data: cartData, refetch } = useGetCart();
   const cartItems = useBoundStore((state) => state.cartItems);
   const token = useBoundStore((state) => state.token);
   const router = useRouter();
@@ -72,7 +72,7 @@ const ShoppingBag = () => {
   let totalItem = 0;
   let totalDiscountOnMrp = 0;
   if (cartData?.items?.length !== 0 && Array.isArray(cartData?.items)) {
-    for (let item of cartData?.items) {
+    for (const item of cartData?.items) {
       totalPrice += item.product.variations.price * item.quantity;
       totalItem += item.quantity;
       totalDiscountOnMrp += getDiscountOnPrice(
@@ -102,7 +102,7 @@ const ShoppingBag = () => {
                     </section>
                   );
                 } else {
-                  return "";
+                  return null;
                 }
               })}
             </section>

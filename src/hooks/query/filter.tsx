@@ -22,7 +22,7 @@ export const useGetFilter = (payload: GetFilterApiPayload) => {
       const colorList = [];
 
       if (data?.data?.color) {
-        for (let key in data?.data?.color) {
+        for (const key in data?.data?.color) {
           colorList.push({ name: key, stock: data.data.color[key] });
         }
 
@@ -30,7 +30,7 @@ export const useGetFilter = (payload: GetFilterApiPayload) => {
       }
 
       if (data?.data?.size) {
-        for (let key in data?.data?.size) {
+        for (const key in data?.data?.size) {
           sizeList.push({ name: key, stock: data.data.size[key] });
         }
         formattedData[0].filter = sizeList;

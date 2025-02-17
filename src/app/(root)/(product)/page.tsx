@@ -219,14 +219,14 @@ export default async function Home() {
                     width={1110}
                     height={427.344}
                     alt="asdf"
-                    className={`w-full h-auto ${showOnDesktopClass}`}
+                    className={`w-full h-auto hidden md:block`}
                     src={e.imgLink.desktop.trim()}
                   />
                   <Image
                     width={395}
                     height={316}
                     alt="asdf"
-                    className={`w-full h-auto ${showOnMobileClass}`}
+                    className={`w-full h-auto block md:hidden`}
                     src={e.imgLink.mobile.trim()}
                   />
                 </Link>

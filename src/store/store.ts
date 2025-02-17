@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { authStore, IAuthStore } from "./Auth";
+import { authStore, IAuthStore } from "./auth";
 import { hydarteStore, IHydrateStore } from "./hydrate";
 import { cartStore, ICartStore } from "./cart";
 

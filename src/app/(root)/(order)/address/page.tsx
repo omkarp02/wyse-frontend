@@ -10,12 +10,12 @@ const AddressPage = () => {
   const { data: addressData } = useGetPrimaryAddress();
 
   return (
-    <div className="px-1 mt-[50px] h-[80vh] flex flex-col">
-      <Link href="/address/add">
+    <div className="px-1 mt-[50px] h-[75vh] flex flex-col min-w-[320px]">
+      {!addressData ? <Link href="/address/add">
         <Button className="uppercase w-full my-4" size={"lg"}>
           Add new Address
         </Button>
-      </Link>
+      </Link> : ""}
 
       {addressData ? (
         <DisplayAddress

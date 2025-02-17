@@ -208,7 +208,7 @@ export default async function Home() {
             // });
 
             return (
-              <CarouselItem key={i} className="relative">
+              <CarouselItem key={i} className="relative max-h-[80vh]">
                 <Link href={e.redirect}>
                   {/* <picture>
                     <source media="(max-width: 500px)" srcSet={mobile} />

@@ -44,7 +44,7 @@ const ShoppingBag = () => {
     if (token) {
       router.push("/address");
     } else {
-      setOpenLoginDialog(true)
+      setOpenLoginDialog(true);
     }
   }
 
@@ -84,17 +84,10 @@ const ShoppingBag = () => {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative flex justify-center">
         {cartData?.items && cartData?.items?.length > 0 ? (
-          <>
-            <Button
-              onClick={handlePlaceOrder}
-              className="w-full uppercase sticky top-[94vh]"
-              size={"lg"}
-            >
-              Place Order
-            </Button>
-            <div className="-mt-8">
+          <div className="block sm:flex justify-center sm:gap-4 md:gap-6">
+            <section className="sm:mt-14 max-h-[500px] hide-scrollbar overflow-y-auto" >
               {cartData?.items?.map((e: ICartItem, i: number) => {
                 if (e.product) {
                   return (
@@ -112,25 +105,33 @@ const ShoppingBag = () => {
                   return "";
                 }
               })}
-            </div>
-            <PriceDetails
-              className="my-6 px-2"
-              discountOnMrp={totalDiscountOnMrp}
-              totalItem={totalItem}
-              totalPrice={totalPrice}
-            />
-            <Image
-              src={
-                "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350"
-              }
-              alt="feature img"
-              className="w-full my-6"
-              width={330}
-              height={400}
-            />
-
-            <div className="h-10"></div>
-          </>
+            </section>
+            <section >
+              <Button
+                onClick={handlePlaceOrder}
+                className="w-full uppercase sticky top-[94vh]"
+                size={"lg"}
+              >
+                Place Order
+              </Button>
+              <PriceDetails
+                className="my-6 px-2"
+                discountOnMrp={totalDiscountOnMrp}
+                totalItem={totalItem}
+                totalPrice={totalPrice}
+              />
+              <Image
+                src={
+                  "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350"
+                }
+                alt="feature img"
+                className="w-full my-6"
+                width={330}
+                height={400}
+              />
+              <div className="h-10"></div>
+            </section>
+          </div>
         ) : (
           <EmptyCart />
         )}

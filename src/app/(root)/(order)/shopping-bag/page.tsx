@@ -22,7 +22,7 @@ const CartPage = async () => {
   return (
     <>
     
-      <div className="main-container">
+      <div className="main-container ">
         <HydrationBoundary state={dehydratedState}>
           <ShoppingBag />
         </HydrationBoundary>

@@ -12,7 +12,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { LIST_PRODUCT } from "@/constants/reactquery";
 import { createSearchParamsUrl, generateProductUrl } from "@/utils/helper";
 import Loader from "@/components/loader/Loader";
-import { LIMIT } from "@/constants/common";
+import { LIMIT, showOnDesktopClass } from "@/constants/common";
 import { FILTER_TYPE } from "@/components/filter/AllFilter";
 import {
   Select,
@@ -130,11 +130,11 @@ const ProductList = () => {
           onValueChange={handleSortChange}
           defaultValue={sortList[0].value}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className={`w-[180px] md:flex hidden`}>
             <SelectValue placeholder="Select a Filter" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectGroup className="bg-background">
+          <SelectContent className="bg-background">
+            <SelectGroup >
               <SelectLabel>Sort By: </SelectLabel>
               {sortList.map((e, i) => {
                 return (

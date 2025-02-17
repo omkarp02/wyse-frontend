@@ -81,7 +81,7 @@ const AddtoCart = ({
       }}
     >
       <DrawerTrigger asChild>
-        <section className="sticky top-[95%] mt-4 px-1">
+        <section className="sticky top-[95%] sm:block sm:top-0 mt-4 px-1">
           <AddToCartButton handleOnClick={addToCart} />
         </section>
       </DrawerTrigger>
@@ -121,7 +121,7 @@ const AddToCartButton = ({
       size={"lg"}
       onClick={handleOnClick}
       disabled={disabled}
-      className={cn("w-full", className)}
+      className={cn("w-full max-w-full", className)}
     >
       Add to Cart
     </Button>

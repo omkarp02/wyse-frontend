@@ -20,10 +20,10 @@ export default function Layout({
       return 1;
     } else if (pathname.includes("address")) {
       return 2;
-    }else if(pathname === "/payment"){
-      return 3
+    } else if (pathname === "/payment") {
+      return 3;
     }
-    return 0
+    return 0;
   }
 
   return (
@@ -32,7 +32,7 @@ export default function Layout({
       <section className="px-6 my-6">
         <CircleStepper steps={steps} curStep={getStep(pathname)} />
       </section>
-      {children}
+      <div className="flex flex-col items-center">{children}</div>
     </main>
   );
 }

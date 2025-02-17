@@ -118,7 +118,7 @@ const CartItem = ({
 
   return (
     <>
-      <section className="flex h-[10rem] relative">
+      <section className="flex h-[10rem] relative pe-6">
         <div className="h-full">
           <Image
             className="h-full w-auto"

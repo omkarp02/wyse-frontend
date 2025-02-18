@@ -17,9 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetCart = () => {
   const token = useBoundStore((state) => state.token);
   const cartItems = useBoundStore((state) => state.cartItems);
-  const hydrate = useBoundStore(state => state.hydrated)
-
- 
+  const hydrate = useBoundStore((state) => state.hydrated);
 
   if (token) {
     return useQuery<{ items: ICartItem[] }, Error>({
@@ -28,29 +26,28 @@ export const useGetCart = () => {
         const data = await getCartApi();
         return data?.data;
       },
-      enabled: hydrate
+      enabled: hydrate,
     });
   } else {
     return useQuery<{ items: ICartItem[] }, Error>({
       queryKey: [GET_CART_DETAILS_OFFLINE],
       queryFn: async () => {
-
-        console.log("<<<<<<<<<first>>>>>>>>>")
+        console.log("<<<<<<<<<first>>>>>>>>>");
         const payload: IGetCartApiOffline = {
           productCode: [],
           size: [],
           cartId: [],
         };
-        console.log("<<<<<<<<<second>>>>>>>>>")
+        console.log("<<<<<<<<<second>>>>>>>>>");
         if (cartItems.length === 0) {
-          console.log("<<<<<<<<<first>>>>>>>>>", cartItems.length)
+          console.log("<<<<<<<<<first>>>>>>>>>", cartItems.length);
           return { items: [] };
         }
 
         const productQuantity: {
           [key: string]: { quantity: number; cartId: string };
         } = {};
-        console.log("<<<<<<<<<third>>>>>>>>>")
+        console.log("<<<<<<<<<third>>>>>>>>>");
         for (const item of cartItems) {
           payload.productCode.push(item.productCode);
           payload.size.push(item.size);
@@ -60,10 +57,10 @@ export const useGetCart = () => {
             cartId: item.cartId,
           };
         }
-        console.log("<<<<<<<<<four>>>>>>>>>")
+        console.log("<<<<<<<<<four>>>>>>>>>");
 
         const data = await getCartApiOffline(payload);
-        console.log("<<<<<<<<<five>>>>>>>>>") 
+        console.log("<<<<<<<<<five>>>>>>>>>");
 
         const finalResult = data?.data;
         if (finalResult) {
@@ -75,7 +72,7 @@ export const useGetCart = () => {
         }
         return { items: finalResult };
       },
-      enabled: hydrate
+      enabled: hydrate,
     });
   }
 };
@@ -84,14 +81,13 @@ export const useGetTotalCartCount = () => {
   const token = useBoundStore((state) => state.token);
   const setTotalCartItem = useBoundStore((state) => state.setTotalCartItem);
 
-  if (token) {
-    return useQuery<{ items: ICartItem[] }, Error>({
-      queryKey: [GET_TOTAL_CART_COUNT],
-      queryFn: async () => {
-        const data = await getTotalCartItemApi();
-        setTotalCartItem(data?.data?.totalItems);
-        return data?.data;
-      },
-    });
-  }
+  return useQuery<{ items: ICartItem[] }, Error>({
+    queryKey: [GET_TOTAL_CART_COUNT],
+    queryFn: async () => {
+      const data = await getTotalCartItemApi();
+      setTotalCartItem(data?.data?.totalItems);
+      return data?.data;
+    },
+    enabled: !!token
+  });
 };

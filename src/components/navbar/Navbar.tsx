@@ -156,13 +156,13 @@ export default function Navbar() {
                   </>
                 ))}
               </section>
-              <section className="mt-auto">
+              <section className="mt-auto space-y-4">
                 {token ? (
                   <>
                     <Button className="w-full" asChild>
                       <Link href={"/profile/details"}>Profile</Link>
                     </Button>
-                    <Button className="w-full" onClick={handleLogout}>
+                    <Button className="w-full" variant={"outline"} onClick={handleLogout}>
                       Logout
                     </Button>
                   </>

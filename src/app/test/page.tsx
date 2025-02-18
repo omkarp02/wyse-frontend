@@ -1,74 +1,22 @@
-'use client';
-import React from 'react';
-import { Loader2 } from 'lucide-react';
+"use client"
 
-interface DummyProductResponse {
-  products: DummyProduct[];
-  total: number;
-  skip: number;
-  limit: number;
-}
+import { testApi } from "@/services/test";
+import React from "react";
 
-interface DummyProduct {
-  id: number;
-  title: string;
-  price: string;
-}
+const TestPage = () => {
+  async function testthis() {
+    try {
+      const data = await testApi({ userId: "asdf", password: "asdf" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-const Product = ({ product }: { product: DummyProduct }) => {
   return (
-    <div className="flex w-full flex-col gap-2 rounded-lg border-2 border-gray-200 p-2">
-      <div className="flex gap-2">
-        <div className="flex flex-col justify-center gap-1">
-          <div className="font-bold text-primary">
-            {product.id} - {product.title}
-          </div>
-          <div className="text-sm text-muted-foreground">{product.price}</div>
-        </div>
-      </div>
+    <div>
+      <button onClick={testthis}>asldfksdf</button>
     </div>
   );
 };
 
-const InfiniteScrollDemo = () => {
-  const [page, setPage] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [products, setProducts] = React.useState<DummyProduct[]>([]);
-
-  const next = async () => {
-    setLoading(true);
-    console.log('<<<<<<<<<<<<<first>>>>>>>>>>>>>')
-
-    /**
-     * Intentionally delay the search by 800ms before execution so that you can see the loading spinner.
-     * In your app, you can remove this setTimeout.
-     **/
-    setTimeout(async () => {
-      const res = await fetch(
-        `https://dummyjson.com/products?limit=3&skip=${3 * page}&select=title,price`,
-      );
-      const data = (await res.json()) as DummyProductResponse;
-      setProducts((prev) => [...prev, ...data.products]);
-      setPage((prev) => prev + 1);
-
-      // Usually your response will tell you if there is no more data.
-      if (data.products.length < 3) {
-        setHasMore(false);
-      }
-      setLoading(false);
-    }, 800);
-  };
-  return (
-    <div className="max-h-[300px] w-full  overflow-y-auto px-10">
-      <div className="flex w-full flex-col items-center  gap-3">
-        {products.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-          {hasMore && <Loader2 className="my-4 h-8 w-8 animate-spin" />}
-      </div>
-    </div>
-  );
-};
-
-export default InfiniteScrollDemo;
+export default TestPage;

@@ -3,7 +3,10 @@
 import { ADDRESS_TYPE } from "@/constants/api";
 import AddressForm from "@/features/address/component/AddressForm";
 import { IAddressFormFields } from "@/features/address/libs/validation";
-import { useAddUserAddress } from "@/hooks/mutation/address";
+import {
+  useAddUserAddress,
+  useEditUserAddress,
+} from "@/hooks/mutation/address";
 import { useGetAddress } from "@/hooks/query/address";
 import { add } from "lodash";
 import { useParams } from "next/navigation";
@@ -12,15 +15,21 @@ import React from "react";
 const EditAddressPage = () => {
   const { id } = useParams();
 
-  const addressMutation = useAddUserAddress();
+  const addressMutation = useEditUserAddress();
   const { data: addressData, isLoading } = useGetAddress(id as string);
 
   function onSubmit(data: IAddressFormFields) {
-    addressMutation.mutate(data);
+    if (id && typeof id === "string") {
+      addressMutation.mutate({
+        address: data.address,
+        id: id,
+        isPrimary: data.isPrimary,
+        type: data.type,
+      });
+    }
   }
 
   if (id === null || Array.isArray(id)) return <></>;
-
 
   return (
     <AddressForm

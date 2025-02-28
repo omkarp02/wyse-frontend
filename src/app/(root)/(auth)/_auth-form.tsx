@@ -86,7 +86,7 @@ export function AuthForm({
       setScreenLoader(true);
       if (isLogin) {
         const res = await loginApi(data);
-        setLoggedIn({ token: res.data.accessToken });
+        setLoggedIn({ token: res.data.accessToken, refreshToken: res.data.refreshToken });
         router.push("/");
       } else {
         const res = await registerApi({

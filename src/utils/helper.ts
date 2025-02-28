@@ -28,6 +28,11 @@ export const getToken = () => {
   }
 };
 
+export const getRefreshToken = () => {
+  const { refreshToken } = useBoundStore.getState();
+  return refreshToken;
+};
+
 export const getActualPrice = (price: number, discount: number) => {
   return Math.round(price / (1 - discount / 100));
 };
@@ -52,5 +57,3 @@ export function generateRandomNumber(n: number) {
   const max = Math.pow(10, n) - 1; // maximum number with n digits
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-

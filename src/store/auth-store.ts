@@ -4,36 +4,42 @@ import { IBoundStore, IMutators } from "./store";
 
 const AUTH_INITIAL_STATE = {
   token: null,
+  refreshToken: null,
 };
 
 type IAuthState = {
   token: string | null;
+  refreshToken: string | null;
 };
 
 type IAuthAction = {
-  setLoggedIn({ token }: { token: string }): void;
+  setLoggedIn({
+    token,
+    refreshToken,
+  }: {
+    token: string;
+    refreshToken: string;
+  }): void;
   reset(): void;
   logout(): void;
 };
 
 export type IAuthStore = IAuthAction & IAuthState;
 
-export const authStore: StateCreator<
-  IBoundStore,
-  IMutators,
-  [],
-  IAuthStore
-> = (set) => ({
+export const authStore: StateCreator<IBoundStore, IMutators, [], IAuthStore> = (
+  set
+) => ({
   token: null,
-  setLoggedIn({ token }) {
-    set({ token: token });
+  refreshToken: null,
+  setLoggedIn({ token, refreshToken }) {
+    set({ token: token, refreshToken });
   },
   reset() {
     set(AUTH_INITIAL_STATE);
   },
   async logout() {
-    // await logoutApi();
-    set({token: "", cartItems: [], totalCartItem: 0});
+    await logoutApi();
+    set({ token: "", refreshToken: "", cartItems: [], totalCartItem: 0 });
   },
 });
 

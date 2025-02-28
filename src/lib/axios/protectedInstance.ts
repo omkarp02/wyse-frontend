@@ -69,9 +69,9 @@ axiosInstance.interceptors.response.use(
       try {
         // Refresh the token
         const response = await handleRefreshTokenApi();
-        const { accessToken } = response.data;
+        const { accessToken, refreshToken } = response.data;
 
-        useBoundStore.setState({ token: accessToken });
+        useBoundStore.setState({ token: accessToken, refreshToken: refreshToken });
         processQueue(null, accessToken); // Process queued requests with the new token
 
         isRefreshing = false;

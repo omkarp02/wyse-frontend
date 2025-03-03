@@ -10,19 +10,12 @@ import React from 'react'
 const ProfilePage = () => {
 
   const router = useRouter()
-  const logout = useBoundStore(state => state.logout)
 
-  async function handleLogout(){
-    logout()
-    router.replace("/")
-  }
 
   return (
     <div className='main-container'>
       <Link href={"/profile/details"} >Edit Profile</Link>
-      <Button onClick={handleLogout} variant={'outline'} className='w-full'>
-        Logout
-      </Button>
+    
     </div>
   )
 }

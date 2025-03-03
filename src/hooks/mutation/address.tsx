@@ -4,6 +4,7 @@ import {
   addUserAddressApi,
   deleteAddressApi,
   deleteAddressByUserIdsApi,
+  editUserAddressApi,
   IAddUserAddressApi,
   IDeleteAddressByUserIdsApi,
   IEditUserAddressApi,
@@ -44,7 +45,7 @@ export const useEditUserAddress = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: IEditUserAddressApi) => addUserAddressApi(payload),
+    mutationFn: (payload: IEditUserAddressApi) => editUserAddressApi(payload),
     onSuccess: (data, id) => {
       queryClient.setQueryData(
         [GET_ADDRESS_LIST],

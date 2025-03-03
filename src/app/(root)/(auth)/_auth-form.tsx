@@ -124,7 +124,6 @@ export function AuthForm({
     }
   };
 
-  console.log(fullErrors);
 
   return (
     <>

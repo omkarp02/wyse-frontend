@@ -11,7 +11,7 @@ const TestPage = () => {
       console.log(error);
     }
   }
-
+console.log('Hii')
   return (
     <div>
       <button onClick={testthis}>asldfksdf</button>

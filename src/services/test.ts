@@ -1,3 +1,4 @@
+import globalInstance from "@/lib/axios/globalInstance";
 import axiosInstance from "@/lib/axios/globalInstance";
 
 
@@ -12,5 +13,6 @@ export const testApi = async (cred: {
   password: string;
 }) => {
   const data = await axiosInstance.post(`/`, cred);
+  // const data = await axiosInstance.get(`/`);
   return data;
 };

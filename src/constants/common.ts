@@ -13,4 +13,4 @@ export const PRODUCT_LIMIT = 10;
 
 //Axios
 
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+export const BACKEND_URL = "https://pro-yknu.onrender.com/api/v1";

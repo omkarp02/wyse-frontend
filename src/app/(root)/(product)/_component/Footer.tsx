@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
+//latest chnage
+
 const Footer = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
 

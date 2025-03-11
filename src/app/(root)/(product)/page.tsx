@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import { generateProductUrl } from "@/utils/helper";
 import { showOnDesktopClass, showOnMobileClass } from "@/constants/common";
+import Footer from "./_component/Footer";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -46,13 +47,13 @@ const cmsData = {
       },
       redirect: "/search?category=cargo-pants&collection=trending",
     },
-    {
-      imgLink: {
-        mobile: "https://nobero.com/cdn/shop/files/195.jpg?v=1738312464",
-        desktop: "https://nobero.com/cdn/shop/files/176.jpg?v=1738312471",
-      },
-      redirect: "/search?category=joggers&collection=best-sellers",
-    },
+    // {
+    //   imgLink: {
+    //     mobile: "https://nobero.com/cdn/shop/files/195.jpg?v=1738312464",
+    //     desktop: "https://nobero.com/cdn/shop/files/176.jpg?v=1738312471",
+    //   },
+    //   redirect: "/search?category=joggers&collection=best-sellers",
+    // },
     {
       imgLink: {
         mobile:
@@ -84,22 +85,22 @@ const cmsData = {
           "https://nobero.com/cdn/shop/files/98_b384e323-1704-4c82-94ce-3fe42681c3c5.jpg?v=1738323401",
         redirect: "/search?category=hoodies&collection=trending",
       },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/Most_Popular-2.jpg?v=1738323477",
-        redirect: "/search?category=hoodies&collection=trending",
-      },
-      {
-        imgLink:
-          "https://nobero.com/cdn/shop/files/99_0d5c5bd6-0982-4cdd-b5be-40d4db098bfb.jpg?v=1738323401",
-        redirect: "/search?category=joggers&collection=trending",
-      },
+      // {
+      //   imgLink:
+      //     "https://nobero.com/cdn/shop/files/Most_Popular-2.jpg?v=1738323477",
+      //   redirect: "/search?category=hoodies&collection=trending",
+      // },
+      // {
+      //   imgLink:
+      //     "https://nobero.com/cdn/shop/files/99_0d5c5bd6-0982-4cdd-b5be-40d4db098bfb.jpg?v=1738323401",
+      //   redirect: "/search?category=joggers&collection=trending",
+      // },
     ],
   },
   featureImgLink:
     "https://nobero.com/cdn/shop/files/Frame_48097704.svg?v=1733223350",
   categories: {
-    title: "Shop for Men",
+    title: "Our Categories",
   },
   banner: {
     mobile: "https://nobero.com/cdn/shop/files/Our_Story-2_1.webp?v=1723793985",
@@ -280,16 +281,19 @@ export default async function Home() {
         <p className="heading">{cmsData.categories.title}</p>
         <div className="flex flex-wrap justify-center sm:justify-center ">
           {categoryList?.data &&
-            categoryList?.data?.map((ele: ICategory, index: number) => (
-              <Link
-                href={`/search?category=${ele.slug}`}
-                key={index}
-                className="w-[45%] h-[45%] max-w-[230px] sm:w-auto sm:h-auto mx-2 my-4 relative"
-              >
-                <Image alt="asdf" src={ele.icon} width={300} height={300} />
-                <p className="text-center">{ele.name}</p>
-              </Link>
-            ))}
+            categoryList?.data?.map((ele: ICategory, index: number) =>{
+              if(["Joggers", "Shorts", "Cargo Pants"].includes(ele.name)) return ""
+              return  (
+                <Link
+                  href={`/search?category=${ele.slug}`}
+                  key={index}
+                  className="w-[45%] h-[45%] max-w-[230px] sm:w-auto sm:h-auto mx-2 my-4 relative"
+                >
+                  <Image alt="asdf" src={ele.icon} width={300} height={300} />
+                  <p className="text-center">{ele.name}</p>
+                </Link>
+              )
+            })}
         </div>
       </section>
 
@@ -355,7 +359,7 @@ export default async function Home() {
         height={218}
       />
 
-      <Image
+      {/* <Image
         src={cmsData.featuredProduct.imgTwo.desktop}
         alt="feature img"
         className={`w-full ${showOnDesktopClass}`}
@@ -368,7 +372,7 @@ export default async function Home() {
         className={`w-full ${showOnMobileClass}`}
         width={323}
         height={266}
-      />
+      /> */}
 
       <section>
         <p className="heading">{cmsData.sectionFour.title}</p>
@@ -401,6 +405,7 @@ export default async function Home() {
           </Button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

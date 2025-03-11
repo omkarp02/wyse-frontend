@@ -50,6 +50,7 @@ const navList = [
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
+  const [showSidebar, setShowSidebar]  = useState(false)
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -116,7 +117,10 @@ export default function Navbar() {
     }
   }
 
-  console.log(pathName);
+
+  function handleCategoryClick(){
+    setShowSidebar(false)
+  }
 
   useEffect(() => {
     if (showSearch) {
@@ -127,7 +131,7 @@ export default function Navbar() {
   return (
     <header className="w-full fixed top-0 z-10 bg-background">
       <div className="flex-between h-navbar px-2 border-b border-b-black">
-        <Sheet>
+        <Sheet onOpenChange={(val)=> setShowSidebar(val)} open={showSidebar} >
           <SheetTrigger>
             <Menu className="cursor-pointer" />
           </SheetTrigger>
@@ -149,6 +153,7 @@ export default function Navbar() {
                     <Link
                       className="text-xl  py-3  border-muted-100"
                       href={e.path}
+                      onClick={handleCategoryClick}
                     >
                       {e.label}
                     </Link>

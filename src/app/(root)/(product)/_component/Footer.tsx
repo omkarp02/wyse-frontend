@@ -1,8 +1,7 @@
-"use client"
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const Footer = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -14,6 +13,9 @@ const Footer = () => {
       setOpenSection(section);
     }
   };
+
+  // Function to scroll to top (client-side only)
+ 
 
   return (
     <footer className="bg-[#1e2a5a] text-white py-6 px-4 md:px-8 lg:px-16">
@@ -115,7 +117,7 @@ const Footer = () => {
 
         {/* Collapsible Sections for Mobile */}
         <div className="border-t border-white border-opacity-20 py-3">
-          <div className="flex justify-between items-center" onClick={() => toggleSection('categories')}>
+          <button type="button" className="w-full flex justify-between items-center focus:outline-none" onClick={() => toggleSection('categories')}>
             <h3 className="font-semibold">Categories</h3>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -126,7 +128,7 @@ const Footer = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </div>
+          </button>
           {openSection === 'categories' && (
             <ul className="mt-2 space-y-2 pl-2">
               <li><Link href="/men" className="hover:underline">Men</Link></li>
@@ -140,7 +142,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white border-opacity-20 py-3">
-          <div className="flex justify-between items-center" onClick={() => toggleSection('help')}>
+          <button type="button" className="w-full flex justify-between items-center focus:outline-none" onClick={() => toggleSection('help')}>
             <h3 className="font-semibold">Need Help</h3>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -151,7 +153,7 @@ const Footer = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </div>
+          </button>
           {openSection === 'help' && (
             <ul className="mt-2 space-y-2 pl-2">
               <li><Link href="/track-order" className="hover:underline">Track Your Order</Link></li>
@@ -164,7 +166,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white border-opacity-20 py-3">
-          <div className="flex justify-between items-center" onClick={() => toggleSection('company')}>
+          <button type="button" className="w-full flex justify-between items-center focus:outline-none" onClick={() => toggleSection('company')}>
             <h3 className="font-semibold">Company</h3>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -175,7 +177,7 @@ const Footer = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </div>
+          </button>
           {openSection === 'company' && (
             <ul className="mt-2 space-y-2 pl-2">
               <li><Link href="/shipping-policy" className="hover:underline">Shipping Policy</Link></li>
@@ -188,19 +190,10 @@ const Footer = () => {
 
       {/* Copyright Section */}
       <div className="mt-8 pt-4 border-t border-white border-opacity-20 text-sm text-center md:text-left">
-        © 2024 WYSE. All Rights Reserved by ----.
+        © 2023 NOBERO. All Rights Reserved by Pratyaya E-commerce Pvt. Ltd.
       </div>
       
-      {/* Scroll to top button (Mobile) */}
-      <button 
-        onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
-        className="md:hidden fixed bottom-4 right-4 bg-white text-[#1e2a5a] rounded-full p-2 shadow-lg"
-        aria-label="Scroll to top"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-        </svg>
-      </button>
+      
     </footer>
   );
 };

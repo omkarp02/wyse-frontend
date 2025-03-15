@@ -103,9 +103,9 @@ const cmsData = {
     title: "Our Categories",
   },
   banner: {
-    mobile: "https://nobero.com/cdn/shop/files/Our_Story-2_1.webp?v=1723793985",
+    mobile: "/outstory-mobile.jpg",
     desktop:
-      "https://nobero.com/cdn/shop/files/BRAND_STORY_2000_x_521_px_-2.webp?v=1723793962",
+      "/outstory-desktop.jpg",
   },
   sectionThree: {
     title: "See the latest",

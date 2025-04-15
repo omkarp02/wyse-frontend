@@ -3,7 +3,7 @@ import axios from "axios";
 
 const globalInstance = axios.create({
   baseURL: BACKEND_URL, // Replace with your API base URL
-  timeout: 1000,
+  timeout: 20000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true
 });

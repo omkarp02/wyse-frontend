@@ -7,7 +7,7 @@ import { BACKEND_URL } from "@/constants/common";
 
 const axiosInstance = axios.create({
   baseURL: BACKEND_URL, // Replace with your API base URL
-  timeout: 1000,
+  timeout: 20000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true
 });

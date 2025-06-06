@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import { generateProductUrl } from "@/utils/helper";
 import { showOnDesktopClass, showOnMobileClass } from "@/constants/common";
+import Footer from "./_component/Footer";
 
 const revalidate = 1;
 // const revalidate = 24 * 3600
@@ -401,6 +402,7 @@ export default async function Home() {
           </Button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

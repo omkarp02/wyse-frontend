@@ -30,6 +30,7 @@ import CShoppingCart from "../icons/CShoppingCart";
 import { useGetTotalCartCount } from "@/hooks/query/cart";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
+import BrandLogo from "../icons/brand/BrandLogo";
 
 const searchSchema = z.object({
   search: z.string(),

@@ -15,6 +15,7 @@ import { toast } from "@/hooks/use-toast";
 import { IResGetAddressApi } from "@/services/user/address";
 import { reportWebVitals } from "next/dist/build/templates/pages";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, {
   ChangeEvent,
   FormEvent,
@@ -25,10 +26,10 @@ import React, {
 
 let prevAddress = "";
 const SelectAddressPage = () => {
-  const { data: addressData } = useGetAddressList();
+  const { data: addressData, isLoading } = useGetAddressList();
   const addressMutation = useUpdateAddressIsPrimary();
   const deleteAddressMutation = useDeleteAddressByUserIds();
-
+  const router = useRouter();
   const [selectedAddress, setSelectedAddress] = useState("");
   const [deletedAddressIdsList, setDeletedAddressIdsList] = useState<string[]>(
     []
@@ -43,11 +44,18 @@ const SelectAddressPage = () => {
       toast({ variant: "destructive", title: "Select one address" });
       return;
     }
+    let somethingupdate = false;
     if (deletedAddressIdsList.length !== 0) {
       deleteAddressMutation.mutate({ ids: deletedAddressIdsList });
+      somethingupdate = true;
     }
     if (prevAddress !== selectedAddress) {
       addressMutation.mutate({ id: selectedAddress, isPrimary: true });
+      somethingupdate = true;
+    }
+
+    if (!somethingupdate) {
+      router.push("/address");
     }
   }
 
@@ -68,72 +76,75 @@ const SelectAddressPage = () => {
   }, [addressData]);
 
   return (
-    <div className="px-1">
-      <Button
-        onClick={handleSubmit}
-        className="w-full uppercase  sticky top-[94vh]"
-        size={"lg"}
-      >
-        confirm
-      </Button>
-      <Link href="/address/add">
-        <Button className="uppercase w-full my-4" size={"lg"}>
-          Add new Address
-        </Button>
-      </Link>
-      <section className="px-2">
-        <RadioGroup
-          onValueChange={handleAddressOnChange}
-          value={selectedAddress}
-          defaultValue="option-one"
+    <>
+      <div className="">
+        <Button
+          onClick={handleSubmit}
+          className="w-full uppercase  sticky top-[94vh]"
+          size={"lg"}
         >
-          {addressData?.map((e, i) => {
-            if (!deletedAddressIdsList.includes(e.id)) {
-              return (
-                <div className="my-2" key={e.id}>
-                  {i < 2 ? (
-                    <p className="form-heading mb-4">
-                      {e.isPrimary ? "Default address" : "Other Address"}
-                    </p>
-                  ) : (
-                    ""
-                  )}
+          confirm
+        </Button>
+        <Link href="/address/add">
+          <Button className="uppercase w-full my-4" size={"lg"}>
+            Add new Address
+          </Button>
+        </Link>
+        <section className="px-2">
+          <RadioGroup
+            onValueChange={handleAddressOnChange}
+            value={selectedAddress}
+            defaultValue="option-one"
+          >
+            {addressData?.map((e, i) => {
+              if (!deletedAddressIdsList.includes(e.id)) {
+                return (
+                  <div className="my-2" key={e.id}>
+                    {i < 2 ? (
+                      <p className="form-heading mb-4">
+                        {e.isPrimary ? "Default address" : "Other Address"}
+                      </p>
+                    ) : (
+                      ""
+                    )}
 
-                  <div className="flex gap-2">
-                    <RadioGroupItem className="mt-2" value={e.id} id={e.id} />
-                    <DisplayAddress selectedAddress={selectedAddress} {...e}>
-                      {e.id === selectedAddress ? (
-                        <div className="flex gap-3">
-                          <Button
-                            onClick={() => handleRemoveAddress(e.id)}
-                            className="uppercase"
-                            variant={"outline"}
-                          >
-                            Remove
-                          </Button>
-                          <Link href={`/address/edit/${e.id}`}>
-                            <Button className="uppercase" variant={"outline"}>
-                              Edit
+                    <div className="flex gap-2">
+                      <RadioGroupItem className="mt-2" value={e.id} id={e.id} />
+                      <DisplayAddress selectedAddress={selectedAddress} {...e}>
+                        {e.id === selectedAddress ? (
+                          <div className="flex gap-3">
+                            <Button
+                              onClick={() => handleRemoveAddress(e.id)}
+                              className="uppercase"
+                              variant={"outline"}
+                            >
+                              Remove
                             </Button>
-                          </Link>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </DisplayAddress>
+                            <Link href={`/address/edit/${e.id}`}>
+                              <Button className="uppercase" variant={"outline"}>
+                                Edit
+                              </Button>
+                            </Link>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </DisplayAddress>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-            return "";
-          })}
-        </RadioGroup>
-      </section>
-      <div className="h-14"></div>
-      <ScreenLoader
-        open={addressMutation.isPending || deleteAddressMutation.isPending}
-      />
-    </div>
+                );
+              }
+              return "";
+            })}
+          </RadioGroup>
+        </section>
+        <div className="h-14"></div>
+        <ScreenLoader
+          open={addressMutation.isPending || deleteAddressMutation.isPending}
+        />
+      </div>
+      <ScreenLoader open={isLoading} />
+    </>
   );
 };
 

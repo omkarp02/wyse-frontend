@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { SelectLabel } from "@radix-ui/react-select";
 import { sortList } from "@/features/filter/data";
+import ScreenLoader from "@/components/loader/ScreenLoader";
 
 const ProductList = () => {
   const searchParams = useSearchParams();
@@ -118,7 +119,7 @@ const ProductList = () => {
     }
   }, [productData]);
 
-  if (isLoading) return <h1> loading... </h1>;
+
   if (isError) return <div>Sorry There was an Error</div>;
 
   return (

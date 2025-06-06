@@ -84,10 +84,15 @@ export const useGetTotalCartCount = () => {
   return useQuery<{ items: ICartItem[] }, Error>({
     queryKey: [GET_TOTAL_CART_COUNT],
     queryFn: async () => {
-      const data = await getTotalCartItemApi();
-      setTotalCartItem(data?.data?.totalItems);
-      return data?.data;
+      try {
+        const data = await getTotalCartItemApi();
+        setTotalCartItem(data?.data?.totalItems);
+        return data?.data;
+      } catch (error) {
+        setTotalCartItem(0);
+        console.log(error)
+      }
     },
-    enabled: !!token
+    enabled: !!token,
   });
 };

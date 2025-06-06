@@ -18,6 +18,7 @@ import EmptyCart from "./ui/EmptyCart";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import LoginDialog from "./ui/LoginDialog";
+import ScreenLoader from "@/components/loader/ScreenLoader";
 
 const ShoppingBag = () => {
 
@@ -83,6 +84,8 @@ const ShoppingBag = () => {
     }
   }
 
+  console.log(updateCartMutation.isPending)
+
   return (
     <>
       <div className="relative flex justify-center">
@@ -143,6 +146,7 @@ const ShoppingBag = () => {
           setOpenLoginDialog(val);
         }}
       />
+      <ScreenLoader open={deleteCartMutation.isPending || updateCartMutation.isPending} />
     </>
   );
 };

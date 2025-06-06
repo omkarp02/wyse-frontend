@@ -139,7 +139,7 @@ export default function Navbar() {
                 <SheetClose>
                   <X className="cursor-pointer" />
                 </SheetClose>
-                <Gitlab />
+                <BrandLogo />
                 <Link href={"/shopping-bag"}>
                   <CShoppingCart itemCount={totalCartItems} />
                 </Link>
@@ -163,7 +163,11 @@ export default function Navbar() {
                     <Button className="w-full" asChild>
                       <Link href={"/profile/details"}>Profile</Link>
                     </Button>
-                    <Button className="w-full" variant={"outline"} onClick={handleLogout}>
+                    <Button
+                      className="w-full"
+                      variant={"outline"}
+                      onClick={handleLogout}
+                    >
                       Logout
                     </Button>
                   </>
@@ -179,7 +183,10 @@ export default function Navbar() {
           </SheetContent>
         </Sheet>
 
-        <Link href={"/"}>Logo</Link>
+        <Link href={"/"}>
+          {" "}
+          <BrandLogo />
+        </Link>
         <div className="flex gap-3">
           {/* {routesForUser.includes(formattedPathName) && (
             <CircleUserRound

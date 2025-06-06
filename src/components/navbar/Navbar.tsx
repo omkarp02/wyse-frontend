@@ -56,6 +56,7 @@ export default function Navbar() {
   const searchParams = useSearchParams();
   const token = useBoundStore((state) => state.token);
   const totalCartItems = useBoundStore((state) => state.totalCartItem);
+  const [showSidebar, setShowSidebar] = useState(false);
   const logout = useBoundStore((state) => state.logout);
 
   useGetTotalCartCount();
@@ -128,7 +129,7 @@ export default function Navbar() {
   return (
     <header className="w-full fixed top-0 z-10 bg-background">
       <div className="flex-between h-navbar px-2 border-b border-b-black">
-        <Sheet>
+        <Sheet open={showSidebar} onOpenChange={(val) => setShowSidebar(val)}>
           <SheetTrigger>
             <Menu className="cursor-pointer" />
           </SheetTrigger>
@@ -139,7 +140,10 @@ export default function Navbar() {
                 <SheetClose>
                   <X className="cursor-pointer" />
                 </SheetClose>
-                <BrandLogo />
+                <Link          onClick={() => setShowSidebar(false)} href={"/"}>
+                  {" "}
+                  <BrandLogo />
+                </Link>
                 <Link href={"/shopping-bag"}>
                   <CShoppingCart itemCount={totalCartItems} />
                 </Link>
@@ -148,6 +152,7 @@ export default function Navbar() {
                 {navList.map((e) => (
                   <>
                     <Link
+                      onClick={() => setShowSidebar(false)}
                       className="text-xl  py-3  border-muted-100"
                       href={e.path}
                     >

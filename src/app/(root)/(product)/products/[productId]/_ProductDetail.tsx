@@ -58,7 +58,11 @@ const ProductDetail = () => {
   const batchId = searchParams.get("batch");
   const size = searchParams.get("size");
 
-  const { data: productDetail, isLoading, isError } = useGetProductDetails(id ?? "");
+  const {
+    data: productDetail,
+    isLoading,
+    isError,
+  } = useGetProductDetails(id ?? "");
 
   const {
     data: productBatchData,
@@ -83,16 +87,21 @@ const ProductDetail = () => {
   const productBatch = productBatchData?.data;
   const imgLinks = productInfo?.imgLink;
   const variations: IVariation[] = productInfo?.variations;
-  const variation = variations?.[0];
-
-  const price = variation?.price;
-  const discount = variation?.discount;
-
+  let variation = variations?.[0];
   let cartItem: IAddCartApiCartItem | null = null;
+
+  console.log(variations, size);
 
   if (size) {
     cartItem = { productCode: id, quantity: 1, size: size };
+    const newVariation = variations.find((e) => e.size === size);
+    if (newVariation) {
+      variation = newVariation;
+    }
   }
+
+  let price = variation?.price;
+  let discount = variation?.discount;
 
   return (
     <>
@@ -224,6 +233,8 @@ const ProductDetail = () => {
           {/* Add cart button */}
           <AddtoCart
             item={cartItem}
+            price={price}
+            discount={discount}
             handleSizeChange={handleChange}
             size={size}
             variations={variations}

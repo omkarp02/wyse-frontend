@@ -6,7 +6,7 @@ import {
   DrawerTrigger,
   Drawer,
 } from "@/components/ui/drawer";
-import { cn, generateRandomNumber } from "@/utils/helper";
+import { cn, generateRandomNumber, getDiscountOnPrice } from "@/utils/helper";
 import React, { useEffect, useState } from "react";
 import ProductSize from "./ProductSize";
 import { IVariation } from "@/types/api";
@@ -21,18 +21,24 @@ const AddtoCart = ({
   handleSizeChange,
   variations,
   setScreenLoader,
+  price,
+  discount,
   item,
 }: {
   size: string | null;
   handleSizeChange(field: string, val: string): void;
   setScreenLoader?: (val: boolean) => void;
   variations: IVariation[];
+  price: number;
+  discount: number;
   item?: IAddCartApiCartItem | null;
 }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const token = useBoundStore((state) => state.token);
   const addToCartFn = useBoundStore((state) => state.addToCart);
   const { toast } = useToast();
+
+
 
   const mutation = useAddToCart();
 
@@ -57,18 +63,17 @@ const AddtoCart = ({
           quantity: item.quantity,
         };
         const res = addToCartFn(cartItem);
-        if(res === -1){
+        if (res === -1) {
           toast({
             title: "Added to Bag",
             variant: "default",
           });
-        }else if(res === ERROR_STATUS.ALREADY_EXIST){
+        } else if (res === ERROR_STATUS.ALREADY_EXIST) {
           toast({
             title: "Item already exist in the cart",
             variant: "destructive",
           });
         }
-       
       }
     }
   }
@@ -96,6 +101,14 @@ const AddtoCart = ({
             size={size}
             variations={variations}
           />
+          {
+            size && <div className="flex gap-2 text-lg mt-5">
+            <p className="font-semibold">₹{price}</p>
+            <p className="font-semibold text-success">
+              ₹{getDiscountOnPrice(price, discount)} OFF
+            </p>
+          </div>
+          }
           <AddToCartButton
             handleOnClick={addToCart}
             disabled={!!!size}

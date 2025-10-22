@@ -85,6 +85,7 @@ export const useGetTotalCartCount = () => {
     queryKey: [GET_TOTAL_CART_COUNT],
     queryFn: async () => {
       try {
+        console.log(">>>>>>>>>>>>>>asdfasdfasdfasd>")
         const data = await getTotalCartItemApi();
         setTotalCartItem(data?.data?.totalItems);
         return data?.data;

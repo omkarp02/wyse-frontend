@@ -48,7 +48,7 @@ export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
           const curCartItem = state.cartItems[index];
           let totalCartItem = state.totalCartItem;
           totalCartItem -= curCartItem.quantity;
-          state.setTotalCartItem( totalCartItem + quantity)
+          state.totalCartItem = totalCartItem + quantity;
 
           state.cartItems[index].quantity = quantity;
         }
@@ -65,8 +65,8 @@ export const cartStore: StateCreator<IBoundStore, IMutators, [], ICartStore> = (
       );
       if (index !== -1) {
         const curCartItem = state.cartItems[index];
-        const total = state.totalCartItem  - curCartItem.quantity
-        state.setTotalCartItem(total)
+        const total = state.totalCartItem - curCartItem.quantity;
+        state.totalCartItem = total
 
         state.cartItems.splice(index, 1);
         return state;

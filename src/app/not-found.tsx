@@ -11,7 +11,7 @@ export default function NotFound() {
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-800">
             <p className="font-medium mb-2">🚧 Prototype Website</p>
             <p className="text-sm">
-              This is a prototype/demo website. The page you're looking for may not exist yet as it's still under development or was created as a placeholder for demonstration and presentation purposes.
+              This is a prototype/demo website. The page you&apos;re looking for may not exist yet as it&apos;s still under development or was created as a placeholder for demonstration and presentation purposes.
             </p>
           </div>
           <p className="text-muted-foreground">

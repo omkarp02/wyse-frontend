@@ -100,8 +100,8 @@ const ProductDetail = () => {
     }
   }
 
-  let price = variation?.price;
-  let discount = variation?.discount;
+  const price = variation?.price;
+  const discount = variation?.discount;
 
   return (
     <>
